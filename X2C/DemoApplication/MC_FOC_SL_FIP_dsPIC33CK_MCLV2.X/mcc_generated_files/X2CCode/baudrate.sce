@@ -1,0 +1,12 @@
+FOSC = 64000000
+BAUD = 921600
+FACT = 16
+
+
+BRG = round((FOSC/BAUD)/FACT -1)
+
+CALCBAUD = FOSC/(FACT*(BRG+1))
+ERROR = (CALCBAUD - BAUD)/BAUD
+
+disp('BRG',BRG)
+disp('Error',ERROR)
