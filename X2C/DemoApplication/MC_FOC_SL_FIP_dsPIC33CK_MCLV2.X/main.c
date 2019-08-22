@@ -65,6 +65,8 @@ int main(void)
     //Signed fractional conversion format
     //ADCON1Hbits.FORM = 0b11;
     
+    TMR1_Start();
+    
     while (1)
     {
         // Add your application code

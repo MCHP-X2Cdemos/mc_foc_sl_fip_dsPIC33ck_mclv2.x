@@ -135,8 +135,8 @@ void UpdateOutports(void) {
     PG3DC = (PWM_PERIODE+(int16)(__builtin_mulss(*x2cModel.outports.bPWM3, PWM_PERIODE)>>15));
     
     /* Clear position counter on Home init */
-    if (*x2cModel.outports.bHOME_INIT >= 0) { 
-    	POS1CNTL = *x2cModel.outports.bHOME_INIT;
+    if (*x2cModel.outports.bHOME_INIT > 0) { 
+    	POS1CNTL = 0; //*x2cModel.outports.bHOME_INIT;
     }
     
     
