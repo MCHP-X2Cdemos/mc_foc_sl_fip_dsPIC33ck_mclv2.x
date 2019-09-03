@@ -58,13 +58,13 @@ ded = 0;
 alphaCU = 0;
 alphaPM = 0;
 Temp_nom = 25;
-
+omega_m0 = 0;
+theta_m0 = -0.5;
 psi_pm = Kell/sqrt(3)*60/(2*%pi*1000)/n_p;
 theta_r0 = theta_m0*2*%pi*n_p;
 omega_r0 = omega_m0/60*2*%pi*n_p;
 
-omega_m0 = 0;
-theta_m0 = -0.5;
+
 
 
 

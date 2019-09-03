@@ -1,7 +1,7 @@
 /* This file is part of X2C. http://x2c.lcm.at/                                                                       */
 
 /* Model: MC_FOC_SL_FIP_dsPIC33CK_MCLV2                                                                               */
-/* Date:  2019-08-14 15:39                                                                                            */
+/* Date:  2019-08-14 15:40                                                                                            */
 
 /* X2C-Version: 6.1.1707                                                                                              */
 /* X2C-Edition: Free                                                                                                  */
@@ -281,6 +281,17 @@ void X2C_Init()
 
     /* Block: Not                                                                                                     */
 
+    /* Block: speedPI/PI_speed                                                                                        */
+    /* Kp = 1.0                                                                                                       */
+    /* Ki = 0.5                                                                                                       */
+    /* ts_fact = 10.0                                                                                                 */
+    x2cModel.blocks.sspeedPI.bPI_speed.b0 = 16;
+    x2cModel.blocks.sspeedPI.bPI_speed.b1 = 16384;
+    x2cModel.blocks.sspeedPI.bPI_speed.sfrb0 = 15;
+    x2cModel.blocks.sspeedPI.bPI_speed.sfrb1 = 14;
+    x2cModel.blocks.sspeedPI.bPI_speed.i_old = 0;
+    x2cModel.blocks.sspeedPI.bPI_speed.enable_old = 0;
+
     /* Block: speedPI/RateLimiter                                                                                     */
     /* Tr = 0.0010                                                                                                    */
     /* Tf = 0.0010                                                                                                    */
@@ -299,17 +310,6 @@ void X2C_Init()
     x2cModel.blocks.sspeedPI.bSpeed_Init1.K = 0;
 
     /* Block: speedPI/Speed_error                                                                                     */
-
-    /* Block: speedPI/pPI_speed                                                                                       */
-    /* Kp = 1.0                                                                                                       */
-    /* Ki = 0.5                                                                                                       */
-    /* ts_fact = 10.0                                                                                                 */
-    x2cModel.blocks.sspeedPI.bpPI_speed.b0 = 16;
-    x2cModel.blocks.sspeedPI.bpPI_speed.b1 = 16384;
-    x2cModel.blocks.sspeedPI.bpPI_speed.sfrb0 = 15;
-    x2cModel.blocks.sspeedPI.bpPI_speed.sfrb1 = 14;
-    x2cModel.blocks.sspeedPI.bpPI_speed.i_old = 0;
-    x2cModel.blocks.sspeedPI.bpPI_speed.enable_old = 0;
 
     /* Block: startup/Constant1                                                                                       */
     /* Value = 0.0                                                                                                    */
@@ -663,9 +663,17 @@ void X2C_Init()
     x2cModel.blocks.bNot.In =
         &x2cModel.blocks.sstartup.bTypeConv.Out;
 
+    /* Block PI_speed                                                                                                 */
+    x2cModel.blocks.sspeedPI.bPI_speed.In =
+        &x2cModel.blocks.sspeedPI.bSpeed_error.Out;
+    x2cModel.blocks.sspeedPI.bPI_speed.Init =
+        &x2cModel.blocks.bManualSwitch1.Out;
+    x2cModel.blocks.sspeedPI.bPI_speed.Enable =
+        &x2cModel.blocks.sstartup.bTypeConv1.Out;
+
     /* Block RateLimiter                                                                                              */
     x2cModel.blocks.sspeedPI.bRateLimiter.In =
-        &x2cModel.blocks.sspeedPI.bpPI_speed.Out;
+        &x2cModel.blocks.sspeedPI.bPI_speed.Out;
     x2cModel.blocks.sspeedPI.bRateLimiter.Init =
         &x2cModel.blocks.sspeedPI.bSpeed_Init1.Out;
     x2cModel.blocks.sspeedPI.bRateLimiter.Enable =
@@ -680,14 +688,6 @@ void X2C_Init()
         &x2cModel.blocks.bGain.Out;
     x2cModel.blocks.sspeedPI.bSpeed_error.Minus =
         &x2cModel.blocks.bManualSwitch1.Out;
-
-    /* Block pPI_speed                                                                                                */
-    x2cModel.blocks.sspeedPI.bpPI_speed.In =
-        &x2cModel.blocks.sspeedPI.bSpeed_error.Out;
-    x2cModel.blocks.sspeedPI.bpPI_speed.Init =
-        &x2cModel.blocks.bManualSwitch1.Out;
-    x2cModel.blocks.sspeedPI.bpPI_speed.Enable =
-        &x2cModel.blocks.sstartup.bTypeConv1.Out;
 
     /* Block Constant1                                                                                                */
 
@@ -860,11 +860,11 @@ void X2C_Init()
     ManualSwitch_FiP16_Init(&x2cModel.blocks.bManualSwitch);
     ManualSwitch_FiP16_Init(&x2cModel.blocks.bManualSwitch1);
     Not_Bool_Init(&x2cModel.blocks.bNot);
+    PI_FiP16_Init(&x2cModel.blocks.sspeedPI.bPI_speed);
     RateLimiter_FiP16_Init(&x2cModel.blocks.sspeedPI.bRateLimiter);
     Constant_Bool_Init(&x2cModel.blocks.sspeedPI.bSpeed_Init);
     Constant_FiP16_Init(&x2cModel.blocks.sspeedPI.bSpeed_Init1);
     Sub_FiP16_Init(&x2cModel.blocks.sspeedPI.bSpeed_error);
-    PI_FiP16_Init(&x2cModel.blocks.sspeedPI.bpPI_speed);
     Constant_FiP16_Init(&x2cModel.blocks.sstartup.bConstant1);
     Constant_FiP16_Init(&x2cModel.blocks.sstartup.bConstant2);
     Constant_Bool_Init(&x2cModel.blocks.sstartup.bConstant5);
@@ -976,7 +976,7 @@ void X2C_Update_10(void)
     TypeConv_FiP16_Bool_Update(&x2cModel.blocks.sstartup.bTypeConv1);
     ManualSwitch_FiP16_Update(&x2cModel.blocks.bManualSwitch1);
     Sub_FiP16_Update(&x2cModel.blocks.sspeedPI.bSpeed_error);
-    PI_FiP16_Update(&x2cModel.blocks.sspeedPI.bpPI_speed);
+    PI_FiP16_Update(&x2cModel.blocks.sspeedPI.bPI_speed);
     RateLimiter_FiP16_Update(&x2cModel.blocks.sspeedPI.bRateLimiter);
 }
 

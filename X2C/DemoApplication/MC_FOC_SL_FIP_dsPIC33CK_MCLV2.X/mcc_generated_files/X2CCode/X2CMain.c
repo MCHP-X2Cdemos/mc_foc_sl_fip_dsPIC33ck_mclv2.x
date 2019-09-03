@@ -128,11 +128,34 @@ void UpdateOutports(void) {
       A_PeripheralVariable = *x2cModel.outports.bPWM1*Scaling
       A_PeripheralVariable = *x2cModel.outports.bPWM2*Scaling
       A_PeripheralVariable = *x2cModel.outports.bPWM3*Scaling
-     */    
+     */   
     
-    PG1DC = (PWM_PERIODE+(int16)(__builtin_mulss(*x2cModel.outports.bPWM1, PWM_PERIODE)>>15));
-    PG2DC = (PWM_PERIODE+(int16)(__builtin_mulss(*x2cModel.outports.bPWM2, PWM_PERIODE)>>15));
-    PG3DC = (PWM_PERIODE+(int16)(__builtin_mulss(*x2cModel.outports.bPWM3, PWM_PERIODE)>>15));
+    if (x2cModel.inports.bS3)
+    {
+        PG1IOCONLbits.OVRENH = 0;
+        PG1IOCONLbits.OVRENL = 0;
+        PG2IOCONLbits.OVRENH = 0;
+        PG2IOCONLbits.OVRENL = 0;
+        PG3IOCONLbits.OVRENH = 0;
+        PG3IOCONLbits.OVRENL = 0;        
+        
+        PG1DC = (PWM_PERIODE+(int16)(__builtin_mulss(*x2cModel.outports.bPWM1, PWM_PERIODE)>>15));
+        PG2DC = (PWM_PERIODE+(int16)(__builtin_mulss(*x2cModel.outports.bPWM2, PWM_PERIODE)>>15));
+        PG3DC = (PWM_PERIODE+(int16)(__builtin_mulss(*x2cModel.outports.bPWM3, PWM_PERIODE)>>15));
+    }
+    else
+    {
+        PG1IOCONLbits.OVRDAT = 0;
+        PG2IOCONLbits.OVRDAT = 0;
+        PG3IOCONLbits.OVRDAT = 0;
+        PG1IOCONLbits.OVRENH = 1;
+        PG1IOCONLbits.OVRENL = 1;
+        PG2IOCONLbits.OVRENH = 1;
+        PG2IOCONLbits.OVRENL = 1;
+        PG3IOCONLbits.OVRENH = 1;
+        PG3IOCONLbits.OVRENL = 1;        
+        
+    }
     
     /* Clear position counter on Home init */
     if (*x2cModel.outports.bHOME_INIT > 0) { 
