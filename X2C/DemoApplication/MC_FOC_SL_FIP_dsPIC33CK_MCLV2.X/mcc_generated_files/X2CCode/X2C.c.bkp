@@ -1,7 +1,7 @@
 /* This file is part of X2C. http://x2c.lcm.at/                                                                       */
 
 /* Model: MC_FOC_SL_FIP_dsPIC33CK_MCLV2                                                                               */
-/* Date:  2019-08-14 15:40                                                                                            */
+/* Date:  2019-09-03 14:37                                                                                            */
 
 /* X2C-Version: 6.1.1707                                                                                              */
 /* X2C-Edition: Free                                                                                                  */
@@ -165,14 +165,14 @@ void X2C_Init()
     x2cModel.blocks.sFOC_main.bPI_torque.enable_old = 0;
 
     /* Block: FOC_main/PLLEstimator/BEMF_calc                                                                         */
-    /* Ls = 0.41                                                                                                      */
-    /* Rs = 0.35                                                                                                      */
+    /* Ls = 0.1                                                                                                       */
+    /* Rs = 0.1                                                                                                       */
     /* U0 = 24.0                                                                                                      */
-    /* I0 = 3.95                                                                                                      */
+    /* I0 = 1.0                                                                                                       */
     /* ts_fact = 1.0                                                                                                  */
     /* CurrentSampleFactor = 10.0                                                                                     */
-    x2cModel.blocks.sFOC_main.sPLLEstimator.bBEMF_calc.Ls = 2211;
-    x2cModel.blocks.sFOC_main.sPLLEstimator.bBEMF_calc.Rs = 1888;
+    x2cModel.blocks.sFOC_main.sPLLEstimator.bBEMF_calc.Ls = 137;
+    x2cModel.blocks.sFOC_main.sPLLEstimator.bBEMF_calc.Rs = 137;
     x2cModel.blocks.sFOC_main.sPLLEstimator.bBEMF_calc.sfrLs = 15;
     x2cModel.blocks.sFOC_main.sPLLEstimator.bBEMF_calc.sfrRs = 15;
     x2cModel.blocks.sFOC_main.sPLLEstimator.bBEMF_calc.Ib_old = 0;

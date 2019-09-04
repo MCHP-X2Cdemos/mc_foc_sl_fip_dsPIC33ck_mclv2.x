@@ -1,7 +1,7 @@
 /* This file is part of X2C. http://x2c.lcm.at/                                                                       */
 
 /* Model: MC_FOC_SL_FIP_dsPIC33CK_MCLV2                                                                               */
-/* Date:  2019-09-03 14:37                                                                                            */
+/* Date:  2019-09-04 08:51                                                                                            */
 
 /* X2C-Version: 6.1.1707                                                                                              */
 /* X2C-Edition: Free                                                                                                  */
@@ -529,7 +529,7 @@ void X2C_Init()
     x2cModel.blocks.sFOC_main.bPI_flux.In =
         &x2cModel.blocks.sFOC_main.bSub_flux.Out;
     x2cModel.blocks.sFOC_main.bPI_flux.Init =
-        &x2cModel.blocks.sFOC_main.bSub_flux.Out;
+        &x2cModel.blocks.sstartup.bIdRateLimiter.Out;
     x2cModel.blocks.sFOC_main.bPI_flux.Enable =
         &x2cModel.blocks.sstartup.bTypeConv.Out;
 
@@ -537,7 +537,7 @@ void X2C_Init()
     x2cModel.blocks.sFOC_main.bPI_torque.In =
         &x2cModel.blocks.sFOC_main.bSub_torque.Out;
     x2cModel.blocks.sFOC_main.bPI_torque.Init =
-        &x2cModel.blocks.sFOC_main.bSub_torque.Out;
+        &x2cModel.blocks.sstartup.bIq_select.Out;
     x2cModel.blocks.sFOC_main.bPI_torque.Enable =
         &x2cModel.blocks.sstartup.bTypeConv.Out;
 
