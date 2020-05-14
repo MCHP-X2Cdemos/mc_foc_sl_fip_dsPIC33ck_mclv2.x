@@ -34,8 +34,8 @@
 /* USERCODE-BEGIN:Description                                                                                         */
 /* Description: */
 /* USERCODE-END:Description                                                                                           */
-#ifndef BEMF_CALC_FIP16_H
-#define BEMF_CALC_FIP16_H
+#ifndef CLARKE_INV_MCHP_FLOAT32_H
+#define CLARKE_INV_MCHP_FLOAT32_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -43,45 +43,32 @@ extern "C" {
 
 #include "CommonFcts.h"
 
-#if !defined(BEMF_CALC_FIP16_ISLINKED)
-#define BEMF_CALC_FIP16_ID ((uint16)20992)
+#if !defined(CLARKE_INV_MCHP_FLOAT32_ISLINKED)
+#define CLARKE_INV_MCHP_FLOAT32_ID ((uint16)20898)
 
 typedef struct {
     uint16          ID;
-    int16           *Ialpha;
-    int16           *Ibeta;
-    int16           *Valpha;
-    int16           *Vbeta;
-    int16           BEMFalpha;
-    int16           BEMFbeta;
-    int16           Ls;
-    int16           Rs;
-    int8            sfrLs;
-    int8            sfrRs;
-    int16           Ib_old;
-    int16           Ia_old;
-    uint8           CurrentSampleFactor;
-    int16           V_Ls_alpha;
-    int16           V_Ls_beta;
-    uint8           FactCounter;
-} BEMF_CALC_FIP16;
+    float32         *alpha;
+    float32         *beta;
+    float32         a;
+    float32         b;
+    float32         c;
+} CLARKE_INV_MCHP_FLOAT32;
 
-#define BEMF_CALC_FIP16_FUNCTIONS { \
-    BEMF_CALC_FIP16_ID, \
-    (void (*)(void*))BEMF_calc_FiP16_Update, \
-    (void (*)(void*))BEMF_calc_FiP16_Init, \
-    (tLoadImplementationParameter)BEMF_calc_FiP16_Load, \
-    (tSaveImplementationParameter)BEMF_calc_FiP16_Save, \
-    (void* (*)(const void*, uint16))BEMF_calc_FiP16_GetAddress }
+#define CLARKE_INV_MCHP_FLOAT32_FUNCTIONS { \
+    CLARKE_INV_MCHP_FLOAT32_ID, \
+    (void (*)(void*))Clarke_inv_MCHP_Float32_Update, \
+    (void (*)(void*))Clarke_inv_MCHP_Float32_Init, \
+    (tLoadImplementationParameter)Common_Load, \
+    (tSaveImplementationParameter)Common_Save, \
+    (void* (*)(const void*, uint16))Clarke_inv_MCHP_Float32_GetAddress }
 
 /**********************************************************************************************************************/
 /** Public prototypes                                                                                                **/
 /**********************************************************************************************************************/
-void BEMF_calc_FiP16_Update(BEMF_CALC_FIP16 *pTBEMF_calc_FiP16);
-void BEMF_calc_FiP16_Init(BEMF_CALC_FIP16 *pTBEMF_calc_FiP16);
-uint8 BEMF_calc_FiP16_Load(const BEMF_CALC_FIP16 *pTBEMF_calc_FiP16, uint8 data[], uint16 *dataLength, uint16 maxSize);
-uint8 BEMF_calc_FiP16_Save(BEMF_CALC_FIP16 *pTBEMF_calc_FiP16, const uint8 data[], uint16 dataLength);
-void* BEMF_calc_FiP16_GetAddress(const BEMF_CALC_FIP16 *block, uint16 elementId);
+void Clarke_inv_MCHP_Float32_Update(CLARKE_INV_MCHP_FLOAT32 *pTClarke_inv_MCHP_Float32);
+void Clarke_inv_MCHP_Float32_Init(CLARKE_INV_MCHP_FLOAT32 *pTClarke_inv_MCHP_Float32);
+void* Clarke_inv_MCHP_Float32_GetAddress(const CLARKE_INV_MCHP_FLOAT32 *block, uint16 elementId);
 
 #endif
 

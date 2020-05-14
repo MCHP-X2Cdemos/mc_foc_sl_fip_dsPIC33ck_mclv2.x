@@ -2,17 +2,17 @@
  * @file
  * @brief Generated model file.
  * 
- * Date:  2019-09-04 08:51
+ * Date:  2020-05-13 20:47
  * 
- * X2C-Version: 6.1.1707
+ * X2C-Version: 6.2.1908
  * X2C-Edition: Free
  */
 /* This file is part of X2C. http://x2c.lcm.at/                                                                       */
 
 /* Model: MC_FOC_SL_FIP_dsPIC33CK_MCLV2                                                                               */
-/* Date:  2019-09-04 08:51                                                                                            */
+/* Date:  2020-05-13 20:47                                                                                            */
 
-/* X2C-Version: 6.1.1707                                                                                              */
+/* X2C-Version: 6.2.1908                                                                                              */
 /* X2C-Edition: Free                                                                                                  */
 
 #ifndef X2C_H
@@ -25,29 +25,29 @@ extern "C" {
 /**********************************************************************************************************************/
 /**     Includes                                                                                                     **/
 /**********************************************************************************************************************/
-#include "Constant_Bool.h"
-#include "Delay_FiP16.h"
-#include "Clark_Park_FiP16.h"
 #include "Constant_FiP16.h"
 #include "Gain_FiP16.h"
-#include "ManualSwitch_FiP16.h"
-#include "Not_Bool.h"
-#include "PI_FiP16.h"
-#include "BEMF_calc_FiP16.h"
-#include "PT1_FiP16.h"
-#include "Park_FiP16.h"
-#include "Add_FiP16.h"
-#include "AutoSwitch_FiP16.h"
-#include "Sub_FiP16.h"
-#include "uI_FiP16.h"
-#include "Park_Clark_inv_FiP16.h"
-#include "Saturation_FiP16.h"
-#include "Sin3Gen_FiP16.h"
-#include "RateLimiter_FiP16.h"
-#include "uSub_FiP16.h"
 #include "I_FiP16.h"
+#include "PI_FiP16.h"
+#include "Park_Clarke_inv_SVM_MCHP_FiP16.h"
+#include "BEMF_MCHP_FiP16.h"
+#include "uI_FiP16.h"
+#include "PT1_FiP16.h"
+#include "Not_Bool.h"
+#include "Saturation_FiP16.h"
+#include "ManualSwitch_FiP16.h"
+#include "Clarke_Park_MCHP_FiP16.h"
+#include "RateLimiter_FiP16.h"
 #include "TypeConv_FiP16_Bool.h"
+#include "Sub_FiP16.h"
+#include "AutoSwitch_FiP16.h"
+#include "uSub_FiP16.h"
+#include "Sin3Gen_FiP16.h"
 #include "Sequencer_FiP16.h"
+#include "Constant_Bool.h"
+#include "Add_FiP16.h"
+#include "Park_MCHP_FiP16.h"
+#include "Delay_FiP16.h"
 #include "Scope_Main.h"
 #include "CommonFcts.h"
 
@@ -55,36 +55,36 @@ extern "C" {
 /**     Defines                                                                                                      **/
 /**********************************************************************************************************************/
 #define FUNCTIONS \
-    CONSTANT_BOOL_FUNCTIONS , \
-    DELAY_FIP16_FUNCTIONS , \
-    CLARK_PARK_FIP16_FUNCTIONS , \
     CONSTANT_FIP16_FUNCTIONS , \
     GAIN_FIP16_FUNCTIONS , \
-    MANUALSWITCH_FIP16_FUNCTIONS , \
-    NOT_BOOL_FUNCTIONS , \
-    PI_FIP16_FUNCTIONS , \
-    BEMF_CALC_FIP16_FUNCTIONS , \
-    PT1_FIP16_FUNCTIONS , \
-    PARK_FIP16_FUNCTIONS , \
-    ADD_FIP16_FUNCTIONS , \
-    AUTOSWITCH_FIP16_FUNCTIONS , \
-    SUB_FIP16_FUNCTIONS , \
-    UI_FIP16_FUNCTIONS , \
-    PARK_CLARK_INV_FIP16_FUNCTIONS , \
-    SATURATION_FIP16_FUNCTIONS , \
-    SIN3GEN_FIP16_FUNCTIONS , \
-    RATELIMITER_FIP16_FUNCTIONS , \
-    USUB_FIP16_FUNCTIONS , \
     I_FIP16_FUNCTIONS , \
+    PI_FIP16_FUNCTIONS , \
+    PARK_CLARKE_INV_SVM_MCHP_FIP16_FUNCTIONS , \
+    BEMF_MCHP_FIP16_FUNCTIONS , \
+    UI_FIP16_FUNCTIONS , \
+    PT1_FIP16_FUNCTIONS , \
+    NOT_BOOL_FUNCTIONS , \
+    SATURATION_FIP16_FUNCTIONS , \
+    MANUALSWITCH_FIP16_FUNCTIONS , \
+    CLARKE_PARK_MCHP_FIP16_FUNCTIONS , \
+    RATELIMITER_FIP16_FUNCTIONS , \
     TYPECONV_FIP16_BOOL_FUNCTIONS , \
+    SUB_FIP16_FUNCTIONS , \
+    AUTOSWITCH_FIP16_FUNCTIONS , \
+    USUB_FIP16_FUNCTIONS , \
+    SIN3GEN_FIP16_FUNCTIONS , \
     SEQUENCER_FIP16_FUNCTIONS , \
+    CONSTANT_BOOL_FUNCTIONS , \
+    ADD_FIP16_FUNCTIONS , \
+    PARK_MCHP_FIP16_FUNCTIONS , \
+    DELAY_FIP16_FUNCTIONS , \
     SCOPE_MAIN_FUNCTIONS
 
 #define PARAMETER_TABLE \
     { 1, &x2cModel.blocks.bConstant3 } , \
     { 2, &x2cModel.blocks.bDelay1 } , \
     { 3, &x2cModel.blocks.bDelay2 } , \
-    { 4, &x2cModel.blocks.sFOC_main.bClark_Park } , \
+    { 4, &x2cModel.blocks.sFOC_main.bClarke_Park_MCHP } , \
     { 5, &x2cModel.blocks.sFOC_main.bConstant } , \
     { 6, &x2cModel.blocks.sFOC_main.bConstant1 } , \
     { 7, &x2cModel.blocks.sFOC_main.bGain } , \
@@ -100,18 +100,18 @@ extern "C" {
     { 17, &x2cModel.blocks.sFOC_main.bOpenLoop_Vq } , \
     { 18, &x2cModel.blocks.sFOC_main.bPI_flux } , \
     { 19, &x2cModel.blocks.sFOC_main.bPI_torque } , \
-    { 20, &x2cModel.blocks.sFOC_main.sPLLEstimator.bBEMF_calc } , \
+    { 20, &x2cModel.blocks.sFOC_main.sPLLEstimator.bBEMF_MCHP } , \
     { 21, &x2cModel.blocks.sFOC_main.sPLLEstimator.bConstant1 } , \
     { 22, &x2cModel.blocks.sFOC_main.sPLLEstimator.bDelay1 } , \
     { 23, &x2cModel.blocks.sFOC_main.sPLLEstimator.bEdfilter } , \
     { 24, &x2cModel.blocks.sFOC_main.sPLLEstimator.bEqfilter } , \
-    { 25, &x2cModel.blocks.sFOC_main.sPLLEstimator.bPark } , \
+    { 25, &x2cModel.blocks.sFOC_main.sPLLEstimator.bPark_MCHP } , \
     { 26, &x2cModel.blocks.sFOC_main.sPLLEstimator.sSpeed_Estim_Superblock.bAdd } , \
     { 27, &x2cModel.blocks.sFOC_main.sPLLEstimator.sSpeed_Estim_Superblock.bAutoSwitch } , \
     { 28, &x2cModel.blocks.sFOC_main.sPLLEstimator.sSpeed_Estim_Superblock.bGain } , \
     { 29, &x2cModel.blocks.sFOC_main.sPLLEstimator.sSpeed_Estim_Superblock.bSub } , \
     { 30, &x2cModel.blocks.sFOC_main.sPLLEstimator.buI } , \
-    { 31, &x2cModel.blocks.sFOC_main.bPark_Clark_inv } , \
+    { 31, &x2cModel.blocks.sFOC_main.bPark_Clarke_inv_SVM_MCHP } , \
     { 32, &x2cModel.blocks.sFOC_main.bSaturation } , \
     { 33, &x2cModel.blocks.sFOC_main.bSaturation1 } , \
     { 34, &x2cModel.blocks.sFOC_main.bSin3Gen } , \
@@ -189,15 +189,15 @@ struct x2cModel {
                     GAIN_FIP16 bGain;
                     SUB_FIP16 bSub;
                 } sSpeed_Estim_Superblock;
-                BEMF_CALC_FIP16 bBEMF_calc;
+                BEMF_MCHP_FIP16 bBEMF_MCHP;
                 CONSTANT_FIP16 bConstant1;
                 DELAY_FIP16 bDelay1;
                 PT1_FIP16 bEdfilter;
                 PT1_FIP16 bEqfilter;
-                PARK_FIP16 bPark;
+                PARK_MCHP_FIP16 bPark_MCHP;
                 UI_FIP16 buI;
             } sPLLEstimator;
-            CLARK_PARK_FIP16 bClark_Park;
+            CLARKE_PARK_MCHP_FIP16 bClarke_Park_MCHP;
             CONSTANT_FIP16 bConstant;
             CONSTANT_FIP16 bConstant1;
             GAIN_FIP16 bGain;
@@ -213,7 +213,7 @@ struct x2cModel {
             CONSTANT_FIP16 bOpenLoop_Vq;
             PI_FIP16 bPI_flux;
             PI_FIP16 bPI_torque;
-            PARK_CLARK_INV_FIP16 bPark_Clark_inv;
+            PARK_CLARKE_INV_SVM_MCHP_FIP16 bPark_Clarke_inv_SVM_MCHP;
             SATURATION_FIP16 bSaturation;
             SATURATION_FIP16 bSaturation1;
             SIN3GEN_FIP16 bSin3Gen;

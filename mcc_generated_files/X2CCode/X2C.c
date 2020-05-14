@@ -1,9 +1,9 @@
 /* This file is part of X2C. http://x2c.lcm.at/                                                                       */
 
 /* Model: MC_FOC_SL_FIP_dsPIC33CK_MCLV2                                                                               */
-/* Date:  2019-09-04 08:51                                                                                            */
+/* Date:  2020-05-13 20:47                                                                                            */
 
-/* X2C-Version: 6.1.1707                                                                                              */
+/* X2C-Version: 6.2.1908                                                                                              */
 /* X2C-Edition: Free                                                                                                  */
 
 /* Common includes                                                                                                    */
@@ -87,7 +87,7 @@ void X2C_Init()
     /* ts_fact = 1.0                                                                                                  */
     x2cModel.blocks.bDelay2.In_old = 0;
 
-    /* Block: FOC_main/Clark_Park                                                                                     */
+    /* Block: FOC_main/Clarke_Park_MCHP                                                                               */
 
     /* Block: FOC_main/Constant                                                                                       */
     /* Value = 0.2                                                                                                    */
@@ -164,23 +164,23 @@ void X2C_Init()
     x2cModel.blocks.sFOC_main.bPI_torque.i_old = 0;
     x2cModel.blocks.sFOC_main.bPI_torque.enable_old = 0;
 
-    /* Block: FOC_main/PLLEstimator/BEMF_calc                                                                         */
+    /* Block: FOC_main/PLLEstimator/BEMF_MCHP                                                                         */
     /* Ls = 0.1                                                                                                       */
     /* Rs = 0.1                                                                                                       */
     /* U0 = 24.0                                                                                                      */
     /* I0 = 1.0                                                                                                       */
     /* ts_fact = 1.0                                                                                                  */
-    /* CurrentSampleFactor = 10.0                                                                                     */
-    x2cModel.blocks.sFOC_main.sPLLEstimator.bBEMF_calc.Ls = 137;
-    x2cModel.blocks.sFOC_main.sPLLEstimator.bBEMF_calc.Rs = 137;
-    x2cModel.blocks.sFOC_main.sPLLEstimator.bBEMF_calc.sfrLs = 15;
-    x2cModel.blocks.sFOC_main.sPLLEstimator.bBEMF_calc.sfrRs = 15;
-    x2cModel.blocks.sFOC_main.sPLLEstimator.bBEMF_calc.Ib_old = 0;
-    x2cModel.blocks.sFOC_main.sPLLEstimator.bBEMF_calc.Ia_old = 0;
-    x2cModel.blocks.sFOC_main.sPLLEstimator.bBEMF_calc.CurrentSampleFactor = 10;
-    x2cModel.blocks.sFOC_main.sPLLEstimator.bBEMF_calc.V_Ls_alpha = 0;
-    x2cModel.blocks.sFOC_main.sPLLEstimator.bBEMF_calc.V_Ls_beta = 0;
-    x2cModel.blocks.sFOC_main.sPLLEstimator.bBEMF_calc.FactCounter = 0;
+    /* CurrentSampleFactor = 1.0                                                                                      */
+    x2cModel.blocks.sFOC_main.sPLLEstimator.bBEMF_MCHP.Ls = 1365;
+    x2cModel.blocks.sFOC_main.sPLLEstimator.bBEMF_MCHP.Rs = 137;
+    x2cModel.blocks.sFOC_main.sPLLEstimator.bBEMF_MCHP.sfrLs = 15;
+    x2cModel.blocks.sFOC_main.sPLLEstimator.bBEMF_MCHP.sfrRs = 15;
+    x2cModel.blocks.sFOC_main.sPLLEstimator.bBEMF_MCHP.Ib_old = 0;
+    x2cModel.blocks.sFOC_main.sPLLEstimator.bBEMF_MCHP.Ia_old = 0;
+    x2cModel.blocks.sFOC_main.sPLLEstimator.bBEMF_MCHP.CurrentSampleFactor = 1;
+    x2cModel.blocks.sFOC_main.sPLLEstimator.bBEMF_MCHP.V_Ls_alpha = 0;
+    x2cModel.blocks.sFOC_main.sPLLEstimator.bBEMF_MCHP.V_Ls_beta = 0;
+    x2cModel.blocks.sFOC_main.sPLLEstimator.bBEMF_MCHP.FactCounter = 0;
 
     /* Block: FOC_main/PLLEstimator/Constant1                                                                         */
     /* Value = 0.0                                                                                                    */
@@ -214,7 +214,7 @@ void X2C_Init()
     x2cModel.blocks.sFOC_main.sPLLEstimator.bEqfilter.sfra = 15;
     x2cModel.blocks.sFOC_main.sPLLEstimator.bEqfilter.in_old = 0;
 
-    /* Block: FOC_main/PLLEstimator/Park                                                                              */
+    /* Block: FOC_main/PLLEstimator/Park_MCHP                                                                         */
 
     /* Block: FOC_main/PLLEstimator/Speed_Estim_Superblock/Add                                                        */
 
@@ -240,7 +240,7 @@ void X2C_Init()
     x2cModel.blocks.sFOC_main.sPLLEstimator.buI.i_old = 0;
     x2cModel.blocks.sFOC_main.sPLLEstimator.buI.enable_old = 0;
 
-    /* Block: FOC_main/Park_Clark_inv                                                                                 */
+    /* Block: FOC_main/Park_Clarke_inv_SVM_MCHP                                                                       */
 
     /* Block: FOC_main/Saturation                                                                                     */
     /* max = 0.98                                                                                                     */
@@ -463,12 +463,12 @@ void X2C_Init()
     x2cModel.blocks.bDelay2.In =
         &x2cModel.blocks.sFOC_main.sPLLEstimator.buI.Out;
 
-    /* Block Clark_Park                                                                                               */
-    x2cModel.blocks.sFOC_main.bClark_Park.a =
+    /* Block Clarke_Park_MCHP                                                                                         */
+    x2cModel.blocks.sFOC_main.bClarke_Park_MCHP.a =
         &x2cModel.inports.bI_a;
-    x2cModel.blocks.sFOC_main.bClark_Park.b =
+    x2cModel.blocks.sFOC_main.bClarke_Park_MCHP.b =
         &x2cModel.inports.bI_b;
-    x2cModel.blocks.sFOC_main.bClark_Park.theta =
+    x2cModel.blocks.sFOC_main.bClarke_Park_MCHP.theta =
         &x2cModel.blocks.sstartup.bPosSwitch.Out;
 
     /* Block Constant                                                                                                 */
@@ -481,11 +481,11 @@ void X2C_Init()
 
     /* Block Gain1                                                                                                    */
     x2cModel.blocks.sFOC_main.bGain1.In =
-        &x2cModel.blocks.sFOC_main.bPark_Clark_inv.Valpha;
+        &x2cModel.blocks.sFOC_main.bPark_Clarke_inv_SVM_MCHP.Valpha;
 
     /* Block Gain2                                                                                                    */
     x2cModel.blocks.sFOC_main.bGain2.In =
-        &x2cModel.blocks.sFOC_main.bPark_Clark_inv.Vbeta;
+        &x2cModel.blocks.sFOC_main.bPark_Clarke_inv_SVM_MCHP.Vbeta;
 
     /* Block ManualSwitch                                                                                             */
     x2cModel.blocks.sFOC_main.bManualSwitch.In1 =
@@ -503,19 +503,19 @@ void X2C_Init()
     x2cModel.blocks.sFOC_main.bManualSwitch2.In1 =
         &x2cModel.blocks.sFOC_main.bSin3Gen.u;
     x2cModel.blocks.sFOC_main.bManualSwitch2.In2 =
-        &x2cModel.blocks.sFOC_main.bPark_Clark_inv.A;
+        &x2cModel.blocks.sFOC_main.bPark_Clarke_inv_SVM_MCHP.A;
 
     /* Block ManualSwitch3                                                                                            */
     x2cModel.blocks.sFOC_main.bManualSwitch3.In1 =
         &x2cModel.blocks.sFOC_main.bSin3Gen.v;
     x2cModel.blocks.sFOC_main.bManualSwitch3.In2 =
-        &x2cModel.blocks.sFOC_main.bPark_Clark_inv.B;
+        &x2cModel.blocks.sFOC_main.bPark_Clarke_inv_SVM_MCHP.B;
 
     /* Block ManualSwitch4                                                                                            */
     x2cModel.blocks.sFOC_main.bManualSwitch4.In1 =
         &x2cModel.blocks.sFOC_main.bSin3Gen.w;
     x2cModel.blocks.sFOC_main.bManualSwitch4.In2 =
-        &x2cModel.blocks.sFOC_main.bPark_Clark_inv.C;
+        &x2cModel.blocks.sFOC_main.bPark_Clarke_inv_SVM_MCHP.C;
 
     /* Block Not                                                                                                      */
     x2cModel.blocks.sFOC_main.bNot.In =
@@ -541,14 +541,14 @@ void X2C_Init()
     x2cModel.blocks.sFOC_main.bPI_torque.Enable =
         &x2cModel.blocks.sstartup.bTypeConv.Out;
 
-    /* Block BEMF_calc                                                                                                */
-    x2cModel.blocks.sFOC_main.sPLLEstimator.bBEMF_calc.Ialpha =
-        &x2cModel.blocks.sFOC_main.bClark_Park.alpha;
-    x2cModel.blocks.sFOC_main.sPLLEstimator.bBEMF_calc.Ibeta =
-        &x2cModel.blocks.sFOC_main.bClark_Park.beta;
-    x2cModel.blocks.sFOC_main.sPLLEstimator.bBEMF_calc.Valpha =
+    /* Block BEMF_MCHP                                                                                                */
+    x2cModel.blocks.sFOC_main.sPLLEstimator.bBEMF_MCHP.Ialpha =
+        &x2cModel.blocks.sFOC_main.bClarke_Park_MCHP.alpha;
+    x2cModel.blocks.sFOC_main.sPLLEstimator.bBEMF_MCHP.Ibeta =
+        &x2cModel.blocks.sFOC_main.bClarke_Park_MCHP.beta;
+    x2cModel.blocks.sFOC_main.sPLLEstimator.bBEMF_MCHP.Valpha =
         &x2cModel.blocks.sFOC_main.bGain1.Out;
-    x2cModel.blocks.sFOC_main.sPLLEstimator.bBEMF_calc.Vbeta =
+    x2cModel.blocks.sFOC_main.sPLLEstimator.bBEMF_MCHP.Vbeta =
         &x2cModel.blocks.sFOC_main.bGain2.Out;
 
     /* Block Constant1                                                                                                */
@@ -559,18 +559,18 @@ void X2C_Init()
 
     /* Block Edfilter                                                                                                 */
     x2cModel.blocks.sFOC_main.sPLLEstimator.bEdfilter.In =
-        &x2cModel.blocks.sFOC_main.sPLLEstimator.bPark.d;
+        &x2cModel.blocks.sFOC_main.sPLLEstimator.bPark_MCHP.d;
 
     /* Block Eqfilter                                                                                                 */
     x2cModel.blocks.sFOC_main.sPLLEstimator.bEqfilter.In =
-        &x2cModel.blocks.sFOC_main.sPLLEstimator.bPark.q;
+        &x2cModel.blocks.sFOC_main.sPLLEstimator.bPark_MCHP.q;
 
-    /* Block Park                                                                                                     */
-    x2cModel.blocks.sFOC_main.sPLLEstimator.bPark.alpha =
-        &x2cModel.blocks.sFOC_main.sPLLEstimator.bBEMF_calc.BEMFalpha;
-    x2cModel.blocks.sFOC_main.sPLLEstimator.bPark.beta =
-        &x2cModel.blocks.sFOC_main.sPLLEstimator.bBEMF_calc.BEMFbeta;
-    x2cModel.blocks.sFOC_main.sPLLEstimator.bPark.theta =
+    /* Block Park_MCHP                                                                                                */
+    x2cModel.blocks.sFOC_main.sPLLEstimator.bPark_MCHP.alpha =
+        &x2cModel.blocks.sFOC_main.sPLLEstimator.bBEMF_MCHP.BEMFalpha;
+    x2cModel.blocks.sFOC_main.sPLLEstimator.bPark_MCHP.beta =
+        &x2cModel.blocks.sFOC_main.sPLLEstimator.bBEMF_MCHP.BEMFbeta;
+    x2cModel.blocks.sFOC_main.sPLLEstimator.bPark_MCHP.theta =
         &x2cModel.blocks.sFOC_main.sPLLEstimator.bDelay1.Out;
 
     /* Block Add                                                                                                      */
@@ -605,16 +605,16 @@ void X2C_Init()
     x2cModel.blocks.sFOC_main.sPLLEstimator.buI.Enable =
         &x2cModel.blocks.sstartup.bTypeConv.Out;
 
-    /* Block Park_Clark_inv                                                                                           */
-    x2cModel.blocks.sFOC_main.bPark_Clark_inv.d =
+    /* Block Park_Clarke_inv_SVM_MCHP                                                                                 */
+    x2cModel.blocks.sFOC_main.bPark_Clarke_inv_SVM_MCHP.d =
         &x2cModel.blocks.sFOC_main.bSaturation1.Out;
-    x2cModel.blocks.sFOC_main.bPark_Clark_inv.q =
+    x2cModel.blocks.sFOC_main.bPark_Clarke_inv_SVM_MCHP.q =
         &x2cModel.blocks.sFOC_main.bSaturation.Out;
-    x2cModel.blocks.sFOC_main.bPark_Clark_inv.theta =
+    x2cModel.blocks.sFOC_main.bPark_Clarke_inv_SVM_MCHP.theta =
         &x2cModel.blocks.sstartup.bPosSwitch.Out;
-    x2cModel.blocks.sFOC_main.bPark_Clark_inv.forcedMode =
+    x2cModel.blocks.sFOC_main.bPark_Clarke_inv_SVM_MCHP.forcedMode =
         &x2cModel.blocks.sFOC_main.bNot.Out;
-    x2cModel.blocks.sFOC_main.bPark_Clark_inv.forcedValue =
+    x2cModel.blocks.sFOC_main.bPark_Clarke_inv_SVM_MCHP.forcedValue =
         &x2cModel.blocks.sFOC_main.bGain.Out;
 
     /* Block Saturation                                                                                               */
@@ -635,13 +635,13 @@ void X2C_Init()
     x2cModel.blocks.sFOC_main.bSub_flux.Plus =
         &x2cModel.blocks.sstartup.bIdRateLimiter.Out;
     x2cModel.blocks.sFOC_main.bSub_flux.Minus =
-        &x2cModel.blocks.sFOC_main.bClark_Park.d;
+        &x2cModel.blocks.sFOC_main.bClarke_Park_MCHP.d;
 
     /* Block Sub_torque                                                                                               */
     x2cModel.blocks.sFOC_main.bSub_torque.Plus =
         &x2cModel.blocks.sstartup.bIq_select.Out;
     x2cModel.blocks.sFOC_main.bSub_torque.Minus =
-        &x2cModel.blocks.sFOC_main.bClark_Park.q;
+        &x2cModel.blocks.sFOC_main.bClarke_Park_MCHP.q;
 
     /* Block Gain                                                                                                     */
     x2cModel.blocks.bGain.In =
@@ -823,7 +823,7 @@ void X2C_Init()
     Constant_Bool_Init(&x2cModel.blocks.bConstant3);
     Delay_FiP16_Init(&x2cModel.blocks.bDelay1);
     Delay_FiP16_Init(&x2cModel.blocks.bDelay2);
-    Clark_Park_FiP16_Init(&x2cModel.blocks.sFOC_main.bClark_Park);
+    Clarke_Park_MCHP_FiP16_Init(&x2cModel.blocks.sFOC_main.bClarke_Park_MCHP);
     Constant_FiP16_Init(&x2cModel.blocks.sFOC_main.bConstant);
     Constant_FiP16_Init(&x2cModel.blocks.sFOC_main.bConstant1);
     Gain_FiP16_Init(&x2cModel.blocks.sFOC_main.bGain);
@@ -839,18 +839,18 @@ void X2C_Init()
     Constant_FiP16_Init(&x2cModel.blocks.sFOC_main.bOpenLoop_Vq);
     PI_FiP16_Init(&x2cModel.blocks.sFOC_main.bPI_flux);
     PI_FiP16_Init(&x2cModel.blocks.sFOC_main.bPI_torque);
-    BEMF_calc_FiP16_Init(&x2cModel.blocks.sFOC_main.sPLLEstimator.bBEMF_calc);
+    BEMF_MCHP_FiP16_Init(&x2cModel.blocks.sFOC_main.sPLLEstimator.bBEMF_MCHP);
     Constant_FiP16_Init(&x2cModel.blocks.sFOC_main.sPLLEstimator.bConstant1);
     Delay_FiP16_Init(&x2cModel.blocks.sFOC_main.sPLLEstimator.bDelay1);
     PT1_FiP16_Init(&x2cModel.blocks.sFOC_main.sPLLEstimator.bEdfilter);
     PT1_FiP16_Init(&x2cModel.blocks.sFOC_main.sPLLEstimator.bEqfilter);
-    Park_FiP16_Init(&x2cModel.blocks.sFOC_main.sPLLEstimator.bPark);
+    Park_MCHP_FiP16_Init(&x2cModel.blocks.sFOC_main.sPLLEstimator.bPark_MCHP);
     Add_FiP16_Init(&x2cModel.blocks.sFOC_main.sPLLEstimator.sSpeed_Estim_Superblock.bAdd);
     AutoSwitch_FiP16_Init(&x2cModel.blocks.sFOC_main.sPLLEstimator.sSpeed_Estim_Superblock.bAutoSwitch);
     Gain_FiP16_Init(&x2cModel.blocks.sFOC_main.sPLLEstimator.sSpeed_Estim_Superblock.bGain);
     Sub_FiP16_Init(&x2cModel.blocks.sFOC_main.sPLLEstimator.sSpeed_Estim_Superblock.bSub);
     uI_FiP16_Init(&x2cModel.blocks.sFOC_main.sPLLEstimator.buI);
-    Park_Clark_inv_FiP16_Init(&x2cModel.blocks.sFOC_main.bPark_Clark_inv);
+    Park_Clarke_inv_SVM_MCHP_FiP16_Init(&x2cModel.blocks.sFOC_main.bPark_Clarke_inv_SVM_MCHP);
     Saturation_FiP16_Init(&x2cModel.blocks.sFOC_main.bSaturation);
     Saturation_FiP16_Init(&x2cModel.blocks.sFOC_main.bSaturation1);
     Sin3Gen_FiP16_Init(&x2cModel.blocks.sFOC_main.bSin3Gen);
@@ -938,7 +938,7 @@ void X2C_Update_1(void)
     uI_FiP16_Update(&x2cModel.blocks.sstartup.sRamp_Up_SB.bRamp_Up_PositionGenerator);
     uSub_FiP16_Update(&x2cModel.blocks.sstartup.bPosError);
     AutoSwitch_FiP16_Update(&x2cModel.blocks.sstartup.bPosSwitch);
-    Clark_Park_FiP16_Update(&x2cModel.blocks.sFOC_main.bClark_Park);
+    Clarke_Park_MCHP_FiP16_Update(&x2cModel.blocks.sFOC_main.bClarke_Park_MCHP);
     PI_FiP16_Update(&x2cModel.blocks.sstartup.bPI);
     Sin3Gen_FiP16_Update(&x2cModel.blocks.sFOC_main.bSin3Gen);
     Sub_FiP16_Update(&x2cModel.blocks.sFOC_main.bSub_flux);
@@ -951,14 +951,14 @@ void X2C_Update_1(void)
     PI_FiP16_Update(&x2cModel.blocks.sFOC_main.bPI_torque);
     ManualSwitch_FiP16_Update(&x2cModel.blocks.sFOC_main.bManualSwitch1);
     Saturation_FiP16_Update(&x2cModel.blocks.sFOC_main.bSaturation);
-    Park_Clark_inv_FiP16_Update(&x2cModel.blocks.sFOC_main.bPark_Clark_inv);
+    Park_Clarke_inv_SVM_MCHP_FiP16_Update(&x2cModel.blocks.sFOC_main.bPark_Clarke_inv_SVM_MCHP);
     Gain_FiP16_Update(&x2cModel.blocks.sFOC_main.bGain1);
     Gain_FiP16_Update(&x2cModel.blocks.sFOC_main.bGain2);
     ManualSwitch_FiP16_Update(&x2cModel.blocks.sFOC_main.bManualSwitch2);
     ManualSwitch_FiP16_Update(&x2cModel.blocks.sFOC_main.bManualSwitch3);
     ManualSwitch_FiP16_Update(&x2cModel.blocks.sFOC_main.bManualSwitch4);
-    BEMF_calc_FiP16_Update(&x2cModel.blocks.sFOC_main.sPLLEstimator.bBEMF_calc);
-    Park_FiP16_Update(&x2cModel.blocks.sFOC_main.sPLLEstimator.bPark);
+    BEMF_MCHP_FiP16_Update(&x2cModel.blocks.sFOC_main.sPLLEstimator.bBEMF_MCHP);
+    Park_MCHP_FiP16_Update(&x2cModel.blocks.sFOC_main.sPLLEstimator.bPark_MCHP);
     PT1_FiP16_Update(&x2cModel.blocks.sFOC_main.sPLLEstimator.bEdfilter);
     PT1_FiP16_Update(&x2cModel.blocks.sFOC_main.sPLLEstimator.bEqfilter);
     Add_FiP16_Update(&x2cModel.blocks.sFOC_main.sPLLEstimator.sSpeed_Estim_Superblock.bAdd);

@@ -34,8 +34,8 @@
 /* USERCODE-BEGIN:Description                                                                                         */
 /* Description: */
 /* USERCODE-END:Description                                                                                           */
-#ifndef CLARK_INV_FIP16_H
-#define CLARK_INV_FIP16_H
+#ifndef PARK_CLARKE_INV_SVM_MCHP_FIP16_H
+#define PARK_CLARKE_INV_SVM_MCHP_FIP16_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -43,32 +43,37 @@ extern "C" {
 
 #include "CommonFcts.h"
 
-#if !defined(CLARK_INV_FIP16_ISLINKED)
-#define CLARK_INV_FIP16_ID ((uint16)20896)
+#if !defined(PARK_CLARKE_INV_SVM_MCHP_FIP16_ISLINKED)
+#define PARK_CLARKE_INV_SVM_MCHP_FIP16_ID ((uint16)20976)
 
 typedef struct {
     uint16          ID;
-    int16           *alpha;
-    int16           *beta;
-    int16           a;
-    int16           b;
-    int16           c;
-} CLARK_INV_FIP16;
+    int16           *d;
+    int16           *q;
+    int16           *theta;
+    bool            *forcedMode;
+    int16           *forcedValue;
+    int16           A;
+    int16           B;
+    int16           C;
+    int16           Valpha;
+    int16           Vbeta;
+} PARK_CLARKE_INV_SVM_MCHP_FIP16;
 
-#define CLARK_INV_FIP16_FUNCTIONS { \
-    CLARK_INV_FIP16_ID, \
-    (void (*)(void*))Clark_inv_FiP16_Update, \
-    (void (*)(void*))Clark_inv_FiP16_Init, \
+#define PARK_CLARKE_INV_SVM_MCHP_FIP16_FUNCTIONS { \
+    PARK_CLARKE_INV_SVM_MCHP_FIP16_ID, \
+    (void (*)(void*))Park_Clarke_inv_SVM_MCHP_FiP16_Update, \
+    (void (*)(void*))Park_Clarke_inv_SVM_MCHP_FiP16_Init, \
     (tLoadImplementationParameter)Common_Load, \
     (tSaveImplementationParameter)Common_Save, \
-    (void* (*)(const void*, uint16))Clark_inv_FiP16_GetAddress }
+    (void* (*)(const void*, uint16))Park_Clarke_inv_SVM_MCHP_FiP16_GetAddress }
 
 /**********************************************************************************************************************/
 /** Public prototypes                                                                                                **/
 /**********************************************************************************************************************/
-void Clark_inv_FiP16_Update(CLARK_INV_FIP16 *pTClark_inv_FiP16);
-void Clark_inv_FiP16_Init(CLARK_INV_FIP16 *pTClark_inv_FiP16);
-void* Clark_inv_FiP16_GetAddress(const CLARK_INV_FIP16 *block, uint16 elementId);
+void Park_Clarke_inv_SVM_MCHP_FiP16_Update(PARK_CLARKE_INV_SVM_MCHP_FIP16 *pTPark_Clarke_inv_SVM_MCHP_FiP16);
+void Park_Clarke_inv_SVM_MCHP_FiP16_Init(PARK_CLARKE_INV_SVM_MCHP_FIP16 *pTPark_Clarke_inv_SVM_MCHP_FiP16);
+void* Park_Clarke_inv_SVM_MCHP_FiP16_GetAddress(const PARK_CLARKE_INV_SVM_MCHP_FIP16 *block, uint16 elementId);
 
 #endif
 

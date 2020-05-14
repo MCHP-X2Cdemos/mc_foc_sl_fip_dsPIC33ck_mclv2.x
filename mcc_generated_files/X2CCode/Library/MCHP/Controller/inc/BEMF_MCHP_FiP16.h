@@ -34,8 +34,8 @@
 /* USERCODE-BEGIN:Description                                                                                         */
 /* Description: */
 /* USERCODE-END:Description                                                                                           */
-#ifndef CLARK_PARK_FLOAT32_H
-#define CLARK_PARK_FLOAT32_H
+#ifndef BEMF_MCHP_FIP16_H
+#define BEMF_MCHP_FIP16_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -43,34 +43,45 @@ extern "C" {
 
 #include "CommonFcts.h"
 
-#if !defined(CLARK_PARK_FLOAT32_ISLINKED)
-#define CLARK_PARK_FLOAT32_ID ((uint16)20962)
+#if !defined(BEMF_MCHP_FIP16_ISLINKED)
+#define BEMF_MCHP_FIP16_ID ((uint16)20992)
 
 typedef struct {
     uint16          ID;
-    float32         *a;
-    float32         *b;
-    float32         *theta;
-    float32         d;
-    float32         q;
-    float32         alpha;
-    float32         beta;
-} CLARK_PARK_FLOAT32;
+    int16           *Ialpha;
+    int16           *Ibeta;
+    int16           *Valpha;
+    int16           *Vbeta;
+    int16           BEMFalpha;
+    int16           BEMFbeta;
+    int16           Ls;
+    int16           Rs;
+    int8            sfrLs;
+    int8            sfrRs;
+    int16           Ib_old;
+    int16           Ia_old;
+    uint8           CurrentSampleFactor;
+    int16           V_Ls_alpha;
+    int16           V_Ls_beta;
+    uint8           FactCounter;
+} BEMF_MCHP_FIP16;
 
-#define CLARK_PARK_FLOAT32_FUNCTIONS { \
-    CLARK_PARK_FLOAT32_ID, \
-    (void (*)(void*))Clark_Park_Float32_Update, \
-    (void (*)(void*))Clark_Park_Float32_Init, \
-    (tLoadImplementationParameter)Common_Load, \
-    (tSaveImplementationParameter)Common_Save, \
-    (void* (*)(const void*, uint16))Clark_Park_Float32_GetAddress }
+#define BEMF_MCHP_FIP16_FUNCTIONS { \
+    BEMF_MCHP_FIP16_ID, \
+    (void (*)(void*))BEMF_MCHP_FiP16_Update, \
+    (void (*)(void*))BEMF_MCHP_FiP16_Init, \
+    (tLoadImplementationParameter)BEMF_MCHP_FiP16_Load, \
+    (tSaveImplementationParameter)BEMF_MCHP_FiP16_Save, \
+    (void* (*)(const void*, uint16))BEMF_MCHP_FiP16_GetAddress }
 
 /**********************************************************************************************************************/
 /** Public prototypes                                                                                                **/
 /**********************************************************************************************************************/
-void Clark_Park_Float32_Update(CLARK_PARK_FLOAT32 *pTClark_Park_Float32);
-void Clark_Park_Float32_Init(CLARK_PARK_FLOAT32 *pTClark_Park_Float32);
-void* Clark_Park_Float32_GetAddress(const CLARK_PARK_FLOAT32 *block, uint16 elementId);
+void BEMF_MCHP_FiP16_Update(BEMF_MCHP_FIP16 *pTBEMF_MCHP_FiP16);
+void BEMF_MCHP_FiP16_Init(BEMF_MCHP_FIP16 *pTBEMF_MCHP_FiP16);
+uint8 BEMF_MCHP_FiP16_Load(const BEMF_MCHP_FIP16 *pTBEMF_MCHP_FiP16, uint8 data[], uint16 *dataLength, uint16 maxSize);
+uint8 BEMF_MCHP_FiP16_Save(BEMF_MCHP_FIP16 *pTBEMF_MCHP_FiP16, const uint8 data[], uint16 dataLength);
+void* BEMF_MCHP_FiP16_GetAddress(const BEMF_MCHP_FIP16 *block, uint16 elementId);
 
 #endif
 

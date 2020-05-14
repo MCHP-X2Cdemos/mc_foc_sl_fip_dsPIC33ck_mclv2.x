@@ -34,8 +34,8 @@
 /* USERCODE-BEGIN:Description                                                                                         */
 /* Description: */
 /* USERCODE-END:Description                                                                                           */
-#ifndef BEMF_CALC_FLOAT32_H
-#define BEMF_CALC_FLOAT32_H
+#ifndef CLARKE_MCHP_FLOAT32_H
+#define CLARKE_MCHP_FLOAT32_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -43,43 +43,31 @@ extern "C" {
 
 #include "CommonFcts.h"
 
-#if !defined(BEMF_CALC_FLOAT32_ISLINKED)
-#define BEMF_CALC_FLOAT32_ID ((uint16)20994)
+#if !defined(CLARKE_MCHP_FLOAT32_ISLINKED)
+#define CLARKE_MCHP_FLOAT32_ID ((uint16)20866)
 
 typedef struct {
     uint16          ID;
-    float32         *Ialpha;
-    float32         *Ibeta;
-    float32         *Valpha;
-    float32         *Vbeta;
-    float32         BEMFalpha;
-    float32         BEMFbeta;
-    float32         Ls;
-    float32         Rs;
-    float32         Ia_old;
-    float32         Ib_old;
-    uint8           CurrentSampleFactor;
-    float32         V_Ls_alpha;
-    float32         V_Ls_beta;
-    uint8           FactCounter;
-} BEMF_CALC_FLOAT32;
+    float32         *a;
+    float32         *b;
+    float32         alpha;
+    float32         beta;
+} CLARKE_MCHP_FLOAT32;
 
-#define BEMF_CALC_FLOAT32_FUNCTIONS { \
-    BEMF_CALC_FLOAT32_ID, \
-    (void (*)(void*))BEMF_calc_Float32_Update, \
-    (void (*)(void*))BEMF_calc_Float32_Init, \
-    (tLoadImplementationParameter)BEMF_calc_Float32_Load, \
-    (tSaveImplementationParameter)BEMF_calc_Float32_Save, \
-    (void* (*)(const void*, uint16))BEMF_calc_Float32_GetAddress }
+#define CLARKE_MCHP_FLOAT32_FUNCTIONS { \
+    CLARKE_MCHP_FLOAT32_ID, \
+    (void (*)(void*))Clarke_MCHP_Float32_Update, \
+    (void (*)(void*))Clarke_MCHP_Float32_Init, \
+    (tLoadImplementationParameter)Common_Load, \
+    (tSaveImplementationParameter)Common_Save, \
+    (void* (*)(const void*, uint16))Clarke_MCHP_Float32_GetAddress }
 
 /**********************************************************************************************************************/
 /** Public prototypes                                                                                                **/
 /**********************************************************************************************************************/
-void BEMF_calc_Float32_Update(BEMF_CALC_FLOAT32 *pTBEMF_calc_Float32);
-void BEMF_calc_Float32_Init(BEMF_CALC_FLOAT32 *pTBEMF_calc_Float32);
-uint8 BEMF_calc_Float32_Load(const BEMF_CALC_FLOAT32 *pTBEMF_calc_Float32, uint8 data[], uint16 *dataLength, uint16 maxSize);
-uint8 BEMF_calc_Float32_Save(BEMF_CALC_FLOAT32 *pTBEMF_calc_Float32, const uint8 data[], uint16 dataLength);
-void* BEMF_calc_Float32_GetAddress(const BEMF_CALC_FLOAT32 *block, uint16 elementId);
+void Clarke_MCHP_Float32_Update(CLARKE_MCHP_FLOAT32 *pTClarke_MCHP_Float32);
+void Clarke_MCHP_Float32_Init(CLARKE_MCHP_FLOAT32 *pTClarke_MCHP_Float32);
+void* Clarke_MCHP_Float32_GetAddress(const CLARKE_MCHP_FLOAT32 *block, uint16 elementId);
 
 #endif
 

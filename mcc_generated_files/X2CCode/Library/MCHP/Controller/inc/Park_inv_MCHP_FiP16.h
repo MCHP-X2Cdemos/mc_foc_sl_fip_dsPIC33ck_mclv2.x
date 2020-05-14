@@ -34,8 +34,8 @@
 /* USERCODE-BEGIN:Description                                                                                         */
 /* Description: */
 /* USERCODE-END:Description                                                                                           */
-#ifndef BEMF_CALC_FIP32_H
-#define BEMF_CALC_FIP32_H
+#ifndef PARK_INV_MCHP_FIP16_H
+#define PARK_INV_MCHP_FIP16_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -43,45 +43,32 @@ extern "C" {
 
 #include "CommonFcts.h"
 
-#if !defined(BEMF_CALC_FIP32_ISLINKED)
-#define BEMF_CALC_FIP32_ID ((uint16)20993)
+#if !defined(PARK_INV_MCHP_FIP16_ISLINKED)
+#define PARK_INV_MCHP_FIP16_ID ((uint16)20912)
 
 typedef struct {
     uint16          ID;
-    int32           *Ialpha;
-    int32           *Ibeta;
-    int32           *Valpha;
-    int32           *Vbeta;
-    int32           BEMFalpha;
-    int32           BEMFbeta;
-    int32           Ls;
-    int32           Rs;
-    int8            sfrLs;
-    int8            sfrRs;
-    int32           Ia_old;
-    int32           Ib_old;
-    uint8           CurrentSampleFactor;
-    int32           V_Ls_alpha;
-    int32           V_Ls_beta;
-    uint8           FactCounter;
-} BEMF_CALC_FIP32;
+    int16           *d;
+    int16           *q;
+    int16           *theta;
+    int16           alpha;
+    int16           beta;
+} PARK_INV_MCHP_FIP16;
 
-#define BEMF_CALC_FIP32_FUNCTIONS { \
-    BEMF_CALC_FIP32_ID, \
-    (void (*)(void*))BEMF_calc_FiP32_Update, \
-    (void (*)(void*))BEMF_calc_FiP32_Init, \
-    (tLoadImplementationParameter)BEMF_calc_FiP32_Load, \
-    (tSaveImplementationParameter)BEMF_calc_FiP32_Save, \
-    (void* (*)(const void*, uint16))BEMF_calc_FiP32_GetAddress }
+#define PARK_INV_MCHP_FIP16_FUNCTIONS { \
+    PARK_INV_MCHP_FIP16_ID, \
+    (void (*)(void*))Park_inv_MCHP_FiP16_Update, \
+    (void (*)(void*))Park_inv_MCHP_FiP16_Init, \
+    (tLoadImplementationParameter)Common_Load, \
+    (tSaveImplementationParameter)Common_Save, \
+    (void* (*)(const void*, uint16))Park_inv_MCHP_FiP16_GetAddress }
 
 /**********************************************************************************************************************/
 /** Public prototypes                                                                                                **/
 /**********************************************************************************************************************/
-void BEMF_calc_FiP32_Update(BEMF_CALC_FIP32 *pTBEMF_calc_FiP32);
-void BEMF_calc_FiP32_Init(BEMF_CALC_FIP32 *pTBEMF_calc_FiP32);
-uint8 BEMF_calc_FiP32_Load(const BEMF_CALC_FIP32 *pTBEMF_calc_FiP32, uint8 data[], uint16 *dataLength, uint16 maxSize);
-uint8 BEMF_calc_FiP32_Save(BEMF_CALC_FIP32 *pTBEMF_calc_FiP32, const uint8 data[], uint16 dataLength);
-void* BEMF_calc_FiP32_GetAddress(const BEMF_CALC_FIP32 *block, uint16 elementId);
+void Park_inv_MCHP_FiP16_Update(PARK_INV_MCHP_FIP16 *pTPark_inv_MCHP_FiP16);
+void Park_inv_MCHP_FiP16_Init(PARK_INV_MCHP_FIP16 *pTPark_inv_MCHP_FiP16);
+void* Park_inv_MCHP_FiP16_GetAddress(const PARK_INV_MCHP_FIP16 *block, uint16 elementId);
 
 #endif
 

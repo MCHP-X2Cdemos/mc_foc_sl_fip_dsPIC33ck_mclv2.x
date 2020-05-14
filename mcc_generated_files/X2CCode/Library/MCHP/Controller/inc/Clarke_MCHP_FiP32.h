@@ -34,8 +34,8 @@
 /* USERCODE-BEGIN:Description                                                                                         */
 /* Description: */
 /* USERCODE-END:Description                                                                                           */
-#ifndef CLARK_FIP32_H
-#define CLARK_FIP32_H
+#ifndef CLARKE_MCHP_FIP32_H
+#define CLARKE_MCHP_FIP32_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -43,8 +43,8 @@ extern "C" {
 
 #include "CommonFcts.h"
 
-#if !defined(CLARK_FIP32_ISLINKED)
-#define CLARK_FIP32_ID ((uint16)20865)
+#if !defined(CLARKE_MCHP_FIP32_ISLINKED)
+#define CLARKE_MCHP_FIP32_ID ((uint16)20865)
 
 typedef struct {
     uint16          ID;
@@ -52,22 +52,22 @@ typedef struct {
     int32           *b;
     int32           alpha;
     int32           beta;
-} CLARK_FIP32;
+} CLARKE_MCHP_FIP32;
 
-#define CLARK_FIP32_FUNCTIONS { \
-    CLARK_FIP32_ID, \
-    (void (*)(void*))Clark_FiP32_Update, \
-    (void (*)(void*))Clark_FiP32_Init, \
+#define CLARKE_MCHP_FIP32_FUNCTIONS { \
+    CLARKE_MCHP_FIP32_ID, \
+    (void (*)(void*))Clarke_MCHP_FiP32_Update, \
+    (void (*)(void*))Clarke_MCHP_FiP32_Init, \
     (tLoadImplementationParameter)Common_Load, \
     (tSaveImplementationParameter)Common_Save, \
-    (void* (*)(const void*, uint16))Clark_FiP32_GetAddress }
+    (void* (*)(const void*, uint16))Clarke_MCHP_FiP32_GetAddress }
 
 /**********************************************************************************************************************/
 /** Public prototypes                                                                                                **/
 /**********************************************************************************************************************/
-void Clark_FiP32_Update(CLARK_FIP32 *pTClark_FiP32);
-void Clark_FiP32_Init(CLARK_FIP32 *pTClark_FiP32);
-void* Clark_FiP32_GetAddress(const CLARK_FIP32 *block, uint16 elementId);
+void Clarke_MCHP_FiP32_Update(CLARKE_MCHP_FIP32 *pTClarke_MCHP_FiP32);
+void Clarke_MCHP_FiP32_Init(CLARKE_MCHP_FIP32 *pTClarke_MCHP_FiP32);
+void* Clarke_MCHP_FiP32_GetAddress(const CLARKE_MCHP_FIP32 *block, uint16 elementId);
 
 #endif
 

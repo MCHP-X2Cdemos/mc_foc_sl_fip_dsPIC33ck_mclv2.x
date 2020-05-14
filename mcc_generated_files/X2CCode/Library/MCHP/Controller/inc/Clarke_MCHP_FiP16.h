@@ -34,8 +34,8 @@
 /* USERCODE-BEGIN:Description                                                                                         */
 /* Description: */
 /* USERCODE-END:Description                                                                                           */
-#ifndef CLARK_PARK_FIP16_H
-#define CLARK_PARK_FIP16_H
+#ifndef CLARKE_MCHP_FIP16_H
+#define CLARKE_MCHP_FIP16_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -43,34 +43,31 @@ extern "C" {
 
 #include "CommonFcts.h"
 
-#if !defined(CLARK_PARK_FIP16_ISLINKED)
-#define CLARK_PARK_FIP16_ID ((uint16)20960)
+#if !defined(CLARKE_MCHP_FIP16_ISLINKED)
+#define CLARKE_MCHP_FIP16_ID ((uint16)20864)
 
 typedef struct {
     uint16          ID;
     int16           *a;
     int16           *b;
-    int16           *theta;
-    int16           d;
-    int16           q;
     int16           alpha;
     int16           beta;
-} CLARK_PARK_FIP16;
+} CLARKE_MCHP_FIP16;
 
-#define CLARK_PARK_FIP16_FUNCTIONS { \
-    CLARK_PARK_FIP16_ID, \
-    (void (*)(void*))Clark_Park_FiP16_Update, \
-    (void (*)(void*))Clark_Park_FiP16_Init, \
+#define CLARKE_MCHP_FIP16_FUNCTIONS { \
+    CLARKE_MCHP_FIP16_ID, \
+    (void (*)(void*))Clarke_MCHP_FiP16_Update, \
+    (void (*)(void*))Clarke_MCHP_FiP16_Init, \
     (tLoadImplementationParameter)Common_Load, \
     (tSaveImplementationParameter)Common_Save, \
-    (void* (*)(const void*, uint16))Clark_Park_FiP16_GetAddress }
+    (void* (*)(const void*, uint16))Clarke_MCHP_FiP16_GetAddress }
 
 /**********************************************************************************************************************/
 /** Public prototypes                                                                                                **/
 /**********************************************************************************************************************/
-void Clark_Park_FiP16_Update(CLARK_PARK_FIP16 *pTClark_Park_FiP16);
-void Clark_Park_FiP16_Init(CLARK_PARK_FIP16 *pTClark_Park_FiP16);
-void* Clark_Park_FiP16_GetAddress(const CLARK_PARK_FIP16 *block, uint16 elementId);
+void Clarke_MCHP_FiP16_Update(CLARKE_MCHP_FIP16 *pTClarke_MCHP_FiP16);
+void Clarke_MCHP_FiP16_Init(CLARKE_MCHP_FIP16 *pTClarke_MCHP_FiP16);
+void* Clarke_MCHP_FiP16_GetAddress(const CLARKE_MCHP_FIP16 *block, uint16 elementId);
 
 #endif
 

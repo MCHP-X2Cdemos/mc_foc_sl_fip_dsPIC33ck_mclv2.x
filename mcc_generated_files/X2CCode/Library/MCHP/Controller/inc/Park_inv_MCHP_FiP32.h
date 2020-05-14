@@ -34,8 +34,8 @@
 /* USERCODE-BEGIN:Description                                                                                         */
 /* Description: */
 /* USERCODE-END:Description                                                                                           */
-#ifndef CLARK_PARK_FIP32_H
-#define CLARK_PARK_FIP32_H
+#ifndef PARK_INV_MCHP_FIP32_H
+#define PARK_INV_MCHP_FIP32_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -43,34 +43,32 @@ extern "C" {
 
 #include "CommonFcts.h"
 
-#if !defined(CLARK_PARK_FIP32_ISLINKED)
-#define CLARK_PARK_FIP32_ID ((uint16)20961)
+#if !defined(PARK_INV_MCHP_FIP32_ISLINKED)
+#define PARK_INV_MCHP_FIP32_ID ((uint16)20913)
 
 typedef struct {
     uint16          ID;
-    int32           *a;
-    int32           *b;
+    int32           *d;
+    int32           *q;
     int32           *theta;
-    int32           d;
-    int32           q;
     int32           alpha;
     int32           beta;
-} CLARK_PARK_FIP32;
+} PARK_INV_MCHP_FIP32;
 
-#define CLARK_PARK_FIP32_FUNCTIONS { \
-    CLARK_PARK_FIP32_ID, \
-    (void (*)(void*))Clark_Park_FiP32_Update, \
-    (void (*)(void*))Clark_Park_FiP32_Init, \
+#define PARK_INV_MCHP_FIP32_FUNCTIONS { \
+    PARK_INV_MCHP_FIP32_ID, \
+    (void (*)(void*))Park_inv_MCHP_FiP32_Update, \
+    (void (*)(void*))Park_inv_MCHP_FiP32_Init, \
     (tLoadImplementationParameter)Common_Load, \
     (tSaveImplementationParameter)Common_Save, \
-    (void* (*)(const void*, uint16))Clark_Park_FiP32_GetAddress }
+    (void* (*)(const void*, uint16))Park_inv_MCHP_FiP32_GetAddress }
 
 /**********************************************************************************************************************/
 /** Public prototypes                                                                                                **/
 /**********************************************************************************************************************/
-void Clark_Park_FiP32_Update(CLARK_PARK_FIP32 *pTClark_Park_FiP32);
-void Clark_Park_FiP32_Init(CLARK_PARK_FIP32 *pTClark_Park_FiP32);
-void* Clark_Park_FiP32_GetAddress(const CLARK_PARK_FIP32 *block, uint16 elementId);
+void Park_inv_MCHP_FiP32_Update(PARK_INV_MCHP_FIP32 *pTPark_inv_MCHP_FiP32);
+void Park_inv_MCHP_FiP32_Init(PARK_INV_MCHP_FIP32 *pTPark_inv_MCHP_FiP32);
+void* Park_inv_MCHP_FiP32_GetAddress(const PARK_INV_MCHP_FIP32 *block, uint16 elementId);
 
 #endif
 
