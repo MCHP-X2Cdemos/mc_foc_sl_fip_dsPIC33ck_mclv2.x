@@ -14,14 +14,14 @@
   @Description:
     This source file provides implementations for PIC24 / dsPIC33 / PIC32MM MCUs traps.
     Generation Information : 
-        Product Revision  :  PIC24 / dsPIC33 / PIC32MM MCUs - 1.95-b-SNAPSHOT
+        Product Revision  :  PIC24 / dsPIC33 / PIC32MM MCUs - 1.167.0
         Device            :  dsPIC33CK256MP508
     The generated drivers are tested against the following:
-        Compiler          :  XC16 v1.36
-        MPLAB             :  MPLAB X v5.10
+        Compiler          :  XC16 v1.50
+        MPLAB             :  MPLAB X v5.35
 */
 /*
-    (c) 2016 Microchip Technology Inc. and its subsidiaries. You may use this
+    (c) 2020 Microchip Technology Inc. and its subsidiaries. You may use this
     software and any derivatives exclusively with Microchip products.
 
     THIS SOFTWARE IS SUPPLIED BY MICROCHIP "AS IS". NO WARRANTIES, WHETHER
@@ -58,6 +58,10 @@ typedef enum
     TRAPS_ADDRESS_ERR = 2, /** Address error Trap vector */
     TRAPS_MATH_ERR = 3, /** Math Error Trap vector */
     TRAPS_HARD_ERR = 7, /** Generic Hard Trap vector */
+    TRAPS_NVM_ERR = 12, /** Generic Soft Trap vector */
+    TRAPS_DMT_ERR = 8, /** Generic Soft Trap vector */
+    TRAPS_DAE_ERR = 9, /** Generic Soft Trap vector */
+    TRAPS_DOOVR_ERR = 10, /** Generic Soft Trap vector */
     TRAPS_APLL_ERR = 11, /** Generic Soft Trap vector */
 } TRAPS_ERROR_CODE;
 /**
@@ -82,6 +86,6 @@ typedef enum
     None.
 
 */
-void __attribute__((naked, noreturn, weak)) TRAPS_halt_on_error(uint16_t code);
+void __attribute__((weak)) TRAPS_halt_on_error(uint16_t code);
 
 #endif

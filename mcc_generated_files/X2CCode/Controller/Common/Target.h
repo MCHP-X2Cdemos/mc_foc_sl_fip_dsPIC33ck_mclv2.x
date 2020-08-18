@@ -1,14 +1,40 @@
 /**
  * @file
- *
  * @brief Common includes, macros and type definitions.
  */
 /*
- * $LastChangedRevision: 1634 $
- * $LastChangedDate:: 2019-02-25 18:53:29 +0100#$
- *
  * Copyright (c) 2013, Linz Center of Mechatronics GmbH (LCM) http://www.lcm.at/
  * All rights reserved.
+ */
+/*
+ * This file is licensed according to the BSD 3-clause license as follows:
+ * 
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *     * Redistributions of source code must retain the above copyright
+ *       notice, this list of conditions and the following disclaimer.
+ *     * Redistributions in binary form must reproduce the above copyright
+ *       notice, this list of conditions and the following disclaimer in the
+ *       documentation and/or other materials provided with the distribution.
+ *     * Neither the name of the "Linz Center of Mechatronics GmbH" and "LCM" nor
+ *       the names of its contributors may be used to endorse or promote products
+ *       derived from this software without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL "Linz Center of Mechatronics GmbH" BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+/*
+ * This file is part of X2C. http://x2c.lcm.at/
+ * $LastChangedRevision: 1866 $
+ * $LastChangedDate:: 2020-04-03 21:38:34 +0200#$
  */
 #ifndef TARGET_H
 #define TARGET_H
@@ -84,14 +110,16 @@ typedef long double float64;
 #define __TMS320F281X__
 #elif defined(__TM4C123GH6__) || defined(__TM4C123BE6__) || defined(__TM4C1294NC__)
 #define __SERIES_TM4C__
+#elif defined(X2C_TMS320F28379D)
+#define X2C_SERIES_TMS32F2837X
 
 /* ST processors */
 #elif defined(__STM32F103ZC__) || defined(__STM32F103T6__) || defined(__STM32F103VB__) || defined(__STM32F103V8__) || \
 defined(__STM32F100C6__) || defined(__STM32F103RB__)
 #define __SERIES_STM32F1__
-#elif defined(__STM32F407ZG__) || defined(__STM32F407ZE__) || defined(__STM32F407VG__)
+#elif defined(__STM32F407ZG__) || defined(__STM32F407ZE__) || defined(__STM32F407VG__) || defined(X2C_STM32F446VE) || defined(X2C_STM32F446RE)
 #define __SERIES_STM32F4__
-#elif defined(__STM32F051R8__) || defined(__STM32F051C8__)
+#elif defined(__STM32F051R8__) || defined(__STM32F051C8__) || defined(X2C_STM32F072RB)
 #define __SERIES_STM32F0__
 #elif defined(__STM32F303RE__) || defined(__STM32F303RB__) || defined(__STM32F302RD__) || defined(__STM32F302R8__)
 #define __SERIES_STM32F3__
@@ -112,6 +140,8 @@ defined(__STM32F100C6__) || defined(__STM32F103RB__)
 #elif defined(__KECONTROL__)
 #define __SERIES_KECONTROL__
 
+#elif defined(X2C_DSPIC33CK256MP505)
+#define X2C_SERIES_DSPIC33C
 #elif defined(__DSPIC33EP256MC506__) || defined(__DSPIC33EP128GP502__) || defined(__DSPIC33EP32GP502__) || \
 defined(__DSPIC33EP256GP502__) || defined(__DSPIC33EP256MC502__) || defined(__DSPIC33EP128MC202__) || \
 defined(__DSPIC33EP128GM604__) || defined(X2C_DSPIC33EP512GM604)
@@ -146,9 +176,8 @@ defined(__DSPIC33EP128GM604__) || defined(X2C_DSPIC33EP512GM604)
 #endif
 
 /* TI processor family */
-#if defined(__TMS320F2806X__) || defined(__TMS320F2803X__) || \
-	defined(__TMS320F2833X__) || defined(__TMS320F280X__) || \
-	defined(__TMS320F281X__) || defined(__TMS320F2802X__)
+#if defined(__TMS320F2806X__) || defined(__TMS320F2803X__) || defined(__TMS320F2833X__) || defined(__TMS320F280X__) || \
+	defined(__TMS320F281X__) || defined(__TMS320F2802X__) || defined(X2C_SERIES_TMS32F2837X)
 #define __C2000__
 #define __ADDRESS_WIDTH_32BIT__
 #define __DATA_WIDTH_16BIT__
@@ -164,8 +193,7 @@ defined(__DSPIC33EP128GM604__) || defined(X2C_DSPIC33EP512GM604)
 #define __ADDRESS_WIDTH_32BIT__
 #define __DATA_WIDTH_8BIT__
 
-#elif defined(__SERIES_STM32F4__) || defined(__SERIES_STM32F0__) || defined(__SERIES_STM32F1__) || \
-	defined(__SERIES_STM32F3__)
+#elif defined(__SERIES_STM32F4__) || defined(__SERIES_STM32F0__) || defined(__SERIES_STM32F1__) || defined(__SERIES_STM32F3__)
 #define __VENDOR_ST__
 #define __ADDRESS_WIDTH_32BIT__
 #define __DATA_WIDTH_8BIT__
@@ -175,7 +203,7 @@ defined(__DSPIC33EP128GM604__) || defined(X2C_DSPIC33EP512GM604)
 #define __ADDRESS_WIDTH_32BIT__
 #define __DATA_WIDTH_8BIT__
 
-#elif defined(__SERIES_DSPIC33E__) || defined(__SERIES_DSPIC33F__)
+#elif defined(__SERIES_DSPIC33E__) || defined(__SERIES_DSPIC33F__) || defined(X2C_SERIES_DSPIC33C)
 #define __VENDOR_MICROCHIP__
 #define __ADDRESS_WIDTH_16BIT__
 #define __DATA_WIDTH_8BIT__
@@ -301,17 +329,31 @@ defined(__DSPIC33EP128GM604__) || defined(X2C_DSPIC33EP512GM604)
 			IWDG_ReloadCounter(); \
 		} while (0)
 #elif defined(__SERIES_STM32F4__)
+#if defined(USE_HAL_DRIVER)
+#define KICK_DOG \
+	do { \
+		HAL_IWDG_Refresh(&hiwdg); \
+	} while (0)
+#else
 	#include "stm32f4xx.h"
 	#define KICK_DOG \
 		do { \
 			IWDG_ReloadCounter(); \
 		} while (0)
+#endif
 #elif defined(__SERIES_STM32F0__)
+#if defined(USE_HAL_DRIVER)
+#define KICK_DOG \
+	do { \
+		HAL_IWDG_Refresh(&hiwdg); \
+	} while (0)
+#else
 	#include "stm32f0xx.h"
 	#define KICK_DOG \
 		do { \
 			IWDG_ReloadCounter(); \
 		} while (0)
+#endif
 #elif defined(__SERIES_STM32F3__)
 	#include "stm32f30x.h"
 	#define KICK_DOG \
@@ -389,6 +431,54 @@ defined(__DSPIC33EP128GM604__) || defined(X2C_DSPIC33EP512GM604)
 		WATCHDOG_ClearAlarm(); \
 		WATCHDOG_Service(); \
 } while(0)
+#elif defined(X2C_SERIES_TMS32F2837X)
+#include <stdint.h>
+#include <stdbool.h>
+
+#include "F2837xD_device.h"
+
+#include "inc/hw_memmap.h"
+
+#include "adc.h"
+#include "asysctl.h"
+#include "can.h"
+#include "cla.h"
+#include "clb.h"
+#include "cmpss.h"
+#include "cpu.h"
+#include "cputimer.h"
+#include "dac.h"
+#include "dcsm.h"
+#include "debug.h"
+#include "dma.h"
+#include "ecap.h"
+#include "emif.h"
+#include "epwm.h"
+#include "eqep.h"
+#include "flash.h"
+#include "gpio.h"
+#include "hrpwm.h"
+#include "i2c.h"
+#include "interrupt.h"
+#include "mcbsp.h"
+#include "memcfg.h"
+#include "pin_map.h"
+#include "sci.h"
+#include "sdfm.h"
+#include "spi.h"
+#include "sysctl.h"
+#include "upp.h"
+#include "version.h"
+#include "xbar.h"
+
+/*
+ * Attention: All watchdog functions issue an EALLOW and EDIS before and after the command itself.
+ * Calling these functions within an EALLOW-EDIS section requires the user to add an EALLOW after each of these macros.
+ */
+#define KICK_DOG SysCtl_serviceWatchdog()
+#define disableWatchdog SysCtl_disableWatchdog
+#define enableWatchdog SysCtl_enableWatchdog
+#define disableInterrupts Interrupt_disableMaster
 
 #elif defined(__MATLAB__) || defined(__SCILAB__) || defined(__VENDOR_KEBA__)
 /* do nothing, just avoid compiler errors */
@@ -437,6 +527,15 @@ typedef unsigned char uint8;
 typedef unsigned int uint16;
 typedef unsigned long uint32;
 typedef unsigned long long uint64;
+#elif defined(X2C_SERIES_TMS32F2837X)
+#include <stdbool.h>    /* support for boolean datatype */
+#include <stdint.h>
+/* int16, int32, int64, float32, float64 already defined in TI files */
+typedef int8_t int8;
+typedef uint8_t uint8;
+typedef uint16_t uint16;
+typedef uint32_t uint32;
+typedef uint64_t uint64;
 #elif defined(__RENESAS_RX__) || \
   defined(__SERIES_STM32F0__) || defined(__SERIES_STM32F1__) ||\
   defined(__SERIES_STM32F3__) || defined(__SERIES_STM32F4__) ||\
@@ -456,7 +555,7 @@ typedef int64_t int64;
 typedef uint64_t uint64;
 typedef float float32;
 typedef double float64;
-#elif   defined(__SERIES_DSPIC33E__) || defined(__SERIES_DSPIC33F__) || \
+#elif defined(__SERIES_DSPIC33E__) || defined(__SERIES_DSPIC33F__) || defined(X2C_SERIES_DSPIC33C) || \
   defined(__SERIES_PIC32MZ__) || defined(__SERIES_PIC32MX__)
 #include <stdint.h>
 #include <stdbool.h>    /* support for boolean datatype */

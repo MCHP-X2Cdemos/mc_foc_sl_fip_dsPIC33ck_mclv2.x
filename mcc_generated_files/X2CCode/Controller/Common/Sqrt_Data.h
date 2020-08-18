@@ -1,23 +1,61 @@
+/**
+ * @file
+ * @brief Square root and inverse square root function lookup table.
+ *
+ * sqrt() and sqrt()^-1 table with 256+1 values. The 257th value enables time efficient table indexing without boundary check.
+ */
 /*
- * Square root and inverse square root lookup table.
- *
- * $$LastChangedRevision: 387 $$
- * $$LastChangedDate: 2014-03-26 10:55:38 +0100 (Wed, 26 Mar 2014) $$
- * $$LastChangedBy: EAL\sfragner $$
- *
- * Copyright (c) 2013 Linz Center of Mechatronics GmbH
+ * Copyright (c) 2013, Linz Center of Mechatronics GmbH (LCM) http://www.lcm.at/
  * All rights reserved.
  */
-#ifndef __SQRT_DATA__
-	#define __SQRT_DATA__
+/*
+ * This file is licensed according to the BSD 3-clause license as follows:
+ * 
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *     * Redistributions of source code must retain the above copyright
+ *       notice, this list of conditions and the following disclaimer.
+ *     * Redistributions in binary form must reproduce the above copyright
+ *       notice, this list of conditions and the following disclaimer in the
+ *       documentation and/or other materials provided with the distribution.
+ *     * Neither the name of the "Linz Center of Mechatronics GmbH" and "LCM" nor
+ *       the names of its contributors may be used to endorse or promote products
+ *       derived from this software without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL "Linz Center of Mechatronics GmbH" BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+/*
+ * This file is part of X2C. http://x2c.lcm.at/
+ * $LastChangedRevision: 1852 $
+ * $LastChangedDate:: 2020-03-10 16:35:19 +0100#$
+ */
+#ifndef SQRT_DATA
+#define SQRT_DATA
 
-	#include "CommonFcts.h"
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-	extern const int8  Sqrt_Table8[257];
-	extern const int16 Sqrt_Table16[257];
-	extern const int32 Sqrt_Table32[257];
-	extern const int8  InvSqrt_Table8[257];
-	extern const int16 InvSqrt_Table16[257];
-	extern const int32 InvSqrt_Table32[257];
+#include "CommonFcts.h"
+
+extern const int8  Sqrt_Table8[257];
+extern const int16 Sqrt_Table16[257];
+extern const int32 Sqrt_Table32[257];
+extern const int8  InvSqrt_Table8[257];
+extern const int16 InvSqrt_Table16[257];
+extern const int32 InvSqrt_Table32[257];
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

@@ -13,15 +13,15 @@
   @Description
     This header file provides implementations for driver APIs for UART1.
     Generation Information :
-        Product Revision  :  PIC24 / dsPIC33 / PIC32MM MCUs - 1.95-b-SNAPSHOT
+        Product Revision  :  PIC24 / dsPIC33 / PIC32MM MCUs - 1.167.0
         Device            :  dsPIC33CK256MP508
     The generated drivers are tested against the following:
-        Compiler          :  XC16 v1.36
-        MPLAB             :  MPLAB X v5.10
+        Compiler          :  XC16 v1.50
+        MPLAB             :  MPLAB X v5.35
 */
 
 /*
-    (c) 2016 Microchip Technology Inc. and its subsidiaries. You may use this
+    (c) 2020 Microchip Technology Inc. and its subsidiaries. You may use this
     software and any derivatives exclusively with Microchip products.
 
     THIS SOFTWARE IS SUPPLIED BY MICROCHIP "AS IS". NO WARRANTIES, WHETHER
@@ -45,7 +45,7 @@
 /**
   Section: Included Files
 */
-
+#include <xc.h>
 #include "uart1.h"
 
 /**
@@ -90,7 +90,9 @@ void UART1_Initialize(void)
     // ABDIF disabled; WUIF disabled; ABDIE disabled; 
     U1INT = 0x00;
     
-    UART1_Enable();  // enabling UARTEN bit
+    U1MODEbits.UARTEN = 1;   // enabling UART ON bit
+    U1MODEbits.UTXEN = 1;
+    U1MODEbits.URXEN = 1;
 }
 
 uint8_t UART1_Read(void)
@@ -104,7 +106,7 @@ uint8_t UART1_Read(void)
     {
         U1STAbits.OERR = 0;
     }
-
+    
     return U1RXREG;
 }
 
@@ -118,23 +120,47 @@ void UART1_Write(uint8_t txData)
     U1TXREG = txData;    // Write the data byte to the USART.
 }
 
-uint32_t UART1_StatusGet (void)
+bool UART1_IsRxReady(void)
+{
+    return (U1STAHbits.URXBE == 0);
+}
+
+bool UART1_IsTxReady(void)
+{
+    return ((!U1STAHbits.UTXBF) && U1MODEbits.UTXEN );
+}
+
+bool UART1_IsTxDone(void)
+{
+    return U1STAbits.TRMT;
+}
+
+
+/*******************************************************************************
+
+  !!! Deprecated API !!!
+  !!! These functions will not be supported in future releases !!!
+
+*******************************************************************************/
+
+uint32_t __attribute__((deprecated)) UART1_StatusGet (void)
 {
     uint32_t statusReg = U1STAH;
     return ((statusReg << 16 ) | U1STA);
 }
 
-void UART1_Enable(void)
+void __attribute__((deprecated)) UART1_Enable(void)
 {
     U1MODEbits.UARTEN = 1;
     U1MODEbits.UTXEN = 1; 
     U1MODEbits.URXEN = 1;
 }
 
-void UART1_Disable(void)
+void __attribute__((deprecated)) UART1_Disable(void)
 {
     U1MODEbits.UARTEN = 0;
     U1MODEbits.UTXEN = 0; 
     U1MODEbits.URXEN = 0;
 }
+
 

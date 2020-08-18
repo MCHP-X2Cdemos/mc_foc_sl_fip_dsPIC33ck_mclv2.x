@@ -11,17 +11,17 @@
     This is the generated main.c using PIC24 / dsPIC33 / PIC32MM MCUs.
 
   @Description
-    This source file provides main entry point for system intialization and application code development.
+    This source file provides main entry point for system initialization and application code development.
     Generation Information :
-        Product Revision  :  PIC24 / dsPIC33 / PIC32MM MCUs - 1.95-b-SNAPSHOT
+        Product Revision  :  PIC24 / dsPIC33 / PIC32MM MCUs - 1.167.0
         Device            :  dsPIC33CK256MP508
     The generated drivers are tested against the following:
-        Compiler          :  XC16 v1.36
-        MPLAB 	          :  MPLAB X v5.10
+        Compiler          :  XC16 v1.50
+        MPLAB 	          :  MPLAB X v5.35
 */
 
 /*
-    (c) 2016 Microchip Technology Inc. and its subsidiaries. You may use this
+    (c) 2020 Microchip Technology Inc. and its subsidiaries. You may use this
     software and any derivatives exclusively with Microchip products.
 
     THIS SOFTWARE IS SUPPLIED BY MICROCHIP "AS IS". NO WARRANTIES, WHETHER
@@ -76,13 +76,6 @@ int main(void)
     
 }
 
-void ADC1_ADCAN0_CallBack(uint16_t adcVal)
-{
-    LED1_SetHigh();
-    X2C_Task();
-    LED1_SetLow();
-    _ADCAN0IF = 0; 
-}
 /**
  End of File
 */

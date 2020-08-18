@@ -1,17 +1,42 @@
 /*
- * $LastChangedRevision: 1634 $
- * $LastChangedDate:: 2019-02-25 18:53:29 +0100#$
- *
- * This file is part of X2C. http://x2c.lcm.at/
- *
  * Copyright (c) 2013, Linz Center of Mechatronics GmbH (LCM) http://www.lcm.at/
  * All rights reserved.
+ */
+/*
+ * This file is licensed according to the BSD 3-clause license as follows:
+ * 
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *     * Redistributions of source code must retain the above copyright
+ *       notice, this list of conditions and the following disclaimer.
+ *     * Redistributions in binary form must reproduce the above copyright
+ *       notice, this list of conditions and the following disclaimer in the
+ *       documentation and/or other materials provided with the distribution.
+ *     * Neither the name of the "Linz Center of Mechatronics GmbH" and "LCM" nor
+ *       the names of its contributors may be used to endorse or promote products
+ *       derived from this software without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL "Linz Center of Mechatronics GmbH" BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+/*
+ * This file is part of X2C. http://x2c.lcm.at/
+ * $LastChangedRevision: 1866 $
+ * $LastChangedDate:: 2020-04-03 21:38:34 +0200#$
  */
 #include "TableStruct.h"
 #include "Services.h"
 
-/* monitor program version */
-#define DEVINFO_MONITOR_VERSION ((uint16)0x0006)
+/* bootloader program version */
+#define DEVINFO_BOOTLOADER_VERSION ((uint16)0x0006)
 
 #if defined(__GENERIC_TI_C28X__)
 #define DEVINFO_PROCESSOR_ID ((uint16)0x8110)
@@ -92,6 +117,9 @@
 #elif defined(__TMS320F28027__)
 #define DEVINFO_PROCESSOR_ID ((uint16)0x0181)
 
+#elif defined(X2C_TMS320F28379D)
+#define DEVINFO_PROCESSOR_ID ((uint16)0x0191)
+
 /* DSPIC33F */
 #elif defined(__DSPIC33FJ256MC710__)
 #define DEVINFO_PROCESSOR_ID ((uint16)0x0221)
@@ -134,6 +162,9 @@
 #elif defined(__PIC32MX170F256__)
 #define DEVINFO_PROCESSOR_ID ((uint16)0x0251)
 
+#elif defined(X2C_DSPIC33CK256MP505)
+#define DEVINFO_PROCESSOR_ID ((uint16)0x0261)
+
 /* STM32F103xx */
 #elif defined(__STM32F103VB__)
 #define DEVINFO_PROCESSOR_ID ((uint16)0x0311)
@@ -165,12 +196,18 @@
 #define DEVINFO_PROCESSOR_ID ((uint16)0x0342)
 #elif defined(__STM32F407VG__)
 #define DEVINFO_PROCESSOR_ID ((uint16)0x0343)
+#elif defined(X2C_STM32F446VE)
+#define DEVINFO_PROCESSOR_ID ((uint16)0x0344)
+#elif defined(X2C_STM32F446RE)
+#define DEVINFO_PROCESSOR_ID ((uint16)0x0345)
 
 /* STM32F0 */
 #elif defined(__STM32F051R8__)
 #define DEVINFO_PROCESSOR_ID ((uint16)0x0351)
 #elif defined(__STM32F051C8__)
 #define DEVINFO_PROCESSOR_ID ((uint16)0x0352)
+#elif defined(X2C_STM32F072RB)
+#define DEVINFO_PROCESSOR_ID ((uint16)0x0353)
 
 /* STM32F3 */
 #elif defined(__STM32F303RE__)
@@ -263,9 +300,9 @@ static void getDeviceInfo(tProtocol* protocol)
 	protocol->ucFRAMESize = 47;
 	protocol->ucFRAMEData[1] = ERRORSuccess;
 
-	/* monitor program version */
-	protocol->ucFRAMEData[2] = (uint8)(DEVINFO_MONITOR_VERSION & 0x00FF);
-	protocol->ucFRAMEData[3] = (uint8)(DEVINFO_MONITOR_VERSION >> 8);
+	/* bootloader program version */
+	protocol->ucFRAMEData[2] = (uint8)(DEVINFO_BOOTLOADER_VERSION & 0x00FF);
+	protocol->ucFRAMEData[3] = (uint8)(DEVINFO_BOOTLOADER_VERSION >> 8);
 
 	/* frame program version */
 	protocol->ucFRAMEData[4] = \
@@ -279,7 +316,7 @@ static void getDeviceInfo(tProtocol* protocol)
 	protocol->ucFRAMEData[8] = (uint8)(DEVINFO_PROCESSOR_ID & 0x00FF);
 	protocol->ucFRAMEData[9] = (uint8)(DEVINFO_PROCESSOR_ID >> 8);
 
-	/* monitor program compilation date as ASCII string */
+	/* bootloader program compilation date as ASCII string */
 	/* 9 ... 11 -> first 3 letters of month (e.g. Oct, Dec) */
 	/* 12 ... 13 -> day as DD */
 	/* 14 ... 17 -> year as YYYY */
@@ -293,7 +330,7 @@ static void getDeviceInfo(tProtocol* protocol)
 	protocol->ucFRAMEData[17] = __DATE__[9];
 	protocol->ucFRAMEData[18] = __DATE__[10];
 
-	/* monitor program compilation time as ASCII string */
+	/* bootloader program compilation time as ASCII string */
 	/* 18 ... 19 -> hour as HH */
 	/* 20 ... 21 -> minute as MM */
 	protocol->ucFRAMEData[19] = __TIME__[0];
@@ -731,7 +768,7 @@ static void setTargetState(tProtocol* protocol)
 	switch (protocol->ucFRAMEData[1])
 	{
 	case 0:
-		TableStruct->DSPState = MONITOR_STATE;
+		TableStruct->DSPState = BOOTLOADER_STATE;
 		break;
 	case 1:
 		TableStruct->DSPState = PRG_LOADED_STATE;

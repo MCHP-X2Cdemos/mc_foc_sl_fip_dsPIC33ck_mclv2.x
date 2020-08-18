@@ -1,4 +1,3 @@
-
 /**
   ADC1 Generated Driver File
 
@@ -9,20 +8,20 @@
     adc1.c
 
   @Summary
-    This is the generated header file for the ADC1 driver using PIC24 / dsPIC33 / PIC32MM MCUs
+    This is the generated driver implementation file for the ADC1 driver using PIC24 / dsPIC33 / PIC32MM MCUs
 
   @Description
-    This header file provides APIs for driver for ADC1.
+    This source file provides APIs for ADC1.
     Generation Information :
-        Product Revision  :  PIC24 / dsPIC33 / PIC32MM MCUs - 1.95-b-SNAPSHOT
-        Device            :  dsPIC33CK256MP508
+        Product Revision  :  PIC24 / dsPIC33 / PIC32MM MCUs - 1.167.0
+        Device            :  dsPIC33CK256MP508      
     The generated drivers are tested against the following:
-        Compiler          :  XC16 v1.36
-        MPLAB 	          :  MPLAB X v5.10
+        Compiler          :  XC16 v1.50
+        MPLAB 	          :  MPLAB X v5.35
 */
 
 /*
-    (c) 2016 Microchip Technology Inc. and its subsidiaries. You may use this
+    (c) 2020 Microchip Technology Inc. and its subsidiaries. You may use this
     software and any derivatives exclusively with Microchip products.
 
     THIS SOFTWARE IS SUPPLIED BY MICROCHIP "AS IS". NO WARRANTIES, WHETHER
@@ -50,9 +49,17 @@
 #include "adc1.h"
 
 /**
-  Section: Driver Interface
+ Section: File specific functions
 */
 
+static void (*ADC1_CommonDefaultInterruptHandler)(void);
+static void (*ADC1_channel_AN19DefaultInterruptHandler)(uint16_t adcVal);
+static void (*ADC1_channel_AN0DefaultInterruptHandler)(uint16_t adcVal);
+static void (*ADC1_channel_ANA1DefaultInterruptHandler)(uint16_t adcVal);
+
+/**
+  Section: Driver Interface
+*/
 
 void ADC1_Initialize (void)
 {
@@ -62,12 +69,12 @@ void ADC1_Initialize (void)
     ADCON1H = 0xE0;
     // PTGEN disabled; SHRADCS 4; REFCIE disabled; SHREISEL Early interrupt is generated 1 TADCORE clock prior to data being ready; REFERCIE disabled; EIEN disabled; 
     ADCON2L = 0x02;
-    // SHRSAMC 398; 
-    ADCON2H = 0x18E;
+    // SHRSAMC 3; 
+    ADCON2H = 0x03;
     // SWCTRG disabled; SHRSAMP disabled; SUSPEND disabled; SWLCTRG disabled; SUSPCIE disabled; CNVCHSEL AN0; REFSEL disabled; 
     ADCON3L = 0x00;
-    // SHREN enabled; C1EN enabled; C0EN enabled; CLKDIV 4; CLKSEL FOSC/2; 
-    ADCON3H = (0x383 & 0xFF00); //Disabling C0EN, C1EN, C2EN, C3EN and SHREN bits
+    // SHREN enabled; C1EN enabled; C0EN enabled; CLKDIV 4; CLKSEL PLL VCO/4; 
+    ADCON3H = (0xC383 & 0xFF00); //Disabling C0EN, C1EN, C2EN, C3EN and SHREN bits
     // SAMC0EN disabled; SAMC1EN disabled; 
     ADCON4L = 0x00;
     // C0CHS AN0; C1CHS ANA1; 
@@ -80,10 +87,10 @@ void ADC1_Initialize (void)
     ADMOD1L = 0x40;
     // SIGN24 disabled; DIFF25 disabled; DIFF24 disabled; SIGN25 disabled; 
     ADMOD1H = 0x00;
-    // IE15 disabled; IE1 disabled; IE0 enabled; IE3 disabled; IE2 disabled; IE5 disabled; IE4 disabled; IE10 disabled; IE7 disabled; IE6 disabled; IE9 disabled; IE13 disabled; IE8 disabled; IE14 disabled; IE11 disabled; IE12 disabled; 
-    ADIEL = 0x01;
-    // IE17 disabled; IE18 disabled; IE16 disabled; IE19 disabled; IE20 disabled; IE21 disabled; IE24 disabled; IE25 disabled; IE22 disabled; IE23 disabled; 
-    ADIEH = 0x00;
+    // IE15 disabled; IE1 enabled; IE0 enabled; IE3 disabled; IE2 disabled; IE5 disabled; IE4 disabled; IE10 disabled; IE7 disabled; IE6 disabled; IE9 disabled; IE13 disabled; IE8 disabled; IE14 disabled; IE11 disabled; IE12 disabled; 
+    ADIEL = 0x03;
+    // IE17 disabled; IE18 disabled; IE16 disabled; IE19 enabled; IE20 disabled; IE21 disabled; IE24 disabled; IE25 disabled; IE22 disabled; IE23 disabled; 
+    ADIEH = 0x08;
     // CMPEN10 disabled; CMPEN11 disabled; CMPEN6 disabled; CMPEN5 disabled; CMPEN4 disabled; CMPEN3 disabled; CMPEN2 disabled; CMPEN1 disabled; CMPEN0 disabled; CMPEN14 disabled; CMPEN9 disabled; CMPEN15 disabled; CMPEN8 disabled; CMPEN12 disabled; CMPEN7 disabled; CMPEN13 disabled; 
     ADCMP0ENL = 0x00;
     // CMPEN10 disabled; CMPEN11 disabled; CMPEN6 disabled; CMPEN5 disabled; CMPEN4 disabled; CMPEN3 disabled; CMPEN2 disabled; CMPEN1 disabled; CMPEN0 disabled; CMPEN14 disabled; CMPEN9 disabled; CMPEN15 disabled; CMPEN8 disabled; CMPEN12 disabled; CMPEN7 disabled; CMPEN13 disabled; 
@@ -150,10 +157,16 @@ void ADC1_Initialize (void)
     ADEIEH = 0x00;
     // C0CIE disabled; C1CIE disabled; SHRCIE disabled; WARMTIME 32768 Source Clock Periods; 
     ADCON5H = (0x1500 & 0xF0FF); //Disabling WARMTIME bit
+	
+    //Assign Default Callbacks
+    ADC1_SetCommonInterruptHandler(&ADC1_CallBack);
+    ADC1_Setchannel_AN19InterruptHandler(&ADC1_channel_AN19_CallBack);
+    ADC1_Setchannel_AN0InterruptHandler(&ADC1_channel_AN0_CallBack);
+    ADC1_Setchannel_ANA1InterruptHandler(&ADC1_channel_ANA1_CallBack);
     
-    // Clearing ADCAN0 interrupt flag.
+    // Clearing channel_AN0 interrupt flag.
     IFS5bits.ADCAN0IF = 0;
-    // Enabling ADCAN0 interrupt.
+    // Enabling channel_AN0 interrupt.
     IEC5bits.ADCAN0IE = 1;
 
     // Setting WARMTIME bit
@@ -217,28 +230,114 @@ void ADC1_SharedCorePowerEnable ( )
 }
 
 
-void __attribute__ ((weak)) ADC1_CallBack(void)
+void __attribute__ ((weak)) ADC1_CallBack ( void )
+{ 
+
+}
+
+void ADC1_SetCommonInterruptHandler(void* handler)
 {
-    // Add your custom callback code here
+    ADC1_CommonDefaultInterruptHandler = handler;
+}
+
+void __attribute__ ((weak)) ADC1_Tasks ( void )
+{
+    if(IFS5bits.ADCIF)
+    {
+        if(ADC1_CommonDefaultInterruptHandler) 
+        { 
+            ADC1_CommonDefaultInterruptHandler(); 
+        }
+
+        // clear the ADC1 interrupt flag
+        IFS5bits.ADCIF = 0;
+    }
+}
+
+void __attribute__ ((weak)) ADC1_channel_AN19_CallBack( uint16_t adcVal )
+{ 
+
+}
+
+void ADC1_Setchannel_AN19InterruptHandler(void* handler)
+{
+    ADC1_channel_AN19DefaultInterruptHandler = handler;
+}
+
+void __attribute__ ((weak)) ADC1_channel_AN19_Tasks ( void )
+{
+    uint16_t valchannel_AN19;
+
+    if(IFS6bits.ADCAN19IF)
+    {
+        //Read the ADC value from the ADCBUF
+        valchannel_AN19 = ADCBUF19;
+
+        if(ADC1_channel_AN19DefaultInterruptHandler) 
+        { 
+            ADC1_channel_AN19DefaultInterruptHandler(valchannel_AN19); 
+        }
+
+        //clear the channel_AN19 interrupt flag
+        IFS6bits.ADCAN19IF = 0;
+    }
 }
 
 
-/* Callback function for the Analog Channel ADCAN0 Interrupt */
-void __attribute__ ((weak)) ADC1_ADCAN0_CallBack(uint16_t adcVal)
-{
-    // Add your custom callback code here
+void __attribute__ ((weak)) ADC1_channel_AN0_CallBack( uint16_t adcVal )
+{ 
+
 }
 
-void __attribute__ ( ( __interrupt__ , auto_psv ) ) _ADCAN0Interrupt ( void )
+void ADC1_Setchannel_AN0InterruptHandler(void* handler)
 {
-    uint16_t valADCAN0;
+    ADC1_channel_AN0DefaultInterruptHandler = handler;
+}
+
+void __attribute__ ( ( __interrupt__ , auto_psv, weak ) ) _ADCAN0Interrupt ( void )
+{
+    uint16_t valchannel_AN0;
     //Read the ADC value from the ADCBUF
-    valADCAN0 = ADCBUF0;
-    //Callback function to process the ADC data
-    ADC1_ADCAN0_CallBack(valADCAN0);
-    //clear the ADCAN0 interrupt flag
+    valchannel_AN0 = ADCBUF0;
+
+    if(ADC1_channel_AN0DefaultInterruptHandler) 
+    { 
+        ADC1_channel_AN0DefaultInterruptHandler(valchannel_AN0); 
+    }
+
+    //clear the channel_AN0 interrupt flag
     IFS5bits.ADCAN0IF = 0;
 }
+
+void __attribute__ ((weak)) ADC1_channel_ANA1_CallBack( uint16_t adcVal )
+{ 
+
+}
+
+void ADC1_Setchannel_ANA1InterruptHandler(void* handler)
+{
+    ADC1_channel_ANA1DefaultInterruptHandler = handler;
+}
+
+void __attribute__ ((weak)) ADC1_channel_ANA1_Tasks ( void )
+{
+    uint16_t valchannel_ANA1;
+
+    if(IFS5bits.ADCAN1IF)
+    {
+        //Read the ADC value from the ADCBUF
+        valchannel_ANA1 = ADCBUF1;
+
+        if(ADC1_channel_ANA1DefaultInterruptHandler) 
+        { 
+            ADC1_channel_ANA1DefaultInterruptHandler(valchannel_ANA1); 
+        }
+
+        //clear the channel_ANA1 interrupt flag
+        IFS5bits.ADCAN1IF = 0;
+    }
+}
+
 
 
 /**

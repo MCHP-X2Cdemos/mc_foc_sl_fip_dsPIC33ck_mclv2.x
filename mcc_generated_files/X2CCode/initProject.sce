@@ -57,9 +57,7 @@ if isdir(ProjectPath + "Library") then
 
     jimport("at.lcm.x2c.core.librarymanager.X2cLibraryManager");
     x2cLM = jinvoke(X2cLibraryManager,"getInstance");
-    
     x2cLibs = jinvoke(x2cLM, "addPath_XcosLibPathStr", ProjectPath + "Library");
-    
     libRoot = [ProjectPath + "Library"];
     for curLib = x2cLibs
 		chdir(curLib);
@@ -71,31 +69,24 @@ if isdir(ProjectPath + "Library") then
         if isfile(loaderFile) then
             exec(loaderFile, -1)
         end
-        
         // load functions and palette
         //deletefile(libName + ".xpal");  // delete palette to force rebuild (otherwise error would occur since block image can't be found)
 		exec("starter.sce", -1)
 
         mprintf("Project specific library " + libName + " added.\n")
     end
-
-    chdir(CurrentDir)
-    
+	chdir(CurrentDir)
     // clean  up
     clear("libName", "libRoot", "loaderFile", "curLib", "x2cLibs", "x2cLM")
-
-    //mprintf("Project specific library " + libName + " added.\n")
-
+	//mprintf("Project specific library " + libName + " added.\n")
 end
-
 // load model parameters
 chdir(CurrentDir);
 if isfile("ModelParameter.sce") then
     exec("ModelParameter.sce", -1);
     mprintf("Model parameter loaded.\n")
 end
-
 // clean up
 clear("fs", "CurrentDir", "vers", "opt", "arc", "ProjectPath")
-
-mprintf("- Done\n");
+mprintf("- Init done and opening model...\n");
+xcos("mc_foc_sl_fip_dspic33ck_mclv2.zcos");

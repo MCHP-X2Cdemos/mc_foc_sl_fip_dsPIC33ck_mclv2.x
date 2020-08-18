@@ -3,13 +3,38 @@
  * @brief Common functions and defines.
  */
 /*
- * $LastChangedRevision: 1603 $
- * $LastChangedDate:: 2019-01-21 19:02:13 +0100#$
- *
- * This file is part of X2C. http://x2c.lcm.at/
- *
  * Copyright (c) 2013, Linz Center of Mechatronics GmbH (LCM) http://www.lcm.at/
  * All rights reserved.
+ */
+/*
+ * This file is licensed according to the BSD 3-clause license as follows:
+ * 
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *     * Redistributions of source code must retain the above copyright
+ *       notice, this list of conditions and the following disclaimer.
+ *     * Redistributions in binary form must reproduce the above copyright
+ *       notice, this list of conditions and the following disclaimer in the
+ *       documentation and/or other materials provided with the distribution.
+ *     * Neither the name of the "Linz Center of Mechatronics GmbH" and "LCM" nor
+ *       the names of its contributors may be used to endorse or promote products
+ *       derived from this software without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL "Linz Center of Mechatronics GmbH" BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+/*
+ * This file is part of X2C. http://x2c.lcm.at/
+ * $LastChangedRevision: 1971 $
+ * $LastChangedDate:: 2020-07-20 12:23:30 +0200#$
  */
 #ifndef COMMONFCTS_H
 #define COMMONFCTS_H
@@ -117,6 +142,10 @@ typedef uint8 (*tSaveMaskParameter) (void*, void*, const uint8[], uint16);
 /** Mask Parameter Load function pointer type */
 typedef uint8 (*tLoadMaskParameter) (const void*, uint8[], uint16*, uint16);
 
+typedef void (*tBackupMaskParameter) (void*);
+typedef void (*tRestoreMaskParameter) (void*);
+typedef uint8 (*tConvertMaskParameter) (void*, void*);
+
 typedef struct tMaskParameterEntry tMaskParameterEntry;
 struct tMaskParameterEntry {
 	uint16 id;
@@ -124,7 +153,22 @@ struct tMaskParameterEntry {
 	void* maskParameter;
 	tSaveMaskParameter saveMaskParameter;
 	tLoadMaskParameter loadMaskParameter;
+	tConvertMaskParameter convertMaskParameter;
+	tBackupMaskParameter backupMaskParameter;
+	tRestoreMaskParameter restoreMaskParameter;
 };
+
+/**
+ * Mask Parameter data record.
+ * Contains information to lookup Mask Parameter data via Block Parameter ID and Mask Parameter ID.
+ */
+typedef struct {
+    uint16 blockParamId;
+    uint8 maskParamId;
+    void* data;
+    uint16 dataSize;
+    uint8 type;
+} tMaskParamDataRecord;
 
 /** Parameter table contains parameter identifier & block address */
 typedef struct {
@@ -221,7 +265,7 @@ typedef struct {
 
 /** DSP states */
 typedef enum {
-	MONITOR_STATE=0,		/**< DSP executes monitor program */
+	BOOTLOADER_STATE=0,		/**< DSP executes bootloader program */
 	PRG_LOADED_STATE=1,		/**< DSP executes application program */
 	IDLE_STATE=2,			/**< DSP is idle */
 	INIT_STATE=3,			/**< Initialization of application program */
@@ -290,6 +334,9 @@ void* Common_GetAddress(const void* common, uint16 elementId);
 uint8 Common_InitMP(void *block, const void *maskParam);
 uint8 Common_SaveMP(void* block, void* maskParam, const uint8 data[], uint16 dataLength);
 uint8 Common_LoadMP(const void* block, uint8 data[], uint16* dataLength, uint16 maxSize);
+uint8 Common_ConvertMP(void* block, void* maskParam);
+void Common_BackupMP(void* maskParam);
+void Common_RestoreMP(void* maskParam);
 
 int8 getAbsValI8(int8 x);
 int16 getAbsValI16(int16 x);
@@ -302,6 +349,22 @@ uint8 getIoParamIndex(const tIoParamIdEntry ioParamTbl[], uint16 paramId, uint16
 uint8 getBlockParamIndex(const tParameterTable* paramTable, uint16 paramId, uint16* index);
 uint8 getBlockFunctionIndex(const tBlockFunctions* fncTable, uint16 blockId, uint16* index);
 uint8 getMaskParamIndex(const tMaskParameterEntry* mpTable, uint16 paramId, uint16* index);
+/**
+ * @brief Lookup Mask Parameter data record.
+ *
+ * Searches the Mask Parameter table for the requested record and returns its index.
+ * The function also checks if the Mask Parameter data table is initialized.
+ *
+ * @param[in] mpTable Mask Parameter data table
+ * @param[in] blockParamId Block Parameter ID
+ * @param[in] maskParamId Mask Parameter ID
+ * @param[out] index Mask Parameter record index
+ *
+ * @return 0 if lookup was successful
+ * @return 1 if table is not initialized or Block- or Mask Parameter ID is zero
+ * @return 2 if record was not found in the table
+ */
+uint8 getMaskParamDataTableIndex(const tMaskParamDataRecord* mpTable, uint16 blockParamId, uint8 maskParamId, uint16* index);
 
 uint8 getQFormat(float_CoT decValue, uint8 maxBits);
 int8  getQx8Value(float_CoT decValue, uint8 qFormat);

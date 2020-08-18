@@ -15,15 +15,15 @@
   @Description:
     This source file provides implementations for PIN MANAGER.
     Generation Information :
-        Product Revision  :  PIC24 / dsPIC33 / PIC32MM MCUs - 1.95-b-SNAPSHOT
+        Product Revision  :  PIC24 / dsPIC33 / PIC32MM MCUs - 1.167.0
         Device            :  dsPIC33CK256MP508
     The generated drivers are tested against the following:
-        Compiler          :  XC16 v1.36
-        MPLAB 	          :  MPLAB X v5.10
+        Compiler          :  XC16 v1.50
+        MPLAB 	          :  MPLAB X v5.35
 */
 
 /*
-    (c) 2016 Microchip Technology Inc. and its subsidiaries. You may use this
+    (c) 2020 Microchip Technology Inc. and its subsidiaries. You may use this
     software and any derivatives exclusively with Microchip products.
 
     THIS SOFTWARE IS SUPPLIED BY MICROCHIP "AS IS". NO WARRANTIES, WHETHER
@@ -77,7 +77,7 @@
     </code>
 
 */
-#define channel_AN0_SetHigh()          _LATA0 = 1
+#define channel_AN0_SetHigh()          (_LATA0 = 1)
 /**
   @Summary
     Sets the GPIO pin, RA0, low using LATA0.
@@ -101,7 +101,7 @@
     </code>
 
 */
-#define channel_AN0_SetLow()           _LATA0 = 0
+#define channel_AN0_SetLow()           (_LATA0 = 0)
 /**
   @Summary
     Toggles the GPIO pin, RA0, using LATA0.
@@ -125,7 +125,7 @@
     </code>
 
 */
-#define channel_AN0_Toggle()           _LATA0 ^= 1
+#define channel_AN0_Toggle()           (_LATA0 ^= 1)
 /**
   @Summary
     Reads the value of the GPIO pin, RA0.
@@ -175,7 +175,7 @@
     </code>
 
 */
-#define channel_AN0_SetDigitalInput()  _TRISA0 = 1
+#define channel_AN0_SetDigitalInput()  (_TRISA0 = 1)
 /**
   @Summary
     Configures the GPIO pin, RA0, as an output.
@@ -199,7 +199,7 @@
     </code>
 
 */
-#define channel_AN0_SetDigitalOutput() _TRISA0 = 0
+#define channel_AN0_SetDigitalOutput() (_TRISA0 = 0)
 /**
   @Summary
     Sets the GPIO pin, RA1, high using LATA1.
@@ -223,7 +223,7 @@
     </code>
 
 */
-#define channel_ANA1_SetHigh()          _LATA1 = 1
+#define channel_ANA1_SetHigh()          (_LATA1 = 1)
 /**
   @Summary
     Sets the GPIO pin, RA1, low using LATA1.
@@ -247,7 +247,7 @@
     </code>
 
 */
-#define channel_ANA1_SetLow()           _LATA1 = 0
+#define channel_ANA1_SetLow()           (_LATA1 = 0)
 /**
   @Summary
     Toggles the GPIO pin, RA1, using LATA1.
@@ -271,7 +271,7 @@
     </code>
 
 */
-#define channel_ANA1_Toggle()           _LATA1 ^= 1
+#define channel_ANA1_Toggle()           (_LATA1 ^= 1)
 /**
   @Summary
     Reads the value of the GPIO pin, RA1.
@@ -321,7 +321,7 @@
     </code>
 
 */
-#define channel_ANA1_SetDigitalInput()  _TRISA1 = 1
+#define channel_ANA1_SetDigitalInput()  (_TRISA1 = 1)
 /**
   @Summary
     Configures the GPIO pin, RA1, as an output.
@@ -345,7 +345,7 @@
     </code>
 
 */
-#define channel_ANA1_SetDigitalOutput() _TRISA1 = 0
+#define channel_ANA1_SetDigitalOutput() (_TRISA1 = 0)
 /**
   @Summary
     Sets the GPIO pin, RD1, high using LATD1.
@@ -369,7 +369,7 @@
     </code>
 
 */
-#define QEI_A_SetHigh()          _LATD1 = 1
+#define QEI_A_SetHigh()          (_LATD1 = 1)
 /**
   @Summary
     Sets the GPIO pin, RD1, low using LATD1.
@@ -393,7 +393,7 @@
     </code>
 
 */
-#define QEI_A_SetLow()           _LATD1 = 0
+#define QEI_A_SetLow()           (_LATD1 = 0)
 /**
   @Summary
     Toggles the GPIO pin, RD1, using LATD1.
@@ -417,7 +417,7 @@
     </code>
 
 */
-#define QEI_A_Toggle()           _LATD1 ^= 1
+#define QEI_A_Toggle()           (_LATD1 ^= 1)
 /**
   @Summary
     Reads the value of the GPIO pin, RD1.
@@ -467,7 +467,7 @@
     </code>
 
 */
-#define QEI_A_SetDigitalInput()  _TRISD1 = 1
+#define QEI_A_SetDigitalInput()  (_TRISD1 = 1)
 /**
   @Summary
     Configures the GPIO pin, RD1, as an output.
@@ -491,7 +491,7 @@
     </code>
 
 */
-#define QEI_A_SetDigitalOutput() _TRISD1 = 0
+#define QEI_A_SetDigitalOutput() (_TRISD1 = 0)
 /**
   @Summary
     Sets the GPIO pin, RD11, high using LATD11.
@@ -515,7 +515,7 @@
     </code>
 
 */
-#define channel_AN19_SetHigh()          _LATD11 = 1
+#define channel_AN19_SetHigh()          (_LATD11 = 1)
 /**
   @Summary
     Sets the GPIO pin, RD11, low using LATD11.
@@ -539,7 +539,7 @@
     </code>
 
 */
-#define channel_AN19_SetLow()           _LATD11 = 0
+#define channel_AN19_SetLow()           (_LATD11 = 0)
 /**
   @Summary
     Toggles the GPIO pin, RD11, using LATD11.
@@ -563,7 +563,7 @@
     </code>
 
 */
-#define channel_AN19_Toggle()           _LATD11 ^= 1
+#define channel_AN19_Toggle()           (_LATD11 ^= 1)
 /**
   @Summary
     Reads the value of the GPIO pin, RD11.
@@ -613,7 +613,7 @@
     </code>
 
 */
-#define channel_AN19_SetDigitalInput()  _TRISD11 = 1
+#define channel_AN19_SetDigitalInput()  (_TRISD11 = 1)
 /**
   @Summary
     Configures the GPIO pin, RD11, as an output.
@@ -637,7 +637,7 @@
     </code>
 
 */
-#define channel_AN19_SetDigitalOutput() _TRISD11 = 0
+#define channel_AN19_SetDigitalOutput() (_TRISD11 = 0)
 /**
   @Summary
     Sets the GPIO pin, RD2, high using LATD2.
@@ -661,7 +661,7 @@
     </code>
 
 */
-#define QEI_B_SetHigh()          _LATD2 = 1
+#define QEI_B_SetHigh()          (_LATD2 = 1)
 /**
   @Summary
     Sets the GPIO pin, RD2, low using LATD2.
@@ -685,7 +685,7 @@
     </code>
 
 */
-#define QEI_B_SetLow()           _LATD2 = 0
+#define QEI_B_SetLow()           (_LATD2 = 0)
 /**
   @Summary
     Toggles the GPIO pin, RD2, using LATD2.
@@ -709,7 +709,7 @@
     </code>
 
 */
-#define QEI_B_Toggle()           _LATD2 ^= 1
+#define QEI_B_Toggle()           (_LATD2 ^= 1)
 /**
   @Summary
     Reads the value of the GPIO pin, RD2.
@@ -759,7 +759,7 @@
     </code>
 
 */
-#define QEI_B_SetDigitalInput()  _TRISD2 = 1
+#define QEI_B_SetDigitalInput()  (_TRISD2 = 1)
 /**
   @Summary
     Configures the GPIO pin, RD2, as an output.
@@ -783,7 +783,7 @@
     </code>
 
 */
-#define QEI_B_SetDigitalOutput() _TRISD2 = 0
+#define QEI_B_SetDigitalOutput() (_TRISD2 = 0)
 /**
   @Summary
     Sets the GPIO pin, RD5, high using LATD5.
@@ -807,7 +807,7 @@
     </code>
 
 */
-#define ButtonS2_SetHigh()          _LATD5 = 1
+#define ButtonS2_SetHigh()          (_LATD5 = 1)
 /**
   @Summary
     Sets the GPIO pin, RD5, low using LATD5.
@@ -831,7 +831,7 @@
     </code>
 
 */
-#define ButtonS2_SetLow()           _LATD5 = 0
+#define ButtonS2_SetLow()           (_LATD5 = 0)
 /**
   @Summary
     Toggles the GPIO pin, RD5, using LATD5.
@@ -855,7 +855,7 @@
     </code>
 
 */
-#define ButtonS2_Toggle()           _LATD5 ^= 1
+#define ButtonS2_Toggle()           (_LATD5 ^= 1)
 /**
   @Summary
     Reads the value of the GPIO pin, RD5.
@@ -905,7 +905,7 @@
     </code>
 
 */
-#define ButtonS2_SetDigitalInput()  _TRISD5 = 1
+#define ButtonS2_SetDigitalInput()  (_TRISD5 = 1)
 /**
   @Summary
     Configures the GPIO pin, RD5, as an output.
@@ -929,7 +929,7 @@
     </code>
 
 */
-#define ButtonS2_SetDigitalOutput() _TRISD5 = 0
+#define ButtonS2_SetDigitalOutput() (_TRISD5 = 0)
 /**
   @Summary
     Sets the GPIO pin, RE7, high using LATE7.
@@ -953,7 +953,7 @@
     </code>
 
 */
-#define ButtonS3_SetHigh()          _LATE7 = 1
+#define ButtonS3_SetHigh()          (_LATE7 = 1)
 /**
   @Summary
     Sets the GPIO pin, RE7, low using LATE7.
@@ -977,7 +977,7 @@
     </code>
 
 */
-#define ButtonS3_SetLow()           _LATE7 = 0
+#define ButtonS3_SetLow()           (_LATE7 = 0)
 /**
   @Summary
     Toggles the GPIO pin, RE7, using LATE7.
@@ -1001,7 +1001,7 @@
     </code>
 
 */
-#define ButtonS3_Toggle()           _LATE7 ^= 1
+#define ButtonS3_Toggle()           (_LATE7 ^= 1)
 /**
   @Summary
     Reads the value of the GPIO pin, RE7.
@@ -1051,7 +1051,7 @@
     </code>
 
 */
-#define ButtonS3_SetDigitalInput()  _TRISE7 = 1
+#define ButtonS3_SetDigitalInput()  (_TRISE7 = 1)
 /**
   @Summary
     Configures the GPIO pin, RE7, as an output.
@@ -1075,7 +1075,7 @@
     </code>
 
 */
-#define ButtonS3_SetDigitalOutput() _TRISE7 = 0
+#define ButtonS3_SetDigitalOutput() (_TRISE7 = 0)
 /**
   @Summary
     Sets the GPIO pin, RE8, high using LATE8.
@@ -1099,7 +1099,7 @@
     </code>
 
 */
-#define LED1_SetHigh()          _LATE8 = 1
+#define LED1_SetHigh()          (_LATE8 = 1)
 /**
   @Summary
     Sets the GPIO pin, RE8, low using LATE8.
@@ -1123,7 +1123,7 @@
     </code>
 
 */
-#define LED1_SetLow()           _LATE8 = 0
+#define LED1_SetLow()           (_LATE8 = 0)
 /**
   @Summary
     Toggles the GPIO pin, RE8, using LATE8.
@@ -1147,7 +1147,7 @@
     </code>
 
 */
-#define LED1_Toggle()           _LATE8 ^= 1
+#define LED1_Toggle()           (_LATE8 ^= 1)
 /**
   @Summary
     Reads the value of the GPIO pin, RE8.
@@ -1197,7 +1197,7 @@
     </code>
 
 */
-#define LED1_SetDigitalInput()  _TRISE8 = 1
+#define LED1_SetDigitalInput()  (_TRISE8 = 1)
 /**
   @Summary
     Configures the GPIO pin, RE8, as an output.
@@ -1221,7 +1221,7 @@
     </code>
 
 */
-#define LED1_SetDigitalOutput() _TRISE8 = 0
+#define LED1_SetDigitalOutput() (_TRISE8 = 0)
 /**
   @Summary
     Sets the GPIO pin, RE9, high using LATE9.
@@ -1245,7 +1245,7 @@
     </code>
 
 */
-#define LED2_SetHigh()          _LATE9 = 1
+#define LED2_SetHigh()          (_LATE9 = 1)
 /**
   @Summary
     Sets the GPIO pin, RE9, low using LATE9.
@@ -1269,7 +1269,7 @@
     </code>
 
 */
-#define LED2_SetLow()           _LATE9 = 0
+#define LED2_SetLow()           (_LATE9 = 0)
 /**
   @Summary
     Toggles the GPIO pin, RE9, using LATE9.
@@ -1293,7 +1293,7 @@
     </code>
 
 */
-#define LED2_Toggle()           _LATE9 ^= 1
+#define LED2_Toggle()           (_LATE9 ^= 1)
 /**
   @Summary
     Reads the value of the GPIO pin, RE9.
@@ -1343,7 +1343,7 @@
     </code>
 
 */
-#define LED2_SetDigitalInput()  _TRISE9 = 1
+#define LED2_SetDigitalInput()  (_TRISE9 = 1)
 /**
   @Summary
     Configures the GPIO pin, RE9, as an output.
@@ -1367,7 +1367,7 @@
     </code>
 
 */
-#define LED2_SetDigitalOutput() _TRISE9 = 0
+#define LED2_SetDigitalOutput() (_TRISE9 = 0)
 
 /**
     Section: Function Prototypes
@@ -1402,6 +1402,7 @@
 
 */
 void PIN_MANAGER_Initialize (void);
+
 
 
 #endif

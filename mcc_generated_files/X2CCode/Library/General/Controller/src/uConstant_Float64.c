@@ -29,7 +29,7 @@
  */
 /*
  * This file is part of X2C. http://x2c.lcm.at/
- * $LastChangedRevision: 1693 $
+ * $LastChangedRevision: 1760 $
  */
 /* USERCODE-BEGIN:Description                                                                                         */
 /*     Description: Constant value.                                                                                   */
@@ -112,6 +112,7 @@ uint8 uConstant_Float64_Save(UCONSTANT_FLOAT64 *pTuConstant_Float64, const uint8
         pTuConstant_Float64->K = (float64)(*(float64*)&tmp64);
         error = (uint8)0;
 /* USERCODE-BEGIN:SaveFnc                                                                                             */
+        OUT = VALUE;
 /* USERCODE-END:SaveFnc                                                                                               */
     }
     return (error);

@@ -1,19 +1,40 @@
 /*
- * Square root and inverse square root lookup table.
- *
- * $$LastChangedRevision: 387 $$
- * $$LastChangedDate: 2014-03-26 10:55:38 +0100 (Wed, 26 Mar 2014) $$
- * $$LastChangedBy: EAL\sfragner $$
- *
- * Copyright (c) 2013 Linz Center of Mechatronics GmbH
+ * Copyright (c) 2013, Linz Center of Mechatronics GmbH (LCM) http://www.lcm.at/
  * All rights reserved.
+ */
+/*
+ * This file is licensed according to the BSD 3-clause license as follows:
+ * 
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *     * Redistributions of source code must retain the above copyright
+ *       notice, this list of conditions and the following disclaimer.
+ *     * Redistributions in binary form must reproduce the above copyright
+ *       notice, this list of conditions and the following disclaimer in the
+ *       documentation and/or other materials provided with the distribution.
+ *     * Neither the name of the "Linz Center of Mechatronics GmbH" and "LCM" nor
+ *       the names of its contributors may be used to endorse or promote products
+ *       derived from this software without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL "Linz Center of Mechatronics GmbH" BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+/*
+ * This file is part of X2C. http://x2c.lcm.at/
+ * $LastChangedRevision: 1852 $
+ * $LastChangedDate:: 2020-03-10 16:35:19 +0100#$
  */
 #include "Sqrt_Data.h"
 
-
-/******************************************************************************/
-/** Square Root Data in 8 Bit Format                                         **/
-/******************************************************************************/
+/* Square Root Data in 8 Bit Format */
 #ifndef __NO_SQRT_TABLE8__	/* prevents Sqrt_Table8 from being compiled into program if defined */
 	const int8 Sqrt_Table8[257]  = {
 		0,    11,    16,    20,    23,    25,    28,    30,
@@ -52,9 +73,7 @@
 #endif
 
 
-/******************************************************************************/
-/** Square Root Data in 16 Bit Format                                        **/
-/******************************************************************************/	
+/* Square Root Data in 16 Bit Format */	
 #ifndef __NO_SQRT_TABLE16__	  /* prevents Sqrt_Table16 from being compiled into program if defined */
 	const int16 Sqrt_Table16[257]  = {
 		    0,   2896,   4096,   5017,   5793,   6476,   7094,   7663,
@@ -93,10 +112,7 @@
 #endif
 	
 
-	
-/******************************************************************************/
-/** Square Root Data in 32 Bit Format                                         **/
-/******************************************************************************/		
+/* Square Root Data in 32 Bit Format */		
 #ifndef __NO_SQRT_TABLE32__	  /* prevent Sqrt_Table32 from being compiled into program if defined */
 	const int32 Sqrt_Table32[257] = {
                  0,   189812531,   268435456,   328764948,   379625062,   424433723,   464943848,   502196753,
@@ -134,9 +150,8 @@
 		 		 0};
 #endif
 
-/******************************************************************************/
-/** Inverse Square Root Data in 8 Bit Format                                 **/
-/******************************************************************************/
+
+/* Inverse Square Root Data in 8 Bit Format */
 #ifndef __NO_INVSQRT_TABLE8__	/* prevents InvSqrt_Table8 from being compiled into program if defined */
 	/* 1/sqrt(x) lookup table (x=0..2) */
 	const int8 InvSqrt_Table8[257] = {
@@ -176,9 +191,7 @@
 #endif
 
 
-/******************************************************************************/
-/** Inverse Square Root Data in 16 Bit Format                                **/
-/******************************************************************************/	
+/* Inverse Square Root Data in 16 Bit Format */	
 #ifndef __NO_INVSQRT_TABLE16__	  /* prevents InvSqrt_Table16 from being compiled into program if defined */
 	/* 1/sqrt(x) lookup table (x=0..2) */
 	const int16 InvSqrt_Table16[257] = {
@@ -217,9 +230,7 @@
 		 23170};
 #endif
 
-/******************************************************************************/
-/** Inverse Square Root Data in 32 Bit Format                                **/
-/******************************************************************************/		
+/* Inverse Square Root Data in 32 Bit Format */	
 #ifndef __NO_INVSQRT_TABLE32__	  /* prevent InvSqrt_Table32 from being compiled into program if defined */
 	/* 1/sqrt(x) lookup table (x=0..2) */
 	const int32 InvSqrt_Table32[257] = {

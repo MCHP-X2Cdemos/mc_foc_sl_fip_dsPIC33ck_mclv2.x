@@ -29,7 +29,7 @@
  */
 /*
  * This file is part of X2C. http://x2c.lcm.at/
- * $LastChangedRevision: 1603 $
+ * $LastChangedRevision: 1871 $
  */
 /* USERCODE-BEGIN:Description                                                                                         */
 /* Description: 	Makes the incoming signal accessible for reading with parameter numbers.						  */
@@ -49,7 +49,7 @@ extern "C" {
 
 typedef struct {
     uint16          ID;
-    uint32          *In;
+    int32           *In;
 } USAVESIGNAL_FIP32;
 
 #define USAVESIGNAL_FIP32_FUNCTIONS { \

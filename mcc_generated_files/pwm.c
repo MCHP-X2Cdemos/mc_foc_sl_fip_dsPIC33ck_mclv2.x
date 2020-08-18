@@ -13,15 +13,15 @@
   @Description
     This source file provides APIs for PWM.
     Generation Information :
-        Product Revision  :  PIC24 / dsPIC33 / PIC32MM MCUs - 1.95-b-SNAPSHOT
+        Product Revision  :  PIC24 / dsPIC33 / PIC32MM MCUs - 1.167.0
         Device            :  dsPIC33CK256MP508
     The generated drivers are tested against the following:
-        Compiler          :  XC16 v1.36
-        MPLAB 	          :  MPLAB X v5.10
+        Compiler          :  XC16 v1.50
+        MPLAB 	          :  MPLAB X v5.35
 */
 
 /*
-    (c) 2016 Microchip Technology Inc. and its subsidiaries. You may use this
+    (c) 2020 Microchip Technology Inc. and its subsidiaries. You may use this
     software and any derivatives exclusively with Microchip products.
 
     THIS SOFTWARE IS SUPPLIED BY MICROCHIP "AS IS". NO WARRANTIES, WHETHER
@@ -51,6 +51,7 @@
 /**
  Section: Driver Interface Function Definitions
 */
+
 void PWM_Initialize (void)
 {
     // MCLKSEL FOSC - System Clock; HRERR disabled; LOCK disabled; DIVSEL 1:2; 
@@ -137,11 +138,11 @@ void PWM_Initialize (void)
     PG2FPCIL = 0x00;
     // PSS Tied to 0; PPS Not inverted; SWTERM disabled; PSYNC disabled; TERM Manual Terminate; AQPS Not inverted; AQSS None; TSYNCDIS PWM EOC; 
     PG3FPCIL = 0x00;
-    // PCIGT disabled; TQPS Not inverted; SWPCI Drives '0'; BPEN disabled; TQSS PWM Generator is triggered; SWPCIM PCI acceptance logic; BPSEL PWM Generator 1; ACP Level-sensitive; 
+    // TQPS Not inverted; LATMOD disabled; SWPCI Drives '0'; BPEN disabled; TQSS PWM Generator is triggered; SWPCIM PCI acceptance logic; BPSEL PWM Generator 1; ACP Level-sensitive; 
     PG1FPCIH = 0x03;
-    // PCIGT disabled; TQPS Not inverted; SWPCI Drives '0'; BPEN disabled; TQSS None; SWPCIM PCI acceptance logic; BPSEL PWM Generator 1; ACP Level-sensitive; 
+    // TQPS Not inverted; LATMOD disabled; SWPCI Drives '0'; BPEN disabled; TQSS None; SWPCIM PCI acceptance logic; BPSEL PWM Generator 1; ACP Level-sensitive; 
     PG2FPCIH = 0x00;
-    // PCIGT disabled; TQPS Not inverted; SWPCI Drives '0'; BPEN disabled; TQSS None; SWPCIM PCI acceptance logic; BPSEL PWM Generator 1; ACP Level-sensitive; 
+    // TQPS Not inverted; LATMOD disabled; SWPCI Drives '0'; BPEN disabled; TQSS None; SWPCIM PCI acceptance logic; BPSEL PWM Generator 1; ACP Level-sensitive; 
     PG3FPCIH = 0x00;
     // PSS Tied to 0; PPS Not inverted; SWTERM disabled; PSYNC disabled; TERM Manual Terminate; AQPS Not inverted; AQSS Selects PCI Source#9; TSYNCDIS PWM EOC; 
     PG1CLPCIL = 0x00;
@@ -255,164 +256,157 @@ void PWM_Initialize (void)
     PG3CONL = 0x800C;
 }
 
-
-void __attribute__ ((weak)) PWM_Generator1CallBack(void)
+void __attribute__ ((weak)) PWM_Generator1_CallBack(void)
 {
-    /* Add your custom callback code here or implement
-    the Callback in the application code, without the weak attribute */
+    // Add Application code here
 }
 
-void PWM_Tasks_Generator1(void)
+void PWM_Generator1_Tasks(void)
 {
     if(IFS4bits.PWM1IF)
     {
-		PWM_Generator1CallBack();
-	
+        // PWM Generator1 callback function 
+        PWM_Generator1_CallBack();
+
+        // clear the PWM Generator1 interrupt flag
         IFS4bits.PWM1IF = 0;
-        //Add your custom code here.
     }
 }
 
-void __attribute__ ((weak)) PWM_Generator2CallBack(void)
+void __attribute__ ((weak)) PWM_Generator2_CallBack(void)
 {
-    /* Add your custom callback code here or implement
-    the Callback in the application code, without the weak attribute */
+    // Add Application code here
 }
 
-void PWM_Tasks_Generator2(void)
+void PWM_Generator2_Tasks(void)
 {
     if(IFS4bits.PWM2IF)
     {
-		PWM_Generator2CallBack();
-	
+        // PWM Generator2 callback function 
+        PWM_Generator2_CallBack();
+
+        // clear the PWM Generator2 interrupt flag
         IFS4bits.PWM2IF = 0;
-        //Add your custom code here.
     }
 }
 
-void __attribute__ ((weak)) PWM_Generator3CallBack(void)
+void __attribute__ ((weak)) PWM_Generator3_CallBack(void)
 {
-    /* Add your custom callback code here or implement
-    the Callback in the application code, without the weak attribute */
+    // Add Application code here
 }
 
-void PWM_Tasks_Generator3(void)
+void PWM_Generator3_Tasks(void)
 {
     if(IFS4bits.PWM3IF)
     {
-		PWM_Generator3CallBack();
-	
+        // PWM Generator3 callback function 
+        PWM_Generator3_CallBack();
+
+        // clear the PWM Generator3 interrupt flag
         IFS4bits.PWM3IF = 0;
-        //Add your custom code here.
     }
 }
 
 
-void __attribute__ ((weak)) PWM_EventACallBack(void)
+void __attribute__ ((weak)) PWM_EventA_CallBack(void)
 {
-    /* Add your custom callback code here or implement
-    the Callback in the application code, without the weak attribute */
+    // Add Application code here
 }
 
-void PWM_Tasks_EventA(void)
+void PWM_EventA_Tasks(void)
 {
     if(IFS10bits.PEVTAIF)
     {
-		PWM_EventACallBack();
-		
+     
+        // PWM EventA callback function 
+        PWM_EventA_CallBack();
+	
+        // clear the PWM EventA interrupt flag
         IFS10bits.PEVTAIF = 0;
-        //Add your custom code here.
     }
 }
-
-
-void __attribute__ ((weak)) PWM_EventBCallBack(void)
+void __attribute__ ((weak)) PWM_EventB_CallBack(void)
 {
-    /* Add your custom callback code here or implement
-    the Callback in the application code, without the weak attribute */
+    // Add Application code here
 }
 
-void PWM_Tasks_EventB(void)
+void PWM_EventB_Tasks(void)
 {
     if(IFS10bits.PEVTBIF)
     {
-		PWM_EventBCallBack();
-		
+     
+        // PWM EventB callback function 
+        PWM_EventB_CallBack();
+	
+        // clear the PWM EventB interrupt flag
         IFS10bits.PEVTBIF = 0;
-        //Add your custom code here.
     }
 }
-
-
-void __attribute__ ((weak)) PWM_EventCCallBack(void)
+void __attribute__ ((weak)) PWM_EventC_CallBack(void)
 {
-    /* Add your custom callback code here or implement
-    the Callback in the application code, without the weak attribute */
+    // Add Application code here
 }
 
-void PWM_Tasks_EventC(void)
+void PWM_EventC_Tasks(void)
 {
     if(IFS10bits.PEVTCIF)
     {
-		PWM_EventCCallBack();
-		
+     
+        // PWM EventC callback function 
+        PWM_EventC_CallBack();
+	
+        // clear the PWM EventC interrupt flag
         IFS10bits.PEVTCIF = 0;
-        //Add your custom code here.
     }
 }
-
-
-void __attribute__ ((weak)) PWM_EventDCallBack(void)
+void __attribute__ ((weak)) PWM_EventD_CallBack(void)
 {
-    /* Add your custom callback code here or implement
-    the Callback in the application code, without the weak attribute */
+    // Add Application code here
 }
 
-void PWM_Tasks_EventD(void)
+void PWM_EventD_Tasks(void)
 {
     if(IFS10bits.PEVTDIF)
     {
-		PWM_EventDCallBack();
-		
+     
+        // PWM EventD callback function 
+        PWM_EventD_CallBack();
+	
+        // clear the PWM EventD interrupt flag
         IFS10bits.PEVTDIF = 0;
-        //Add your custom code here.
     }
 }
-
-
-void __attribute__ ((weak)) PWM_EventECallBack(void)
+void __attribute__ ((weak)) PWM_EventE_CallBack(void)
 {
-    /* Add your custom callback code here or implement
-    the Callback in the application code, without the weak attribute */
+    // Add Application code here
 }
 
-void PWM_Tasks_EventE(void)
+void PWM_EventE_Tasks(void)
 {
     if(IFS10bits.PEVTEIF)
     {
-		PWM_EventECallBack();
-		
+     
+        // PWM EventE callback function 
+        PWM_EventE_CallBack();
+	
+        // clear the PWM EventE interrupt flag
         IFS10bits.PEVTEIF = 0;
-        //Add your custom code here.
     }
 }
-
-
-void __attribute__ ((weak)) PWM_EventFCallBack(void)
+void __attribute__ ((weak)) PWM_EventF_CallBack(void)
 {
-    /* Add your custom callback code here or implement
-    the Callback in the application code, without the weak attribute */
+    // Add Application code here
 }
 
-void PWM_Tasks_EventF(void)
+void PWM_EventF_Tasks(void)
 {
     if(IFS10bits.PEVTFIF)
     {
-		PWM_EventFCallBack();
-		
+     
+        // PWM EventF callback function 
+        PWM_EventF_CallBack();
+	
+        // clear the PWM EventF interrupt flag
         IFS10bits.PEVTFIF = 0;
-        //Add your custom code here.
     }
 }
-
-

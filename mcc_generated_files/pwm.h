@@ -13,15 +13,15 @@
   @Description
     This header file provides APIs for driver for PWM.
     Generation Information :
-        Product Revision  :  PIC24 / dsPIC33 / PIC32MM MCUs - 1.95-b-SNAPSHOT
+        Product Revision  :  PIC24 / dsPIC33 / PIC32MM MCUs - 1.167.0
         Device            :  dsPIC33CK256MP508
     The generated drivers are tested against the following:
-        Compiler          :  XC16 v1.36
-        MPLAB 	          :  MPLAB X v5.10
+        Compiler          :  XC16 v1.50
+        MPLAB 	          :  MPLAB X v5.35
 */
 
 /*
-    (c) 2016 Microchip Technology Inc. and its subsidiaries. You may use this
+    (c) 2020 Microchip Technology Inc. and its subsidiaries. You may use this
     software and any derivatives exclusively with Microchip products.
 
     THIS SOFTWARE IS SUPPLIED BY MICROCHIP "AS IS". NO WARRANTIES, WHETHER
@@ -52,6 +52,7 @@
 #include <xc.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include <stdlib.h>
 
 #ifdef __cplusplus  // Provide C++ Compatibility
 
@@ -81,18 +82,35 @@ typedef enum
     PWM_GENERATOR_3 =  3,       
 } PWM_GENERATOR;
         
+/** PWM Generator Interrupt Definition
+ 
+ @Summary 
+   Defines the PWM generator interrupt available for PWM
+ 
+ @Description
+   This routine defines the PWM generator interrupt that are available for the module to use.
+ 
+ Remarks:
+   None
+ */
+typedef enum 
+{
+    PWM_GENERATOR_INTERRUPT_FAULT =  1,       
+    PWM_GENERATOR_INTERRUPT_CURRENT_LIMIT =  2,
+    PWM_GENERATOR_INTERRUPT_FEED_FORWARD =  3,
+    PWM_GENERATOR_INTERRUPT_SYNC =  4,		
+} PWM_GENERATOR_INTERRUPT;
+
 /**
  Section: Interface Routines
 */
 
 /**
   @Summary
-    Initializes hardware and data for PWM module
+    Initializes PWM module.
 
   @Description
-    This routine initializes hardware for PWM module,
-    using the given hardware initialization data.  It also initializes all
-    necessary internal data.
+    This routine initializes PWM module, using the given initialization data. 
 
   @Param
     None.
@@ -110,13 +128,13 @@ typedef enum
 
     PWM_Initialize();
  
-    PWM_ModuleDisable();
+    PWM_GeneratorDisable();
 
     PWM_MasterPeriodSet(masterPeriod);
     PWM_MasterDutyCycleSet(masterDutyCycle);
     PWM_MasterPhaseSet(masterPhase);
  
-    PWM_ModuleEnable(PWM_GENERATOR_1);
+    PWM_GeneratorEnable(PWM_GENERATOR_1);
 
     </code>
 */
@@ -127,18 +145,20 @@ void PWM_Initialize (void);
     Enables the specific PWM generator.
 
   @Description
-    This routine is used to enable the specific PWM generator.
+    This routine is used to enable the specific PWM generator selected by the argument PWM_GENERATOR.
 
   @Param
-    genNum - PWM generator instance number.
+    genNum - PWM generator number.
 
   @Returns
     None
  
   @Example 
-    Refer to the example of PWM_Initialize();
+    <code>
+    PWM_GeneratorEnable(PWM_GENERATOR_1);
+    </code>
 */
-inline static void PWM_ModuleEnable(PWM_GENERATOR genNum)
+inline static void PWM_GeneratorEnable(PWM_GENERATOR genNum)
 {
     switch(genNum) { 
         case PWM_GENERATOR_1:
@@ -159,18 +179,20 @@ inline static void PWM_ModuleEnable(PWM_GENERATOR genNum)
     Disables the specific PWM generator.
 
   @Description
-    This routine is used to disable the specific PWM generator.
+    This routine is used to disable the specific PWM generator selected by the argument PWM_GENERATOR.
 
   @Param
-    genNum - PWM generator instance number.
+    genNum - PWM generator number.
 
   @Returns
     None
  
   @Example 
-    Refer to the example of PWM_Initialize();
+    <code>
+    PWM_GeneratorDisable(PWM_GENERATOR_1);
+    </code>
 */
-inline static void PWM_ModuleDisable(PWM_GENERATOR genNum)
+inline static void PWM_GeneratorDisable(PWM_GENERATOR genNum)
 {
     switch(genNum) { 
         case PWM_GENERATOR_1:
@@ -188,6 +210,83 @@ inline static void PWM_ModuleDisable(PWM_GENERATOR genNum)
 
 /**
   @Summary
+    Enables all the generators of PWM module.
+
+  @Description
+    This routine is used to enable all the generators of PWM module.
+
+  @Param
+    None.
+
+  @Returns
+    None
+ 
+  @Example 
+    <code>
+    PWM_Enable();
+    </code>
+*/
+inline static void PWM_Enable()
+{
+    PG1CONLbits.ON = 1;              
+    PG2CONLbits.ON = 1;              
+    PG3CONLbits.ON = 1;              
+}
+
+/**
+  @Summary
+    Disables all the generators of PWM module.
+
+  @Description
+    This routine is used to disable all the generators of PWM module.
+
+  @Param
+    None.
+
+  @Returns
+    None
+ 
+  @Example 
+    <code>
+    PWM_Disable();
+    </code>
+*/
+inline static void PWM_Disable()
+{
+    PG1CONLbits.ON = 0;              
+    PG2CONLbits.ON = 0;              
+    PG3CONLbits.ON = 0;              
+}
+
+/**
+  @Summary
+    Sets the period value in count for the Master Time Base generator.
+
+  @Description
+    This routine is used to set the period value in count for the Master Time Base generator.
+
+  @Param
+    masterPeriod - Period value in count.
+
+  @Returns
+    None
+ 
+  @Example 
+    <code>
+    uint16_t masterPeriod;
+
+    masterPeriod = 0xFF;
+    
+    PWM_MasterPeriodSet(masterPeriod);
+    </code>
+*/
+inline static void PWM_MasterPeriodSet(uint16_t masterPeriod)
+{
+    MPER = masterPeriod;
+}
+
+/**
+  @Summary
     Used to set the PWM master duty cycle register.
 
   @Description
@@ -200,7 +299,13 @@ inline static void PWM_ModuleDisable(PWM_GENERATOR genNum)
     None
  
   @Example 
-    Refer to the example of PWM_Initialize();
+    <code>
+    uint16_t masterDutyCycle;
+
+    masterDutyCycle = 0xFF;
+    
+    PWM_MasterDutyCycleSet(masterDutyCycle);
+    </code>
 */
 inline static void PWM_MasterDutyCycleSet(uint16_t masterDutyCycle)
 {
@@ -209,40 +314,25 @@ inline static void PWM_MasterDutyCycleSet(uint16_t masterDutyCycle)
 
 /**
   @Summary
-    Sets the period value for the Master Time Base generator.
+    Sets the phase value in count for the Master Time Base generator.
 
   @Description
-    This routine is used to set the period value for the Master Time Base generator.
+    This routine is used to set the phase value in count for the Master Time Base generator.
 
   @Param
-    masterPeriod - Period value.
+    masterPhase - Phase value in count.
 
   @Returns
     None
  
   @Example 
-    Refer to the example of PWM_Initialize();
-*/
-inline static void PWM_MasterPeriodSet(uint16_t masterPeriod)
-{
-    MPER = masterPeriod;
-}
+    <code>
+    uint16_t masterPhase;
 
-/**
-  @Summary
-    Sets the phase value for the Master Time Base generator.
-
-  @Description
-    This routine is used to set the phase value for the Master Time Base generator.
-
-  @Param
-    masterPhase - Phase value.
-
-  @Returns
-    None
- 
-  @Example 
-    Refer to the example of PWM_Initialize();
+    masterPhase = 0xFF;
+    
+    PWM_MasterPhaseSet(masterPhase);
+    </code>
 */
 inline static void PWM_MasterPhaseSet(uint16_t masterPhase)
 {
@@ -251,59 +341,21 @@ inline static void PWM_MasterPhaseSet(uint16_t masterPhase)
 
 /**
   @Summary
-    Used to set the PWM generator specific duty cycle register.
+    Sets the period value in count for the PWM generator specific Time Base.
 
   @Description
-    This routine is used to set the PWM generator specific duty cycle register.
+    This routine is used to set the period value in count for the PWM generator specific Time Base.
 
   @Param
-    genNum      - PWM generator instance number.
-    dutyCycle   - PWM generator duty cycle.
+    genNum - PWM generator number.
+    period - PWM generator period value in count.
 
   @Returns
     None
  
   @Example 
     <code>    
-    int16_t dutyCyle;
-    
-    dutyCycle = 0xFF;
-    PWM_DutyCycleSet(PWM_GENERATOR_1, dutyCycle);
-    </code>
-*/
-inline static void PWM_DutyCycleSet(PWM_GENERATOR genNum,uint16_t dutyCycle)
-{
-    switch(genNum) { 
-        case PWM_GENERATOR_1:
-                PG1DC = dutyCycle;              
-                break;       
-        case PWM_GENERATOR_2:
-                PG2DC = dutyCycle;              
-                break;       
-        case PWM_GENERATOR_3:
-                PG3DC = dutyCycle;              
-                break;       
-        default:break;    
-    }  
-}
-
-/**
-  @Summary
-    Sets the period value for the PWM generator specific Time Base.
-
-  @Description
-    This routine is used to set the period value for the PWM generator specific Time Base.
-
-  @Param
-    genNum - PWM generator instance number.
-    period - PWM generator period.
-
-  @Returns
-    None
- 
-  @Example 
-    <code>    
-    int16_t period;
+    uint16_t period;
     
     period = 0xFFFF;
     PWM_PeriodSet(PWM_GENERATOR_1, period);
@@ -327,21 +379,59 @@ inline static void PWM_PeriodSet(PWM_GENERATOR genNum,uint16_t period)
 
 /**
   @Summary
-    Sets the phase value for the PWM generator specific Time Base.
+    Used to set the PWM generator specific duty cycle register.
 
   @Description
-    This routine is used to set the phase value for the PWM generator specific Time Base.
+    This routine is used to set the PWM generator specific duty cycle register.
 
   @Param
-    genNum - PWM generator instance number.
-    phase - PWM generator phase value.
+    genNum      - PWM generator number.
+    dutyCycle   - PWM generator duty cycle.
 
   @Returns
     None
  
   @Example 
     <code>    
-    int16_t phase;
+    uint16_t dutyCyle;
+    
+    dutyCycle = 0xFF;
+    PWM_DutyCycleSet(PWM_GENERATOR_1, dutyCycle);
+    </code>
+*/
+inline static void PWM_DutyCycleSet(PWM_GENERATOR genNum,uint16_t dutyCycle)
+{
+    switch(genNum) { 
+        case PWM_GENERATOR_1:
+                PG1DC = dutyCycle;              
+                break;       
+        case PWM_GENERATOR_2:
+                PG2DC = dutyCycle;              
+                break;       
+        case PWM_GENERATOR_3:
+                PG3DC = dutyCycle;              
+                break;       
+        default:break;    
+    }  
+}
+
+/**
+  @Summary
+    Sets the phase value in count for the PWM generator specific Time Base.
+
+  @Description
+    This routine is used to set the phase value in count for the PWM generator specific Time Base.
+
+  @Param
+    genNum - PWM generator number.
+    phase - PWM generator phase value in count.
+
+  @Returns
+    None
+ 
+  @Example 
+    <code>    
+    uint16_t phase;
     
     phase = 0xFFFF;
     PWM_PhaseSet(PWM_GENERATOR_1, phase);
@@ -365,231 +455,14 @@ inline static void PWM_PhaseSet(PWM_GENERATOR genNum,uint16_t phase)
 
 /**
   @Summary
-    Sets the TRIGA compare value for a specific PWM generator.
-
-  @Description
-    This routine is used to set the TRIGA compare value for a specific PWM generator.
-
-  @Param
-    genNum - PWM generator instance number.
-    trigA  - TRIGA compare value.
-
-  @Returns
-    None
- 
-  @Example 
-    <code>    
-    int16_t trigA;
-    
-    trigA = 0xF;
-    PWM_TRIGACompareSet(PWM_GENERATOR_1, trigA);
-    </code>
-*/
-inline static void PWM_TRIGACompareSet(PWM_GENERATOR genNum,uint16_t trigA)
-{ 
-    switch(genNum) { 
-        case PWM_GENERATOR_1:
-                PG1TRIGA = trigA;              
-                break;       
-        case PWM_GENERATOR_2:
-                PG2TRIGA = trigA;              
-                break;       
-        case PWM_GENERATOR_3:
-                PG3TRIGA = trigA;              
-                break;       
-        default:break;    
-    }
-}
-
-/**
-  @Summary
-    Sets the TRIGB compare value for a specific PWM generator.
-
-  @Description
-    This routine is used to set the TRIGB compare value for a specific PWM generator.
-
-  @Param
-    genNum - PWM generator instance number.
-    trigB  - TRIGB compare value.
-
-  @Returns
-    None
- 
-  @Example 
-    <code>    
-    int16_t trigB;
-    
-    trigB = 0xF;
-    PWM_TRIGBCompareSet(PWM_GENERATOR_1, trigB);
-    </code>
-*/
-inline static void PWM_TRIGBCompareSet(PWM_GENERATOR genNum,uint16_t trigB)
-{
-    switch(genNum) { 
-        case PWM_GENERATOR_1:
-                PG1TRIGB = trigB;              
-                break;       
-        case PWM_GENERATOR_2:
-                PG2TRIGB = trigB;              
-                break;       
-        case PWM_GENERATOR_3:
-                PG3TRIGB = trigB;              
-                break;       
-        default:break;    
-    }
-}
-
-/**
-  @Summary
-    Sets the TRIGC compare value for a specific PWM generator.
-
-  @Description
-    This routine is used to set the TRIGC compare value for a specific PWM generator.
-
-  @Param
-    genNum - PWM generator instance number.
-    trigC  - TRIGC compare value.
-
-  @Returns
-    None
- 
-  @Example 
-    <code>    
-    int16_t trigC;
-    
-    trigC = 0xF;
-    PWM_TRIGCCompareSet(PWM_GENERATOR_1, trigC);
-    </code>
-*/
-inline static void PWM_TRIGCCompareSet(PWM_GENERATOR genNum,uint16_t trigC)
-{
-    switch(genNum) { 
-        case PWM_GENERATOR_1:
-                PG1TRIGC = trigC;              
-                break;       
-        case PWM_GENERATOR_2:
-                PG2TRIGC = trigC;              
-                break;       
-        case PWM_GENERATOR_3:
-                PG3TRIGC = trigC;              
-                break;       
-        default:break;    
-    }
-}
-
-/**
-  @Summary
-    Enables/Disables PWM override on PWML output for specific PWM generator.
-
-  @Description
-    This routine is used to enable/disable PWM override on PWML output for specific PWM generator.
-
-  @Param
-    genNum - PWM generator instance number.
-    enableOverride  - Data to enable or disable override low. 
-
-  @Returns
-    None
- 
-  @Example 
-    <code>    
-    PWM_OverrideLowEnableSet(PWM_GENERATOR_1, enableOverride);
-    </code>
-*/  
-inline static void PWM_OverrideLowEnableSet(PWM_GENERATOR genNum, bool enableOverride)
-{
-    switch(genNum) { 
-        case PWM_GENERATOR_1:
-                PG1IOCONLbits.OVRENL = enableOverride;              
-                break;       
-        case PWM_GENERATOR_2:
-                PG2IOCONLbits.OVRENL = enableOverride;              
-                break;       
-        case PWM_GENERATOR_3:
-                PG3IOCONLbits.OVRENL = enableOverride;              
-                break;       
-        default:break;    
-    }
-}
-
-/**
-  @Summary
-    Enables/Disables PWM override on PWMH output for specific PWM generator.
-
-  @Description
-    This routine is used to enable/disable PWM override on PWMH output for specific PWM generator.
-
-  @Param
-    genNum - PWM generator instance number.
-    enableOverride  - Data to enable or disable override high. 
-
-  @Returns
-    None
- 
-  @Example 
-    <code>    
-    PWM_OverrideHighEnableSet(PWM_GENERATOR_1, enableOverride);
-    </code>
-*/  
-inline static void PWM_OverrideHighEnableSet(PWM_GENERATOR genNum, bool enableOverride)
-{
-    switch(genNum) { 
-        case PWM_GENERATOR_1:
-                PG1IOCONLbits.OVRENH = enableOverride;              
-                break;       
-        case PWM_GENERATOR_2:
-                PG2IOCONLbits.OVRENH = enableOverride;              
-                break;       
-        case PWM_GENERATOR_3:
-                PG3IOCONLbits.OVRENH = enableOverride;              
-                break;       
-        default:break;    
-    }
-}
-
-/**
-  @Summary
-    Disables PWM override on PWMH output for specific PWM generator.
-
-  @Description
-    This routine is used to disable PWM override on PWMH output for specific PWM generator.
-
-  @Param
-    genNum - PWM generator instance number.
-
-  @Returns
-    None
- 
-  @Example 
-    <code>    
-    PWM_OverrideHighDisable(PWM_GENERATOR_1);
-    </code>
-*/  
-inline static void PWM_OverrideHighDisable(PWM_GENERATOR genNum)
-{
-    switch(genNum) { 
-        case PWM_GENERATOR_1:
-                PG1IOCONLbits.OVRENH = 0;              
-                break;       
-        case PWM_GENERATOR_2:
-                PG2IOCONLbits.OVRENH = 0;              
-                break;       
-        case PWM_GENERATOR_3:
-                PG3IOCONLbits.OVRENH = 0;              
-                break;       
-        default:break;    
-    }
-}
-
-/**
-  @Summary
     Updates PWM override data bits with the requested value for a specific PWM generator.
 
   @Description
-    This routine is used to updates PWM override data bits with the requested value for a specific PWM generator.
+    This routine is used to updates PWM override data bits with the requested 
+    value for a specific PWM generator selected by the argument PWM_GENERATOR.
 
   @Param
-    genNum          - PWM generator instance number.
+    genNum          - PWM generator number.
     overrideData    - Override data
 
   @Returns
@@ -622,13 +495,288 @@ inline static void PWM_OverrideDataSet(PWM_GENERATOR genNum,uint16_t overrideDat
 
 /**
   @Summary
+    Updates PWM override high data bit with the requested value for a specific PWM generator.
+
+  @Description
+    This routine is used to update PWM override high data bit with the requested 
+    value for a specific PWM generator selected by the argument PWM_GENERATOR.
+
+  @Param
+    genNum              - PWM generator number.
+    overrideDataHigh    - Override data
+
+  @Returns
+    None
+ 
+  @Example 
+    <code>    
+    bool overrideDataHigh;
+
+    overrideDataHigh = true;
+    
+    PWM_OverrideDataHighSet(PWM_GENERATOR_1, overrideDataHigh);
+    </code>
+*/  
+inline static void PWM_OverrideDataHighSet(PWM_GENERATOR genNum,bool overrideDataHigh)
+{
+    switch(genNum) { 
+        case PWM_GENERATOR_1:
+                overrideDataHigh = ((overrideDataHigh & 0x0001)<<11);
+                PG1IOCONLbits.OVRDAT = (PG1IOCONLbits.OVRDAT & 0xF7FF);
+                PG1IOCONLbits.OVRDAT = (PG1IOCONLbits.OVRDAT | overrideDataHigh);
+                break;
+        case PWM_GENERATOR_2:
+                overrideDataHigh = ((overrideDataHigh & 0x0001)<<11);
+                PG2IOCONLbits.OVRDAT = (PG2IOCONLbits.OVRDAT & 0xF7FF);
+                PG2IOCONLbits.OVRDAT = (PG2IOCONLbits.OVRDAT | overrideDataHigh);
+                break;
+        case PWM_GENERATOR_3:
+                overrideDataHigh = ((overrideDataHigh & 0x0001)<<11);
+                PG3IOCONLbits.OVRDAT = (PG3IOCONLbits.OVRDAT & 0xF7FF);
+                PG3IOCONLbits.OVRDAT = (PG3IOCONLbits.OVRDAT | overrideDataHigh);
+                break;
+        default:break;    
+    }
+}
+
+/**
+  @Summary
+    Updates PWM override low data bit with the requested value for a specific PWM generator.
+
+  @Description
+    This routine is used to update PWM override low data bit with the requested 
+    value for a specific PWM generator selected by the argument PWM_GENERATOR.
+
+  @Param
+    genNum             - PWM generator number.
+    overrideDataLow    - Override data
+
+  @Returns
+    None
+ 
+  @Example 
+    <code>    
+    bool overrideDataLow;
+
+    overrideDataLow = true;
+    
+    PWM_OverrideDataLowSet(PWM_GENERATOR_1, overrideDataLow);
+    </code>
+*/  
+inline static void PWM_OverrideDataLowSet(PWM_GENERATOR genNum,bool overrideDataLow)
+{
+    switch(genNum) { 
+        case PWM_GENERATOR_1:
+                overrideDataLow = ((overrideDataLow & 0x0001)<<10);
+                PG1IOCONLbits.OVRDAT = (PG1IOCONLbits.OVRDAT & 0xFBFF);
+                PG1IOCONLbits.OVRDAT = (PG1IOCONLbits.OVRDAT | overrideDataLow);             
+                break;  
+        case PWM_GENERATOR_2:
+                overrideDataLow = ((overrideDataLow & 0x0001)<<10);
+                PG2IOCONLbits.OVRDAT = (PG2IOCONLbits.OVRDAT & 0xFBFF);
+                PG2IOCONLbits.OVRDAT = (PG2IOCONLbits.OVRDAT | overrideDataLow);             
+                break;  
+        case PWM_GENERATOR_3:
+                overrideDataLow = ((overrideDataLow & 0x0001)<<10);
+                PG3IOCONLbits.OVRDAT = (PG3IOCONLbits.OVRDAT & 0xFBFF);
+                PG3IOCONLbits.OVRDAT = (PG3IOCONLbits.OVRDAT | overrideDataLow);             
+                break;  
+        default:break;    
+    }
+}
+
+/**
+  @Summary
+    Gets PWM override value for the PWM Generator.
+
+  @Description
+    This routine is used to get PWM override value for the PWM Generator 
+    selected by the argument PWM_GENERATOR.
+	
+  @Param
+    genNum          - PWM generator number.
+
+  @Returns
+    Override data for the PWM Generator selected by the argument PWM_GENERATOR.
+ 
+  @Example 
+    <code>    
+    PWM_GENERATOR genNum;
+    uint16_t overrideData;
+    
+    genNum = PWM_GENERATOR_1;
+    overrideData = PWM_OverrideDataGet(genNum, overrideData);
+    </code>
+*/
+inline static uint16_t PWM_OverrideDataGet(PWM_GENERATOR genNum)
+{
+    uint16_t overrideData;
+    switch(genNum) { 
+        case PWM_GENERATOR_1:
+                overrideData = PG1IOCONLbits.OVRDAT;             
+                break;
+        case PWM_GENERATOR_2:
+                overrideData = PG2IOCONLbits.OVRDAT;             
+                break;
+        case PWM_GENERATOR_3:
+                overrideData = PG3IOCONLbits.OVRDAT;             
+                break;
+        default:break;    
+    }
+    return overrideData;
+}
+
+/**
+  @Summary
+    Enables PWM override on PWMH output for specific PWM generator.
+
+  @Description
+    This routine is used to enables PWM override on PWMH output for specific PWM generator 
+    selected by the argument PWM_GENERATOR.
+
+  @Param
+    genNum - PWM generator number.
+
+  @Returns
+    None
+ 
+  @Example 
+    <code>    
+    PWM_OverrideHighEnable(PWM_GENERATOR_1);
+    </code>
+*/  
+inline static void PWM_OverrideHighEnable(PWM_GENERATOR genNum)
+{
+    switch(genNum) { 
+        case PWM_GENERATOR_1:
+                PG1IOCONLbits.OVRENH = 1;              
+                break;
+        case PWM_GENERATOR_2:
+                PG2IOCONLbits.OVRENH = 1;              
+                break;
+        case PWM_GENERATOR_3:
+                PG3IOCONLbits.OVRENH = 1;              
+                break;
+        default:break;    
+    }
+}
+
+/**
+  @Summary
+    Enables PWM override on PWML output for specific PWM generator.
+
+  @Description
+    This routine is used to enables PWM override on PWML output for specific PWM generator
+    selected by the argument PWM_GENERATOR.
+
+  @Param
+    genNum - PWM generator number.
+
+  @Returns
+    None
+ 
+  @Example 
+    <code>    
+    PWM_OverrideLowEnable(PWM_GENERATOR_1);
+    </code>
+*/  
+inline static void PWM_OverrideLowEnable(PWM_GENERATOR genNum)
+{
+    switch(genNum) { 
+        case PWM_GENERATOR_1:
+                PG1IOCONLbits.OVRENL = 1;              
+                break; 
+        case PWM_GENERATOR_2:
+                PG2IOCONLbits.OVRENL = 1;              
+                break; 
+        case PWM_GENERATOR_3:
+                PG3IOCONLbits.OVRENL = 1;              
+                break; 
+        default:break;    
+    }
+}
+
+/**
+  @Summary
+    Disables PWM override on PWMH output for specific PWM generator.
+
+  @Description
+    This routine is used to disable PWM override on PWMH output for specific PWM generator 
+    selected by the argument PWM_GENERATOR.
+
+
+  @Param
+    genNum - PWM generator number.
+
+  @Returns
+    None
+ 
+  @Example 
+    <code>    
+    PWM_OverrideHighDisable(PWM_GENERATOR_1);
+    </code>
+*/  
+inline static void PWM_OverrideHighDisable(PWM_GENERATOR genNum)
+{
+    switch(genNum) { 
+        case PWM_GENERATOR_1:
+                PG1IOCONLbits.OVRENH = 0;              
+                break;
+        case PWM_GENERATOR_2:
+                PG2IOCONLbits.OVRENH = 0;              
+                break;
+        case PWM_GENERATOR_3:
+                PG3IOCONLbits.OVRENH = 0;              
+                break;
+        default:break;    
+    }
+}
+
+/**
+  @Summary
+    Disables PWM override on PWML output for specific PWM generator.
+
+  @Description
+    This routine is used to disable PWM override on PWML output for specific PWM generator 
+    selected by the argument PWM_GENERATOR.
+
+  @Param
+    genNum - PWM generator number.
+
+  @Returns
+    None
+ 
+  @Example 
+    <code>    
+    PWM_OverrideLowDisable(PWM_GENERATOR_1);
+    </code>
+*/  
+inline static void PWM_OverrideLowDisable(PWM_GENERATOR genNum)
+{
+    switch(genNum) { 
+        case PWM_GENERATOR_1:
+                PG1IOCONLbits.OVRENL = 0;              
+                break;   
+        case PWM_GENERATOR_2:
+                PG2IOCONLbits.OVRENL = 0;              
+                break;   
+        case PWM_GENERATOR_3:
+                PG3IOCONLbits.OVRENL = 0;              
+                break;   
+        default:break;    
+    }
+}
+
+/**
+  @Summary
     Updates PWM Deadtime low register with the requested value for a specific PWM generator.
 
   @Description
-    This routine is used to updates PWM Deadtime low register with the requested value for a specific PWM generator.
+    This routine is used to updates PWM Deadtime low register with the requested
+    value for a specific PWM generator selected by the argument PWM_GENERATOR.
 
   @Param
-    genNum      - PWM generator instance number.
+    genNum      - PWM generator number.
     deadtimeLow - Deadtime low value.
 
   @Returns
@@ -664,10 +812,11 @@ inline static void PWM_DeadTimeLowSet(PWM_GENERATOR genNum,uint16_t deadtimeLow)
     Updates PWM Deadtime high register with the requested value for a specific PWM generator.
 
   @Description
-    This routine is used to updates PWM Deadtime high register with the requested value for a specific PWM generator.
+    This routine is used to updates PWM Deadtime high register with the requested
+    value for a specific PWM generator selected by the argument PWM_GENERATOR.
 
   @Param
-    genNum          - PWM generator instance number.
+    genNum          - PWM generator number.
     deadtimeHigh    - Deadtime high value.
 
   @Returns
@@ -700,23 +849,563 @@ inline static void PWM_DeadTimeHighSet(PWM_GENERATOR genNum,uint16_t deadtimeHig
 
 /**
   @Summary
-    Requests to update the data registers for specific PWM generator.
+    Updates PWM Deadtime low and high register with the requested value for a specific PWM generator.
 
   @Description
-    This routine is used to request to update the data registers for specific PWM generator.
+    This routine is used to updates PWM Deadtime low and high register with the 
+    requested value for a specific PWM generator selected by the argument PWM_GENERATOR.
 
   @Param
-    genNum - PWM generator instance number.
+    genNum          - PWM generator number.
+    deadtimeHigh    - Deadtime value.
 
   @Returns
     None
  
   @Example 
     <code>    
-    PWM_DataUpdateRequestSet(PWM_GENERATOR_1);
+    uint16_t deadtime;
+
+    deadtime = 0x01;
+    
+    PWM_DeadTimeHighSet(PWM_GENERATOR_1, deadtime);
     </code>
 */  
-inline static void PWM_DataUpdateRequestSet(PWM_GENERATOR genNum)
+inline static void PWM_DeadTimeSet(PWM_GENERATOR genNum,uint16_t deadtime)
+{
+    switch(genNum) { 
+        case PWM_GENERATOR_1:
+                PG1DTL = deadtime;
+                PG1DTH = deadtime; 				
+                break;       
+        case PWM_GENERATOR_2:
+                PG2DTL = deadtime;
+                PG2DTH = deadtime; 				
+                break;       
+        case PWM_GENERATOR_3:
+                PG3DTL = deadtime;
+                PG3DTH = deadtime; 				
+                break;       
+        default:break;    
+    }
+}
+
+/**
+  @Summary
+    Sets the PWM trigger compare value in count for the 
+    PWM Generator.
+
+  @Description
+    This routine is used to set the PWM trigger compare value in count
+    for the PWM Generator selected by the argument PWM_GENERATOR.
+
+  @Param
+    genNum          - PWM generator number.
+    trigCompValue   - Trigger compare value in count.
+
+  @Returns
+    None
+ 
+  @Example 
+    <code>    
+    PWM_GENERATOR genNum;
+    uint16_t trigCompValue;
+
+    trigCompValue = 0x01;
+    
+    genNum = PWM_GENERATOR_1;
+    PWM_TriggerCompareValueSet(genNum, trigCompValue);
+    </code>
+*/  
+inline static void PWM_TriggerCompareValueSet(PWM_GENERATOR genNum,uint16_t trigCompValue)
+{
+    switch(genNum) { 
+        case PWM_GENERATOR_1:
+                PG1TRIGA = trigCompValue;              
+                break;      
+        case PWM_GENERATOR_2:
+                PG2TRIGA = trigCompValue;              
+                break;      
+        case PWM_GENERATOR_3:
+                PG3TRIGA = trigCompValue;              
+                break;      
+        default:break;    
+    }
+}
+
+/**
+  @Summary
+    Enables interrupt requests for the PWM Generator.
+
+  @Description
+    This routine is used to enable interrupt requests for the PWM Generator 
+    selected by the argument PWM_GENERATOR.
+
+  @Param
+    genNum - PWM generator number.
+    interrupt - PWM generator interrupt source.
+
+  @Returns
+    None
+ 
+  @Example 
+    <code>    
+    PWM_GENERATOR genNum;
+    PWM_GENERATOR_INTERRUPT interrupt;
+    
+    genNum = PWM_GENERATOR_1;
+    interrupt = PWM_GENERATOR_INTERRUPT_TRIGGER;
+    PWM_GeneratorInterruptEnable(genNum, interrupt);
+    </code>
+*/ 
+inline static void PWM_GeneratorInterruptEnable(PWM_GENERATOR genNum, PWM_GENERATOR_INTERRUPT interrupt)
+{
+    switch(genNum) { 
+        case PWM_GENERATOR_1:
+                switch(interrupt) { 
+                        case PWM_GENERATOR_INTERRUPT_FAULT:
+                                        PG1EVTHbits.FLTIEN = true;               
+                                        break;       
+                        case PWM_GENERATOR_INTERRUPT_CURRENT_LIMIT:
+                                        PG1EVTHbits.CLIEN = true;
+                                        break;
+                        case PWM_GENERATOR_INTERRUPT_FEED_FORWARD:
+                                        PG1EVTHbits.FFIEN = true;
+                                        break;
+                        case PWM_GENERATOR_INTERRUPT_SYNC:
+                                        PG1EVTHbits.SIEN = true;
+                                        break;														
+                        default:break;  
+                }              
+                break;   
+        case PWM_GENERATOR_2:
+                switch(interrupt) { 
+                        case PWM_GENERATOR_INTERRUPT_FAULT:
+                                        PG2EVTHbits.FLTIEN = true;               
+                                        break;       
+                        case PWM_GENERATOR_INTERRUPT_CURRENT_LIMIT:
+                                        PG2EVTHbits.CLIEN = true;
+                                        break;
+                        case PWM_GENERATOR_INTERRUPT_FEED_FORWARD:
+                                        PG2EVTHbits.FFIEN = true;
+                                        break;
+                        case PWM_GENERATOR_INTERRUPT_SYNC:
+                                        PG2EVTHbits.SIEN = true;
+                                        break;														
+                        default:break;  
+                }              
+                break;   
+        case PWM_GENERATOR_3:
+                switch(interrupt) { 
+                        case PWM_GENERATOR_INTERRUPT_FAULT:
+                                        PG3EVTHbits.FLTIEN = true;               
+                                        break;       
+                        case PWM_GENERATOR_INTERRUPT_CURRENT_LIMIT:
+                                        PG3EVTHbits.CLIEN = true;
+                                        break;
+                        case PWM_GENERATOR_INTERRUPT_FEED_FORWARD:
+                                        PG3EVTHbits.FFIEN = true;
+                                        break;
+                        case PWM_GENERATOR_INTERRUPT_SYNC:
+                                        PG3EVTHbits.SIEN = true;
+                                        break;														
+                        default:break;  
+                }              
+                break;   
+        default:break;  
+    }
+}
+
+/**
+  @Summary
+    Disables interrupt requests for the PWM Generator.
+
+  @Description
+    This routine is used to disables interrupt requests for the PWM 
+    Generator selected by the argument PWM_GENERATOR.
+
+  @Param
+    genNum - PWM generator number.
+    interrupt - PWM generator interrupt source.
+
+  @Returns
+    None
+ 
+  @Example 
+    <code>    
+    PWM_GENERATOR genNum;
+    PWM_GENERATOR_INTERRUPT interrupt;
+    
+    genNum = PWM_GENERATOR_1;
+    interrupt = PWM_GENERATOR_INTERRUPT_TRIGGER;
+    PWM_GeneratorInterruptDisable(genNum, interrupt);
+    </code>
+*/ 
+inline static void PWM_GeneratorInterruptDisable(PWM_GENERATOR genNum, PWM_GENERATOR_INTERRUPT interrupt)
+{
+    switch(genNum) { 
+        case PWM_GENERATOR_1:
+                switch(interrupt) { 
+                        case PWM_GENERATOR_INTERRUPT_FAULT:
+                                        PG1EVTHbits.FLTIEN = false;               
+                                        break;       
+                        case PWM_GENERATOR_INTERRUPT_CURRENT_LIMIT:
+                                        PG1EVTHbits.CLIEN = false;
+                                        break;
+                        case PWM_GENERATOR_INTERRUPT_FEED_FORWARD:
+                                        PG1EVTHbits.FFIEN = false;
+                                        break;
+                        case PWM_GENERATOR_INTERRUPT_SYNC:
+                                        PG1EVTHbits.SIEN = false;
+                                        break;								
+                        default:break;  
+                }              
+                break;  
+        case PWM_GENERATOR_2:
+                switch(interrupt) { 
+                        case PWM_GENERATOR_INTERRUPT_FAULT:
+                                        PG2EVTHbits.FLTIEN = false;               
+                                        break;       
+                        case PWM_GENERATOR_INTERRUPT_CURRENT_LIMIT:
+                                        PG2EVTHbits.CLIEN = false;
+                                        break;
+                        case PWM_GENERATOR_INTERRUPT_FEED_FORWARD:
+                                        PG2EVTHbits.FFIEN = false;
+                                        break;
+                        case PWM_GENERATOR_INTERRUPT_SYNC:
+                                        PG2EVTHbits.SIEN = false;
+                                        break;								
+                        default:break;  
+                }              
+                break;  
+        case PWM_GENERATOR_3:
+                switch(interrupt) { 
+                        case PWM_GENERATOR_INTERRUPT_FAULT:
+                                        PG3EVTHbits.FLTIEN = false;               
+                                        break;       
+                        case PWM_GENERATOR_INTERRUPT_CURRENT_LIMIT:
+                                        PG3EVTHbits.CLIEN = false;
+                                        break;
+                        case PWM_GENERATOR_INTERRUPT_FEED_FORWARD:
+                                        PG3EVTHbits.FFIEN = false;
+                                        break;
+                        case PWM_GENERATOR_INTERRUPT_SYNC:
+                                        PG3EVTHbits.SIEN = false;
+                                        break;								
+                        default:break;  
+                }              
+                break;  
+        default:break;  
+    }
+}
+
+/**
+  @Summary
+    Clears PWM interrupt status for the PWM Generator.
+
+  @Description
+    This routine is used to clear PWM interrupt status for the PWM Generator 
+    selected by the argument PWM_GENERATOR.
+
+  @Param
+    genNum - PWM generator number.
+    interrupt - PWM generator interrupt source.
+
+  @Returns
+    None
+ 
+  @Example 
+    <code>    
+    PWM_GENERATOR genNum;
+    PWM_GENERATOR_INTERRUPT interrupt;
+    
+    genNum = PWM_GENERATOR_1;
+    interrupt = PWM_GENERATOR_INTERRUPT_TRIGGER;
+    PWM_GeneratorEventStatusClear(genNum, interrupt);
+    </code>
+*/
+inline static void PWM_GeneratorEventStatusClear(PWM_GENERATOR genNum, PWM_GENERATOR_INTERRUPT interrupt)
+{
+    switch(genNum) { 
+        case PWM_GENERATOR_1:
+                switch(interrupt) { 
+                        case PWM_GENERATOR_INTERRUPT_FAULT:
+                                        PG1STATbits.FLTEVT = 0;							
+                                        break;       
+                        case PWM_GENERATOR_INTERRUPT_CURRENT_LIMIT:
+                                        PG1STATbits.CLEVT = 0;
+                                        break;
+                        case PWM_GENERATOR_INTERRUPT_FEED_FORWARD:
+                                        PG1STATbits.FFEVT = 0;
+                                        break;	
+                        case PWM_GENERATOR_INTERRUPT_SYNC:
+                                        PG1STATbits.SEVT = 0;
+                                        break;							
+                        default:break;  
+                }              
+                break; 
+        case PWM_GENERATOR_2:
+                switch(interrupt) { 
+                        case PWM_GENERATOR_INTERRUPT_FAULT:
+                                        PG2STATbits.FLTEVT = 0;							
+                                        break;       
+                        case PWM_GENERATOR_INTERRUPT_CURRENT_LIMIT:
+                                        PG2STATbits.CLEVT = 0;
+                                        break;
+                        case PWM_GENERATOR_INTERRUPT_FEED_FORWARD:
+                                        PG2STATbits.FFEVT = 0;
+                                        break;	
+                        case PWM_GENERATOR_INTERRUPT_SYNC:
+                                        PG2STATbits.SEVT = 0;
+                                        break;							
+                        default:break;  
+                }              
+                break; 
+        case PWM_GENERATOR_3:
+                switch(interrupt) { 
+                        case PWM_GENERATOR_INTERRUPT_FAULT:
+                                        PG3STATbits.FLTEVT = 0;							
+                                        break;       
+                        case PWM_GENERATOR_INTERRUPT_CURRENT_LIMIT:
+                                        PG3STATbits.CLEVT = 0;
+                                        break;
+                        case PWM_GENERATOR_INTERRUPT_FEED_FORWARD:
+                                        PG3STATbits.FFEVT = 0;
+                                        break;	
+                        case PWM_GENERATOR_INTERRUPT_SYNC:
+                                        PG3STATbits.SEVT = 0;
+                                        break;							
+                        default:break;  
+                }              
+                break; 
+        default:break;  
+    }
+}
+
+/**
+  @Summary
+    Gets PWM interrupt status for the PWM Generator.
+
+  @Description
+    This routine is used to get PWM interrupt status for the PWM Generator 
+    selected by the argument PWM_GENERATOR.
+
+  @Param
+    genNum - PWM generator number.
+    interrupt - PWM generator interrupt source.
+
+  @Returns
+    true - Interrupt is pending.
+    false - Interrupt is not pending.
+ 
+  @Example 
+    <code>    
+    PWM_GENERATOR genNum;
+    PWM_GENERATOR_INTERRUPT interrupt;
+    bool status;
+    
+    genNum = PWM_GENERATOR_1;
+    interrupt = PWM_GENERATOR_INTERRUPT_TRIGGER;
+    status = PWM_GeneratorEventStatusGet(genNum, interrupt);
+    </code>
+*/
+inline static bool PWM_GeneratorEventStatusGet(PWM_GENERATOR genNum, PWM_GENERATOR_INTERRUPT interrupt)
+{
+    bool status = false;
+    switch(genNum) { 
+        case PWM_GENERATOR_1:
+                switch(interrupt) { 
+                        case PWM_GENERATOR_INTERRUPT_FAULT:
+                                        status = PG1STATbits.FLTEVT;               
+                                        break;       
+                        case PWM_GENERATOR_INTERRUPT_CURRENT_LIMIT:
+                                        status = PG1STATbits.CLEVT;
+                                        break;
+                        case PWM_GENERATOR_INTERRUPT_FEED_FORWARD:
+                                        status = PG1STATbits.FFEVT;
+                                        break;	
+                        case PWM_GENERATOR_INTERRUPT_SYNC:
+                                        status = PG1STATbits.SEVT;
+                                        break;							
+                        default:break;  
+                }              
+                break; 
+        case PWM_GENERATOR_2:
+                switch(interrupt) { 
+                        case PWM_GENERATOR_INTERRUPT_FAULT:
+                                        status = PG2STATbits.FLTEVT;               
+                                        break;       
+                        case PWM_GENERATOR_INTERRUPT_CURRENT_LIMIT:
+                                        status = PG2STATbits.CLEVT;
+                                        break;
+                        case PWM_GENERATOR_INTERRUPT_FEED_FORWARD:
+                                        status = PG2STATbits.FFEVT;
+                                        break;	
+                        case PWM_GENERATOR_INTERRUPT_SYNC:
+                                        status = PG2STATbits.SEVT;
+                                        break;							
+                        default:break;  
+                }              
+                break; 
+        case PWM_GENERATOR_3:
+                switch(interrupt) { 
+                        case PWM_GENERATOR_INTERRUPT_FAULT:
+                                        status = PG3STATbits.FLTEVT;               
+                                        break;       
+                        case PWM_GENERATOR_INTERRUPT_CURRENT_LIMIT:
+                                        status = PG3STATbits.CLEVT;
+                                        break;
+                        case PWM_GENERATOR_INTERRUPT_FEED_FORWARD:
+                                        status = PG3STATbits.FFEVT;
+                                        break;	
+                        case PWM_GENERATOR_INTERRUPT_SYNC:
+                                        status = PG3STATbits.SEVT;
+                                        break;							
+                        default:break;  
+                }              
+                break; 
+        default:break;  
+    }
+	return status;
+}
+
+/**
+  @Summary
+    Sets the TRIGA compare value in count for a specific PWM generator.
+
+  @Description
+    This routine is used to set the TRIGA compare value in count for a specific PWM generator
+    selected by the argument PWM_GENERATOR.
+
+  @Param
+    genNum - PWM generator number.
+    trigA  - TRIGA compare value in count.
+
+  @Returns
+    None
+ 
+  @Example 
+    <code>    
+    uint16_t trigA;
+    
+    trigA = 0xF;
+    PWM_TriggerACompareValueSet(PWM_GENERATOR_1, trigA);
+    </code>
+*/
+inline static void PWM_TriggerACompareValueSet(PWM_GENERATOR genNum,uint16_t trigA)
+{ 
+    switch(genNum) { 
+        case PWM_GENERATOR_1:
+                PG1TRIGA = trigA;              
+                break;       
+        case PWM_GENERATOR_2:
+                PG2TRIGA = trigA;              
+                break;       
+        case PWM_GENERATOR_3:
+                PG3TRIGA = trigA;              
+                break;       
+        default:break;    
+    }
+}
+
+/**
+  @Summary
+    Sets the TRIGB compare value in count for a specific PWM generator.
+
+  @Description
+    This routine is used to set the TRIGB compare value in count for a specific PWM generator 
+    selected by the argument PWM_GENERATOR.
+
+  @Param
+    genNum - PWM generator number.
+    trigB  - TRIGB compare value in count.
+
+  @Returns
+    None
+ 
+  @Example 
+    <code>    
+    uint16_t trigB;
+    
+    trigB = 0xF;
+    PWM_TriggerBCompareValueSet(PWM_GENERATOR_1, trigB);
+    </code>
+*/
+inline static void PWM_TriggerBCompareValueSet(PWM_GENERATOR genNum,uint16_t trigB)
+{
+    switch(genNum) { 
+        case PWM_GENERATOR_1:
+                PG1TRIGB = trigB;              
+                break;       
+        case PWM_GENERATOR_2:
+                PG2TRIGB = trigB;              
+                break;       
+        case PWM_GENERATOR_3:
+                PG3TRIGB = trigB;              
+                break;       
+        default:break;    
+    }
+}
+
+/**
+  @Summary
+    Sets the TRIGC compare value in count for a specific PWM generator.
+
+  @Description
+    This routine is used to set the TRIGC compare value in count for a specific PWM generator 
+    selected by the argument PWM_GENERATOR.
+
+  @Param
+    genNum - PWM generator number.
+    trigC  - TRIGC compare value in count.
+
+  @Returns
+    None
+ 
+  @Example 
+    <code>    
+    uint16_t trigC;
+    
+    trigC = 0xF;
+    PWM_TriggerCCompareValueSet(PWM_GENERATOR_1, trigC);
+    </code>
+*/
+inline static void PWM_TriggerCCompareValueSet(PWM_GENERATOR genNum,uint16_t trigC)
+{
+    switch(genNum) { 
+        case PWM_GENERATOR_1:
+                PG1TRIGC = trigC;              
+                break;       
+        case PWM_GENERATOR_2:
+                PG2TRIGC = trigC;              
+                break;       
+        case PWM_GENERATOR_3:
+                PG3TRIGC = trigC;              
+                break;       
+        default:break;    
+    }
+}
+
+/**
+  @Summary
+    Requests to update the data registers for specific PWM generator.
+
+  @Description
+    This routine is used to request to update the data registers for specific PWM generator 
+    selected by the argument PWM_GENERATOR.
+
+  @Param
+    genNum - PWM generator number.
+
+  @Returns
+    None
+ 
+  @Example 
+    <code>    
+    PWM_SoftwareUpdateRequest(PWM_GENERATOR_1);
+    </code>
+*/  
+inline static void PWM_SoftwareUpdateRequest(PWM_GENERATOR genNum)
 {
     switch(genNum) { 
         case PWM_GENERATOR_1:
@@ -738,10 +1427,11 @@ inline static void PWM_DataUpdateRequestSet(PWM_GENERATOR genNum)
     Gets the status of the update request for specific PWM generator.
 
   @Description
-    This routine is used to get the status of the update request for specific PWM generator
+    This routine is used to get the status of the update request for specific PWM generator 
+    selected by the argument PWM_GENERATOR.
 
   @Param
-    genNum - PWM generator instance number.
+    genNum - PWM generator number.
 
   @Returns
     None
@@ -750,10 +1440,10 @@ inline static void PWM_DataUpdateRequestSet(PWM_GENERATOR genNum)
     <code>    
     bool status;
     
-    status = PWM_DataUpdateStatusGet(PWM_GENERATOR_1);
+    status = PWM_SoftwareUpdatePending(PWM_GENERATOR_1);
     </code>
 */  
-inline static bool PWM_DataUpdateStatusGet(PWM_GENERATOR genNum)
+inline static bool PWM_SoftwareUpdatePending(PWM_GENERATOR genNum)
 {
     bool status = false;
     switch(genNum) { 
@@ -773,6 +1463,44 @@ inline static bool PWM_DataUpdateStatusGet(PWM_GENERATOR genNum)
 
 /**
   @Summary
+    Clears the status of PWM latched fault mode for the PWM Generator.
+
+  @Description
+    This routine is used to clear the status of PWM latched fault mode 
+    for the PWM Generator selected by the argument PWM_GENERATOR.
+
+  @Param
+    genNum - PWM generator number.
+
+  @Returns
+    None
+ 
+  @Example 
+    <code>    
+    PWM_GENERATOR genNum;
+    
+    genNum = PWM_GENERATOR_1;
+    PWM_FaultModeLatchClear(genNum);
+    </code>
+*/  
+inline static void PWM_FaultModeLatchClear(PWM_GENERATOR genNum)
+{
+    switch(genNum) { 
+        case PWM_GENERATOR_1: 
+                PG1FPCILbits.SWTERM = 1;
+                break;   
+        case PWM_GENERATOR_2: 
+                PG2FPCILbits.SWTERM = 1;
+                break;   
+        case PWM_GENERATOR_3: 
+                PG3FPCILbits.SWTERM = 1;
+                break;   
+        default:break;   
+    }   
+}
+
+/**
+  @Summary
     Callback for PWM1 interrupt.
 
   @Description
@@ -785,9 +1513,12 @@ inline static bool PWM_DataUpdateStatusGet(PWM_GENERATOR genNum)
     None.
  
   @Example 
-    None.
+    <code>    
+    PWM_Generator1_CallBack();
+    </code>
 */
-void PWM_Generator1CallBack(void);
+void PWM_Generator1_CallBack(void);
+
 /**
   @Summary
     Tasks routine for PWM1.
@@ -802,9 +1533,12 @@ void PWM_Generator1CallBack(void);
     None.
  
   @Example 
-    None.
+    <code>    
+    PWM_Generator1_Tasks();
+    </code>
 */
-void PWM_Tasks_Generator1(void);
+void PWM_Generator1_Tasks(void);
+
 /**
   @Summary
     Callback for PWM2 interrupt.
@@ -819,9 +1553,12 @@ void PWM_Tasks_Generator1(void);
     None.
  
   @Example 
-    None.
+    <code>    
+    PWM_Generator2_CallBack();
+    </code>
 */
-void PWM_Generator2CallBack(void);
+void PWM_Generator2_CallBack(void);
+
 /**
   @Summary
     Tasks routine for PWM2.
@@ -836,9 +1573,12 @@ void PWM_Generator2CallBack(void);
     None.
  
   @Example 
-    None.
+    <code>    
+    PWM_Generator2_Tasks();
+    </code>
 */
-void PWM_Tasks_Generator2(void);
+void PWM_Generator2_Tasks(void);
+
 /**
   @Summary
     Callback for PWM3 interrupt.
@@ -853,9 +1593,12 @@ void PWM_Tasks_Generator2(void);
     None.
  
   @Example 
-    None.
+    <code>    
+    PWM_Generator3_CallBack();
+    </code>
 */
-void PWM_Generator3CallBack(void);
+void PWM_Generator3_CallBack(void);
+
 /**
   @Summary
     Tasks routine for PWM3.
@@ -870,9 +1613,12 @@ void PWM_Generator3CallBack(void);
     None.
  
   @Example 
-    None.
+    <code>    
+    PWM_Generator3_Tasks();
+    </code>
 */
-void PWM_Tasks_Generator3(void);
+void PWM_Generator3_Tasks(void);
+
 
 /**
   @Summary
@@ -888,9 +1634,12 @@ void PWM_Tasks_Generator3(void);
     None.
  
   @Example 
-    None.
+    <code>    
+    PWM_EventA_CallBack();
+    </code>
 */
-void PWM_EventACallBack(void);
+void PWM_EventA_CallBack(void);
+
 /**
   @Summary
     Tasks routine for EventA.
@@ -905,9 +1654,12 @@ void PWM_EventACallBack(void);
     None.
  
   @Example 
-    None.
+    <code>    
+    PWM_EventA_Tasks();
+    </code>
 */
-void PWM_Tasks_EventA(void);
+void PWM_EventA_Tasks(void);
+
 /**
   @Summary
     Callback for EventB interrupt.
@@ -922,9 +1674,12 @@ void PWM_Tasks_EventA(void);
     None.
  
   @Example 
-    None.
+    <code>    
+    PWM_EventB_CallBack();
+    </code>
 */
-void PWM_EventBCallBack(void);
+void PWM_EventB_CallBack(void);
+
 /**
   @Summary
     Tasks routine for EventB.
@@ -939,9 +1694,12 @@ void PWM_EventBCallBack(void);
     None.
  
   @Example 
-    None.
+    <code>    
+    PWM_EventB_Tasks();
+    </code>
 */
-void PWM_Tasks_EventB(void);
+void PWM_EventB_Tasks(void);
+
 /**
   @Summary
     Callback for EventC interrupt.
@@ -956,9 +1714,12 @@ void PWM_Tasks_EventB(void);
     None.
  
   @Example 
-    None.
+    <code>    
+    PWM_EventC_CallBack();
+    </code>
 */
-void PWM_EventCCallBack(void);
+void PWM_EventC_CallBack(void);
+
 /**
   @Summary
     Tasks routine for EventC.
@@ -973,9 +1734,12 @@ void PWM_EventCCallBack(void);
     None.
  
   @Example 
-    None.
+    <code>    
+    PWM_EventC_Tasks();
+    </code>
 */
-void PWM_Tasks_EventC(void);
+void PWM_EventC_Tasks(void);
+
 /**
   @Summary
     Callback for EventD interrupt.
@@ -990,9 +1754,12 @@ void PWM_Tasks_EventC(void);
     None.
  
   @Example 
-    None.
+    <code>    
+    PWM_EventD_CallBack();
+    </code>
 */
-void PWM_EventDCallBack(void);
+void PWM_EventD_CallBack(void);
+
 /**
   @Summary
     Tasks routine for EventD.
@@ -1007,9 +1774,12 @@ void PWM_EventDCallBack(void);
     None.
  
   @Example 
-    None.
+    <code>    
+    PWM_EventD_Tasks();
+    </code>
 */
-void PWM_Tasks_EventD(void);
+void PWM_EventD_Tasks(void);
+
 /**
   @Summary
     Callback for EventE interrupt.
@@ -1024,9 +1794,12 @@ void PWM_Tasks_EventD(void);
     None.
  
   @Example 
-    None.
+    <code>    
+    PWM_EventE_CallBack();
+    </code>
 */
-void PWM_EventECallBack(void);
+void PWM_EventE_CallBack(void);
+
 /**
   @Summary
     Tasks routine for EventE.
@@ -1041,9 +1814,12 @@ void PWM_EventECallBack(void);
     None.
  
   @Example 
-    None.
+    <code>    
+    PWM_EventE_Tasks();
+    </code>
 */
-void PWM_Tasks_EventE(void);
+void PWM_EventE_Tasks(void);
+
 /**
   @Summary
     Callback for EventF interrupt.
@@ -1058,9 +1834,12 @@ void PWM_Tasks_EventE(void);
     None.
  
   @Example 
-    None.
+    <code>    
+    PWM_EventF_CallBack();
+    </code>
 */
-void PWM_EventFCallBack(void);
+void PWM_EventF_CallBack(void);
+
 /**
   @Summary
     Tasks routine for EventF.
@@ -1075,9 +1854,358 @@ void PWM_EventFCallBack(void);
     None.
  
   @Example 
-    None.
+    <code>    
+    PWM_EventF_Tasks();
+    </code>
 */
-void PWM_Tasks_EventF(void);
+void PWM_EventF_Tasks(void);
+
+
+/*******************************************************************************
+
+  !!! Deprecated Definitions and APIs !!!
+  !!! These functions will not be supported in future releases !!!
+
+*******************************************************************************/
+/**
+  @Summary
+    Enables the specific PWM generator.
+
+  @Description
+    This routine is used to enable the specific PWM generator 
+    selected by the argument PWM_GENERATOR.
+
+  @Param
+    genNum - PWM generator number.
+
+  @Returns
+    None
+ 
+  @Example 
+    <code>    
+    PWM_GENERATOR genNum;
+    
+    genNum = PWM_GENERATOR_1;
+    PWM_ModuleEnable(genNum);
+    </code>
+*/
+inline static void __attribute__((deprecated("\nThis will be removed in future MCC releases. \nUse PWM_GeneratorEnable instead."))) PWM_ModuleEnable(PWM_GENERATOR genNum)
+{
+    switch(genNum) { 
+        case PWM_GENERATOR_1:
+                PG1CONLbits.ON = 1;              
+                break;       
+        case PWM_GENERATOR_2:
+                PG2CONLbits.ON = 1;              
+                break;       
+        case PWM_GENERATOR_3:
+                PG3CONLbits.ON = 1;              
+                break;       
+        default:break;    
+    }     
+}
+
+/**
+  @Summary
+    Disables the specific PWM generator.
+
+  @Description
+    This routine is used to disable the specific PWM generator 
+    selected by the argument PWM_GENERATOR.
+
+  @Param
+    genNum - PWM generator number.
+
+  @Returns
+    None
+ 
+  @Example 
+    <code>    
+    PWM_GENERATOR genNum;
+    
+    genNum = PWM_GENERATOR_1;
+    PWM_ModuleDisable(genNum);
+    </code>
+*/
+inline static void __attribute__((deprecated("\nThis will be removed in future MCC releases. \nUse PWM_GeneratorDisable instead."))) PWM_ModuleDisable(PWM_GENERATOR genNum)
+{
+    switch(genNum) { 
+        case PWM_GENERATOR_1:
+                PG1CONLbits.ON = 0;              
+                break;       
+        case PWM_GENERATOR_2:
+                PG2CONLbits.ON = 0;              
+                break;       
+        case PWM_GENERATOR_3:
+                PG3CONLbits.ON = 0;              
+                break;       
+        default:break;    
+    }    
+}
+
+/**
+  @Summary
+    Enables/Disables PWM override on PWML output for specific PWM generator.
+
+  @Description
+    This routine is used to enable/disable PWM override on PWML output for specific PWM generator 
+    selected by the argument PWM_GENERATOR.
+
+  @Param
+    genNum - PWM generator number.
+    enableOverride  - Data to enable or disable override low. 
+
+  @Returns
+    None
+ 
+  @Example 
+    <code>    
+    PWM_OverrideLowEnableSet(PWM_GENERATOR_1, enableOverride);
+    </code>
+*/  
+inline static void __attribute__((deprecated("\nThis will be removed in future MCC releases. \nUse PWM_OverrideLowEnable and PWM_OverrideLowDisable instead."))) PWM_OverrideLowEnableSet(PWM_GENERATOR genNum, bool enableOverride)
+{
+    switch(genNum) { 
+        case PWM_GENERATOR_1:
+                PG1IOCONLbits.OVRENL = enableOverride;              
+                break;       
+        case PWM_GENERATOR_2:
+                PG2IOCONLbits.OVRENL = enableOverride;              
+                break;       
+        case PWM_GENERATOR_3:
+                PG3IOCONLbits.OVRENL = enableOverride;              
+                break;       
+        default:break;    
+    }
+}
+
+/**
+  @Summary
+    Enables/Disables PWM override on PWMH output for specific PWM generator.
+
+  @Description
+    This routine is used to enable/disable PWM override on PWMH output for specific PWM generator 
+    selected by the argument PWM_GENERATOR.
+
+  @Param
+    genNum - PWM generator number.
+    enableOverride  - Data to enable or disable override high. 
+
+  @Returns
+    None
+ 
+  @Example 
+    <code>    
+    PWM_OverrideHighEnableSet(PWM_GENERATOR_1, enableOverride);
+    </code>
+*/  
+inline static void __attribute__((deprecated("\nThis will be removed in future MCC releases. \nUse PWM_OverrideHighEnable and PWM_OverrideHighDisable instead."))) PWM_OverrideHighEnableSet(PWM_GENERATOR genNum, bool enableOverride)
+{
+    switch(genNum) { 
+        case PWM_GENERATOR_1:
+                PG1IOCONLbits.OVRENH = enableOverride;              
+                break;       
+        case PWM_GENERATOR_2:
+                PG2IOCONLbits.OVRENH = enableOverride;              
+                break;       
+        case PWM_GENERATOR_3:
+                PG3IOCONLbits.OVRENH = enableOverride;              
+                break;       
+        default:break;    
+    }
+}
+
+/**
+  @Summary
+    Sets the TRIGA compare value in count for a specific PWM generator.
+
+  @Description
+    This routine is used to set the TRIGA compare value in count for a specific PWM generator 
+    selected by the argument PWM_GENERATOR.
+
+  @Param
+    genNum - PWM generator number.
+    trigA  - TRIGA compare value in count.
+
+  @Returns
+    None
+ 
+  @Example 
+    <code>    
+    uint16_t trigA;
+    
+    trigA = 0xF;
+    PWM_TRIGACompareSet(PWM_GENERATOR_1, trigA);
+    </code>
+*/
+inline static void __attribute__((deprecated("\nThis will be removed in future MCC releases. \nUse PWM_TriggerACompareValueSet instead."))) PWM_TRIGACompareSet(PWM_GENERATOR genNum,uint16_t trigA)
+{ 
+    switch(genNum) { 
+        case PWM_GENERATOR_1:
+                PG1TRIGA = trigA;              
+                break;       
+        case PWM_GENERATOR_2:
+                PG2TRIGA = trigA;              
+                break;       
+        case PWM_GENERATOR_3:
+                PG3TRIGA = trigA;              
+                break;       
+        default:break;    
+    }
+}
+
+/**
+  @Summary
+    Sets the TRIGB compare value in count for a specific PWM generator.
+
+  @Description
+    This routine is used to set the TRIGB compare value in count for a specific PWM generator 
+    selected by the argument PWM_GENERATOR.
+
+  @Param
+    genNum - PWM generator number.
+    trigB  - TRIGB compare value in count.
+
+  @Returns
+    None
+ 
+  @Example 
+    <code>    
+    uint16_t trigB;
+    
+    trigB = 0xF;
+    PWM_TRIGBCompareSet(PWM_GENERATOR_1, trigB);
+    </code>
+*/
+inline static void __attribute__((deprecated("\nThis will be removed in future MCC releases. \nUse PWM_TriggerBCompareValueSet instead."))) PWM_TRIGBCompareSet(PWM_GENERATOR genNum,uint16_t trigB)
+{
+    switch(genNum) { 
+        case PWM_GENERATOR_1:
+                PG1TRIGB = trigB;              
+                break;       
+        case PWM_GENERATOR_2:
+                PG2TRIGB = trigB;              
+                break;       
+        case PWM_GENERATOR_3:
+                PG3TRIGB = trigB;              
+                break;       
+        default:break;    
+    }
+}
+
+/**
+  @Summary
+    Sets the TRIGC compare value in count for a specific PWM generator.
+
+  @Description
+    This routine is used to set the TRIGC compare value in count for a specific PWM generator 
+    selected by the argument PWM_GENERATOR.
+
+  @Param
+    genNum - PWM generator number.
+    trigC  - TRIGC compare value in count.
+
+  @Returns
+    None
+ 
+  @Example 
+    <code>    
+    uint16_t trigC;
+    
+    trigC = 0xF;
+    PWM_TRIGCCompareSet(PWM_GENERATOR_1, trigC);
+    </code>
+*/
+inline static void __attribute__((deprecated("\nThis will be removed in future MCC releases. \nUse PWM_TriggerCCompareValueSet instead."))) PWM_TRIGCCompareSet(PWM_GENERATOR genNum,uint16_t trigC)
+{
+    switch(genNum) { 
+        case PWM_GENERATOR_1:
+                PG1TRIGC = trigC;              
+                break;       
+        case PWM_GENERATOR_2:
+                PG2TRIGC = trigC;              
+                break;       
+        case PWM_GENERATOR_3:
+                PG3TRIGC = trigC;              
+                break;       
+        default:break;    
+    }
+}
+
+/**
+  @Summary
+    Requests to update the data registers for specific PWM generator.
+
+  @Description
+    This routine is used to request to update the data registers for specific PWM generator 
+    selected by the argument PWM_GENERATOR.
+
+  @Param
+    genNum - PWM generator number.
+
+  @Returns
+    None
+ 
+  @Example 
+    <code>    
+    PWM_DataUpdateRequestSet(PWM_GENERATOR_1);
+    </code>
+*/  
+inline static void __attribute__((deprecated("\nThis will be removed in future MCC releases. \nUse PWM_SoftwareUpdateRequest instead."))) PWM_DataUpdateRequestSet(PWM_GENERATOR genNum)
+{
+    switch(genNum) { 
+        case PWM_GENERATOR_1:
+                PG1STATbits.UPDREQ = 1;              
+                break;       
+        case PWM_GENERATOR_2:
+                PG2STATbits.UPDREQ = 1;              
+                break;       
+        case PWM_GENERATOR_3:
+                PG3STATbits.UPDREQ = 1;              
+                break;       
+        default:break;    
+    }
+
+}
+
+/**
+  @Summary
+    Gets the status of the update request for specific PWM generator.
+
+  @Description
+    This routine is used to get the status of the update request for specific PWM generator 
+    selected by the argument PWM_GENERATOR.
+
+  @Param
+    genNum - PWM generator number.
+
+  @Returns
+    None
+ 
+  @Example 
+    <code>    
+    bool status;
+    
+    status = PWM_DataUpdateStatusGet(PWM_GENERATOR_1);
+    </code>
+*/  
+inline static bool __attribute__((deprecated("\nThis will be removed in future MCC releases. \nUse PWM_SoftwareUpdatePending instead."))) PWM_DataUpdateStatusGet(PWM_GENERATOR genNum)
+{
+    bool status = false;
+    switch(genNum) { 
+        case PWM_GENERATOR_1:
+                status = PG1STATbits.UPDATE;              
+                break;       
+        case PWM_GENERATOR_2:
+                status = PG2STATbits.UPDATE;              
+                break;       
+        case PWM_GENERATOR_3:
+                status = PG3STATbits.UPDATE;              
+                break;       
+        default:break;   
+    }
+    return status;
+}
 
 #ifdef __cplusplus  // Provide C++ Compatibility
 
@@ -1086,4 +2214,3 @@ void PWM_Tasks_EventF(void);
 #endif
 
 #endif //PWM_H
-

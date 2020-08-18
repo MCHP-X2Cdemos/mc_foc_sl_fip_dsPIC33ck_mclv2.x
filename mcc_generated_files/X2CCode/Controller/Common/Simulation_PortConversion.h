@@ -1,3 +1,10 @@
+/**
+ * @file 
+ * @brief Port data type conversion functions for simulation in Xcos (Simulink).
+ *
+ * In simulation glue code all in/out-ports are handled as double -1..1.
+ * This file provides functions to convert from double -1..1 to the internal representation and back.
+ */
 /*
  * Copyright (c) 2014, Linz Center of Mechatronics GmbH (LCM) http://www.lcm.at/
  * All rights reserved.
@@ -29,17 +36,15 @@
  */
 /*
  * This file is part of X2C. http://x2c.lcm.at/
- * $LastChangedRevision: 1603 $
- * $LastChangedDate:: 2019-01-21 19:02:13 +0100 #$:
+ * $LastChangedRevision: 1852 $
+ * $LastChangedDate:: 2020-03-10 16:35:19 +0100#$
  */
-/*
- * In simulation glue code all in/out-ports are handled as double -1..1.
- * This file provides functions to convert from double -1..1 to the internal representation and back.
- */
+#ifndef SIMULATION_PORTCONVERSION
+#define SIMULATION_PORTCONVERSION
 
-
-#ifndef __SIMULATION_PORTCONVERSION__
-#define __SIMULATION_PORTCONVERSION__
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include "Target.h"
 
@@ -161,5 +166,9 @@ static float64 convert_double_to_float64(double value) {
 static double convert_float64_to_double(float64 value) {
   return ((double) value);
 }
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

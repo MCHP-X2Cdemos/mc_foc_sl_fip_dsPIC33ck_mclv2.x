@@ -29,7 +29,7 @@
  */
 /*
  * This file is part of X2C. http://x2c.lcm.at/
- * $LastChangedRevision: 1603 $
+ * $LastChangedRevision: 1948 $
  */
 /* USERCODE-BEGIN:Description                                                                                         */
 /**
@@ -51,7 +51,7 @@ extern "C" {
 
 typedef struct {
     uint16          ID;
-    int8            *In;
+    bool            *In;
     int32           Out;
 } TYPECONV_BOOL_FIP32;
 

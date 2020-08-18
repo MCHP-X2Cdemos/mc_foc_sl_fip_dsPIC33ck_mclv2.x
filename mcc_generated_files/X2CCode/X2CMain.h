@@ -31,19 +31,6 @@
 extern "C" {
 #endif
 
-/*
- * 
- * Calls the inports update function
- * Then run model calculation
- * Last read model outports and update the peripherals
- * 
- * The selected model update mode is manual.
- * The X2C_Task() have to be called manually!
- * Note:
- * The model X2C sample time frequency must be the same 
- * as the X2C_Task() call frequency. 
- */
- void X2C_Task (void);
 
 #endif/* X2CMAIN */
 

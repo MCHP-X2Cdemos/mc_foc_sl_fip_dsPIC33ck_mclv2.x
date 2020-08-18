@@ -14,15 +14,15 @@
   @Description
     This source file provides APIs for driver for TMR1. 
     Generation Information : 
-        Product Revision  :  PIC24 / dsPIC33 / PIC32MM MCUs - 1.95-b-SNAPSHOT
+        Product Revision  :  PIC24 / dsPIC33 / PIC32MM MCUs - 1.167.0
         Device            :  dsPIC33CK256MP508
     The generated drivers are tested against the following:
-        Compiler          :  XC16 v1.36
-        MPLAB             :  MPLAB X v5.10
+        Compiler          :  XC16 v1.50
+        MPLAB             :  MPLAB X v5.35
 */
 
 /*
-    (c) 2016 Microchip Technology Inc. and its subsidiaries. You may use this
+    (c) 2020 Microchip Technology Inc. and its subsidiaries. You may use this
     software and any derivatives exclusively with Microchip products.
 
     THIS SOFTWARE IS SUPPLIED BY MICROCHIP "AS IS". NO WARRANTIES, WHETHER
@@ -53,7 +53,6 @@
 /**
  Section: File specific functions
 */
-void (*TMR1_InterruptHandler)(void) = NULL;
 
 /**
   Section: Data Type Definitions
@@ -62,10 +61,10 @@ void (*TMR1_InterruptHandler)(void) = NULL;
 /** TMR Driver Hardware Instance Object
 
   @Summary
-    Defines the object required for the maintainence of the hardware instance.
+    Defines the object required for the maintenance of the hardware instance.
 
   @Description
-    This defines the object required for the maintainence of the hardware
+    This defines the object required for the maintenance of the hardware
     instance. This object exists once per hardware instance of the peripheral.
 
   Remarks:

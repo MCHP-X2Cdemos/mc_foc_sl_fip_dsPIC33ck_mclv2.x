@@ -88,9 +88,9 @@ void UpdateInports(void) {
     }  
 
     /* ADC */   
-    x2cModel.inports.bI_a = ADC1_Core0ConversionResultGet();
-    x2cModel.inports.bI_b = ADC1_Core1ConversionResultGet();
-    x2cModel.inports.bV_POT = ADC1_SharedChannelAN19ConversionResultGet();  
+    x2cModel.inports.bI_a = ADCBUF0; //ADC1_Core0ConversionResultGet();
+    x2cModel.inports.bI_b = ADCBUF1; //ADC1_Core1ConversionResultGet();
+    x2cModel.inports.bV_POT = ADCBUF19; //ADC1_SharedChannelAN19ConversionResultGet();  
 
     POS1CNTtemp = POS1CNTL;
     x2cModel.inports.bQEI_POS = (int16_t)(__builtin_mulss(POS1CNTtemp,QEI_FACT));  
@@ -176,23 +176,18 @@ void UpdateOutports(void) {
  * Then run model calculation
  * Last read model outports and update the peripherals
 */
-/*
- * The selected model update mode is manual.
- * The X2C_Task() have to be called manually!
- * Note:
- * The model X2C sample time frequency must be the same 
- * as the X2C_X2C_Task() call frequency. 
-*/
 
- void X2C_Task (void){
-    TMR1_Counter16BitSet(0);
+void __attribute__ ( ( __interrupt__ , auto_psv ) ) _ADCAN0Interrupt ( void )
+{
+    volatile uint16_t valchannel_AN0;
+    //Read the ADC value from the ADCBUF
+    valchannel_AN0 = ADCBUF0;
+    //clear the channel_AN1 interrupt flag
+    IFS5bits.ADCAN0IF = 0;
     UpdateInports();
     X2C_Update();
     UpdateOutports();
-    CpuLoad = TMR1_Counter16BitGet()*((uint16)INT16_MAX/LOOPINTCY);
-
 }
-
 
 /* *****************************************************************************
  End of File

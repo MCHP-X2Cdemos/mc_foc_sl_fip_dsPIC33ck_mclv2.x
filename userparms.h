@@ -82,8 +82,8 @@ extern "C" {
         /* encoder */
     #define PULSE_PER_REV   1000                // ENCODER Pulses
     #define N_P             5                   // Electrical Pole-Pairs
-    #define QEI_FACT        65535/((PULSE_PER_REV/N_P))
-    #define QEI_FACT_MECH   65535/(PULSE_PER_REV)
+    #define QEI_FACT        65536/((PULSE_PER_REV/N_P))
+    #define QEI_FACT_MECH   65536/(PULSE_PER_REV)
 
     //#define QEI_FACT        65535/((PULSE_PER_REV/N_P)-1)
     

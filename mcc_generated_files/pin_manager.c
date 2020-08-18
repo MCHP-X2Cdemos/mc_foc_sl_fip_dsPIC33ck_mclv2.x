@@ -15,15 +15,15 @@
   @Description:
     This source file provides implementations for PIN MANAGER.
     Generation Information :
-        Product Revision  :  PIC24 / dsPIC33 / PIC32MM MCUs - 1.95-b-SNAPSHOT
+        Product Revision  :  PIC24 / dsPIC33 / PIC32MM MCUs - 1.167.0
         Device            :  dsPIC33CK256MP508
     The generated drivers are tested against the following:
-        Compiler          :  XC16 v1.36
-        MPLAB 	          :  MPLAB X v5.10
+        Compiler          :  XC16 v1.50
+        MPLAB 	          :  MPLAB X v5.35
 */
 
 /*
-    (c) 2016 Microchip Technology Inc. and its subsidiaries. You may use this
+    (c) 2020 Microchip Technology Inc. and its subsidiaries. You may use this
     software and any derivatives exclusively with Microchip products.
 
     THIS SOFTWARE IS SUPPLIED BY MICROCHIP "AS IS". NO WARRANTIES, WHETHER
@@ -52,10 +52,6 @@
 #include <xc.h>
 #include <stdio.h>
 #include "pin_manager.h"
-
-/**
- Section: File specific functions
-*/
 
 /**
  Section: Driver Interface Function Definitions
@@ -111,8 +107,7 @@ void PIN_MANAGER_Initialize (void)
     ANSELC = 0x00CF;
     ANSELD = 0x2C00;
     ANSELE = 0x000F;
-
-
+    
     /****************************************************************************
      * Set the PPS
      ***************************************************************************/
@@ -122,7 +117,5 @@ void PIN_MANAGER_Initialize (void)
     RPOR19bits.RP70R = 0x0001;    //RD6->UART1:U1TX
 
     __builtin_write_RPCON(0x0800); // lock PPS
-
 }
-
 

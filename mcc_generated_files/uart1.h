@@ -13,15 +13,15 @@
   @Description
     This header file provides APIs for driver for UART1.
     Generation Information :
-        Product Revision  :  PIC24 / dsPIC33 / PIC32MM MCUs - 1.95-b-SNAPSHOT
+        Product Revision  :  PIC24 / dsPIC33 / PIC32MM MCUs - 1.167.0
         Device            :  dsPIC33CK256MP508
     The generated drivers are tested against the following:
-        Compiler          :  XC16 v1.36
-        MPLAB             :  MPLAB X v5.10
+        Compiler          :  XC16 v1.50
+        MPLAB             :  MPLAB X v5.35
 */
 
 /*
-    (c) 2016 Microchip Technology Inc. and its subsidiaries. You may use this
+    (c) 2020 Microchip Technology Inc. and its subsidiaries. You may use this
     software and any derivatives exclusively with Microchip products.
 
     THIS SOFTWARE IS SUPPLIED BY MICROCHIP "AS IS". NO WARRANTIES, WHETHER
@@ -42,14 +42,13 @@
     TERMS.
 */
 
-#ifndef UART1_H
-#define UART1_H
+#ifndef _UART1_H
+#define _UART1_H
 
 /**
   Section: Included Files
 */
 
-#include <xc.h>
 #include <stdbool.h>
 #include <stdint.h>
 
@@ -58,85 +57,6 @@
     extern "C" {
 
 #endif
-
-/**
-  Section: Data Types
-*/
-
-/** UART1 Driver Hardware Flags
-
-  @Summary
-    Specifies the status of the hardware receive or transmit
-
-  @Description
-    This type specifies the status of the hardware receive or transmit.
-    More than one of these values may be OR'd together to create a complete
-    status value.  To test a value of this type, the bit of interest must be
-    AND'ed with value and checked to see if the result is non-zero.
-*/
-
-typedef enum
-{
-    
-    /* Indicates that Receive buffer has overflowed */
-    UART1_RX_OVERRUN_ERROR
-        /*DOM-IGNORE-BEGIN*/  = (1 << 1) /*DOM-IGNORE-END*/,
-
-    /* Indicates that Receive break interrupt was received */
-    UART1_RX_BREAK_INT_FLAG
-        /*DOM-IGNORE-BEGIN*/  = (1 << 2) /*DOM-IGNORE-END*/,
-        
-    /* Indicates that Framing error has been detected for the current character */
-    UART1_FRAMING_ERROR
-        /*DOM-IGNORE-BEGIN*/  = (1 << 3) /*DOM-IGNORE-END*/,
-    
-    /* Indicates that Auto-Baud rate acquisition interrupt was received */
-    UART1_AUTOBAUD_RATE_ACQ_INT_FLAG
-        /*DOM-IGNORE-BEGIN*/  = (1 << 5) /*DOM-IGNORE-END*/,
-
-    /* Indicates that Parity error has been detected for the current character */
-    UART1_PARITY_ERROR
-        /*DOM-IGNORE-BEGIN*/  = (1 << 6) /*DOM-IGNORE-END */,
-
-    /* Indicates that Transmit shifter empty interrupt was received */
-    UART1_TX_SHIFTER_EMPTY_INT_FLAG
-        /*DOM-IGNORE-BEGIN*/  = (1 << 7) /*DOM-IGNORE-END*/,
-     
-    /* Indicates that Receive buffer is full */
-    UART1_RX_BUFFER_FULL
-        /*DOM-IGNORE-BEGIN*/  = (1UL << 16) /*DOM-IGNORE-END*/,
-    
-    /* Indicates that Receive buffer is empty */
-    UART1_RX_BUFFER_EMPTY
-        /*DOM-IGNORE-BEGIN*/  = (1UL << 17) /*DOM-IGNORE-END*/,
-        
-    /* Indicates that Receiver is Idle */
-    UART1_RECEIVER_IDLE
-        /*DOM-IGNORE-BEGIN*/  = (1UL << 19) /*DOM-IGNORE-END*/,
-
-    /* Indicates that Transmit buffer is full */
-    UART1_TX_BUFFER_FULL
-        /*DOM-IGNORE-BEGIN*/  = (1UL << 20) /*DOM-IGNORE-END*/,
-    
-    /* Indicates that Transmit buffer is empty */
-    UART1_TX_BUFFER_EMPTY
-        /*DOM-IGNORE-BEGIN*/  = (1UL << 21) /*DOM-IGNORE-END*/,
-        
-    /* Indicates that Stop bit detection mode is set */
-    UART1_STOP_DETECT_MODE
-        /*DOM-IGNORE-BEGIN*/  = (1UL << 22) /*DOM-IGNORE-END*/,
-        
-    /* Indicates that TX Write transmit error has been detected for the current character */
-    UART1_TX_WRITE_TX_ERROR
-        /*DOM-IGNORE-BEGIN*/  = (1UL << 23) /*DOM-IGNORE-END*/,
-
-}UART1_STATUS;
-
-/**
-  Section: Macro Declarations
-*/
-
-#define UART1_DataReady  (U1STAHbits.URXBE == 1)
 
 /**
   Section: UART1 APIs
@@ -159,57 +79,12 @@ typedef enum
   @Returns
     None
 
-  @Comment
+  @Example
+    None.
     
 */
 
 void UART1_Initialize(void);
-
-/**
-  @Summary
-    Allows setting of a the enable bit for the UART1 mode
-
-  @Description
-    This routine is used to enable the UART1
-  
-  @Preconditions
-    UART1_Initialize() function should have been 
-    called before calling this function.
- 
-  @Returns
-    None
-
-  @Param
-    None
-  
-  @Example
-    Refer to UART1_Initialize(); for an example
-*/
-
-void UART1_Enable(void);
-
-/**
-  @Summary
-    Allows setting of a the disable bit for the UART1 mode
-
-  @Description
-    This routine is used to disable the UART1
-  
-  @Preconditions
-    UART1_Initialize() function should have been 
-    called before calling this function.
- 
-  @Returns
-    None
-
-  @Param
-    None
-  
-  @Example
-    Refer to UART1_Initialize(); for an example
-*/
-
-void UART1_Disable(void);
 
 /**
   @Summary
@@ -233,7 +108,7 @@ void UART1_Disable(void);
 
 uint8_t UART1_Read(void);
 
- /**
+/**
   @Summary
     Writes a byte of data to the UART1.
 
@@ -255,36 +130,149 @@ uint8_t UART1_Read(void);
 void UART1_Write(uint8_t txData);
 
 /**
+  @Description
+    Indicates of there is data available to read.
+
+  @Returns
+    true if byte can be read.
+    false if byte can't be read right now.
+*/
+bool UART1_IsRxReady(void);
+
+/**
+  @Description
+    Indicates if a byte can be written.
+ 
+ @Returns
+    true if byte can be written.
+    false if byte can't be written right now.
+*/
+bool UART1_IsTxReady(void);
+
+/**
+  @Description
+    Indicates if all bytes have been transferred.
+ 
+ @Returns
+    true if all bytes transfered.
+    false if there is still data pending to transfer.
+*/
+bool UART1_IsTxDone(void);
+
+/*******************************************************************************
+
+  !!! Deprecated API and types !!!
+  !!! These functions will not be supported in future releases !!!
+
+*******************************************************************************/
+
+/** UART1 Driver Hardware Flags
+
   @Summary
-    Returns the 32 bit transmitter and receiver hardware status
+    Specifies the status of the hardware receive or transmit
 
   @Description
-    This returns the transmitter and receiver hardware status. The returned status 
-    contains a 32 bit value. 
+    This type specifies the status of the hardware receive or transmit.
+    More than one of these values may be OR'd together to create a complete
+    status value.  To test a value of this type, the bit of interest must be
+    AND'ed with value and checked to see if the result is non-zero.
+*/
+typedef enum
+{
+    /* Indicates that Receive buffer has data, at least one more character can be read */
+    UART1_RX_DATA_AVAILABLE = (1 << 0),
+    /* Indicates that Receive buffer has overflowed */
+    UART1_RX_OVERRUN_ERROR = (1 << 1),
+    /* Indicates that Framing error has been detected for the current character */
+    UART1_FRAMING_ERROR = (1 << 2),
+    /* Indicates that Parity error has been detected for the current character */
+    UART1_PARITY_ERROR = (1 << 3),
+    /* Indicates that Receiver is Idle */
+    UART1_RECEIVER_IDLE = (1 << 4),
+    /* Indicates that the last transmission has completed */
+    UART1_TX_COMPLETE = (1 << 8),
+    /* Indicates that Transmit buffer is full */
+    UART1_TX_FULL = (1 << 9) 
+}UART1_STATUS;
+
+/**
+  @Summary
+    Allows setting of a the enable bit for the UART1 mode
+
+  @Description
+    This routine is used to enable the UART1
+  
+  @Preconditions
+    UART1_Initialize() function should have been 
+    called before calling this function.
+ 
+  @Returns
+    None
+
+  @Param
+    None
+  
+  @Example
+    Refer to UART1_Initialize(); for an example
+*/
+
+void __attribute__((deprecated)) UART1_Enable(void);
+
+/**
+  @Summary
+    Allows setting of a the disable bit for the UART1 mode
+
+  @Description
+    This routine is used to disable the UART1
+  
+  @Preconditions
+    UART1_Initialize() function should have been 
+    called before calling this function.
+ 
+  @Returns
+    None
+
+  @Param
+    None
+  
+  @Example
+    Refer to UART1_Initialize(); for an example
+*/
+
+void __attribute__((deprecated)) UART1_Disable(void);
+
+/**
+  @Summary
+    Returns the transmitter and receiver status
+
+  @Description
+    This returns the transmitter and receiver status. The returned status may 
+    contain a value with more than one of the bits
+    specified in the UART1_STATUS enumeration set.  
     The caller should perform an "AND" with the bit of interest and verify if the
     result is non-zero (as shown in the example) to verify the desired status
     bit.
 
   @Preconditions
-    UART1_Initializer function should have been called 
+    UART1_Initialize function should have been called 
     before calling this function
 
   @Param
     None.
 
   @Returns
-    32 bit value describing the current status of the transfer.
+    A UART1_STATUS value describing the current status 
+    of the transfer.
 
   @Example
     <code>
-        while(!(UART1_StatusGet() & UART1_RX_BUFFER_EMPTY ))
+        while(!(UART1_StatusGet & UART1_TX_COMPLETE ))
         {
            // Wait for the tranmission to complete
         }
     </code>
 */
-
-uint32_t UART1_StatusGet (void );
+uint32_t __attribute__((deprecated)) UART1_StatusGet (void );
 
 #ifdef __cplusplus  // Provide C++ Compatibility
 
@@ -292,4 +280,4 @@ uint32_t UART1_StatusGet (void );
 
 #endif
 
-#endif  // UART1_H
+#endif  // _UART1_H

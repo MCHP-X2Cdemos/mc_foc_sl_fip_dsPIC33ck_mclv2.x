@@ -1,9 +1,9 @@
 /* This file is part of X2C. http://x2c.lcm.at/                                                                       */
 
-/* Model: MC_FOC_SL_FIP_dsPIC33CK_MCLV2                                                                               */
-/* Date:  2020-05-13 20:47                                                                                            */
+/* Model: mc_foc_sl_fip_dspic33ck_mclv2                                                                               */
+/* Date:  2020-08-18 10:46                                                                                            */
 
-/* X2C-Version: 6.2.1908                                                                                              */
+/* X2C-Version: 6.3.2018                                                                                              */
 /* X2C-Edition: Free                                                                                                  */
 
 /* Common includes                                                                                                    */
@@ -22,8 +22,6 @@ struct x2cModel x2cModel;
 /**                                                       Scope                                                      **/
 /**********************************************************************************************************************/
 SCOPE_MAIN x2cScope;
-
-
 
 /* Block function table                                                                                               */
 #define END_BLOCKFUNCTIONS { (uint16)0, (void (*)(void*))0, (void (*)(void*))0, \
@@ -53,9 +51,14 @@ const tIoParamIdEntry outportParamIdTable[] = {
     END_PARAMID_IO_TABLE
 };
 /* Mask Parameter identifier table                                                                                    */
-#define END_MASKPARAMID_TABLE { 0, (void*)0, (void*)0, (tSaveMaskParameter)0, (tLoadMaskParameter)0 }
-static const tMaskParameterEntry maskParamIdTable[] = {
+#define END_MASKPARAMID_TABLE { 0, (void*)0, (void*)0, (tSaveMaskParameter)0, (tLoadMaskParameter)0, (tConvertMaskParameter)0, (tBackupMaskParameter)0, (tRestoreMaskParameter)0 }
+const tMaskParameterEntry maskParamIdTable[] = {
     END_MASKPARAMID_TABLE
+};
+
+/* Mask Parameter data table                                                                                          */
+const tMaskParamDataRecord maskParamDataTable[] = {
+    { 0, 0, (void*)0, 0, 0 }
 };
 
 /**********************************************************************************************************************/
@@ -155,9 +158,9 @@ void X2C_Init()
 
     /* Block: FOC_main/PI_torque                                                                                      */
     /* Kp = 0.8                                                                                                       */
-    /* Ki = 0.5                                                                                                       */
+    /* Ki = 5.0                                                                                                       */
     /* ts_fact = 1.0                                                                                                  */
-    x2cModel.blocks.sFOC_main.bPI_torque.b0 = 2;
+    x2cModel.blocks.sFOC_main.bPI_torque.b0 = 16;
     x2cModel.blocks.sFOC_main.bPI_torque.b1 = 26214;
     x2cModel.blocks.sFOC_main.bPI_torque.sfrb0 = 15;
     x2cModel.blocks.sFOC_main.bPI_torque.sfrb1 = 15;
@@ -281,6 +284,18 @@ void X2C_Init()
 
     /* Block: Not                                                                                                     */
 
+    /* Block: speedPI/Constant                                                                                        */
+    /* Value = 0.05                                                                                                   */
+    x2cModel.blocks.sspeedPI.bConstant.K = 1638;
+
+    /* Block: speedPI/Constant1                                                                                       */
+    /* Value = 0.0                                                                                                    */
+    x2cModel.blocks.sspeedPI.bConstant1.K = 0;
+
+    /* Block: speedPI/ManualSwitch                                                                                    */
+    /* Toggle = 0.0                                                                                                   */
+    x2cModel.blocks.sspeedPI.bManualSwitch.Toggle = 0;
+
     /* Block: speedPI/PI_speed                                                                                        */
     /* Kp = 1.0                                                                                                       */
     /* Ki = 0.5                                                                                                       */
@@ -311,6 +326,55 @@ void X2C_Init()
 
     /* Block: speedPI/Speed_error                                                                                     */
 
+    /* Block: speedPI/perturbation/Add                                                                                */
+
+    /* Block: speedPI/perturbation/AutoSwitch                                                                         */
+    /* Thresh_up = 0.0                                                                                                */
+    /* Thresh_down = 0.0                                                                                              */
+    x2cModel.blocks.sspeedPI.sperturbation.bAutoSwitch.Thresh_up = 0;
+    x2cModel.blocks.sspeedPI.sperturbation.bAutoSwitch.Thresh_down = 0;
+    x2cModel.blocks.sspeedPI.sperturbation.bAutoSwitch.Status = &RamTable_int16[1];
+
+    /* Block: speedPI/perturbation/Constant                                                                           */
+    /* Value = 1.0                                                                                                    */
+    x2cModel.blocks.sspeedPI.sperturbation.bConstant.K = 32767;
+
+    /* Block: speedPI/perturbation/Constant1                                                                          */
+    /* Value = 0.01                                                                                                   */
+    x2cModel.blocks.sspeedPI.sperturbation.bConstant1.K = 328;
+
+    /* Block: speedPI/perturbation/Constant2                                                                          */
+    /* Value = 1.0                                                                                                    */
+    x2cModel.blocks.sspeedPI.sperturbation.bConstant2.K = 1;
+
+    /* Block: speedPI/perturbation/Constant3                                                                          */
+    /* Value = 0.0                                                                                                    */
+    x2cModel.blocks.sspeedPI.sperturbation.bConstant3.K = 0;
+
+    /* Block: speedPI/perturbation/Gain                                                                               */
+    /* Gain = -1.0                                                                                                    */
+    x2cModel.blocks.sspeedPI.sperturbation.bGain.V = -16384;
+    x2cModel.blocks.sspeedPI.sperturbation.bGain.sfr = 14;
+
+    /* Block: speedPI/perturbation/RateLimiter                                                                        */
+    /* Tr = 0.0                                                                                                       */
+    /* Tf = 0.0                                                                                                       */
+    /* ts_fact = 10.0                                                                                                 */
+    x2cModel.blocks.sspeedPI.sperturbation.bRateLimiter.RateUp = 2147483647;
+    x2cModel.blocks.sspeedPI.sperturbation.bRateLimiter.RateDown = 2147483647;
+    x2cModel.blocks.sspeedPI.sperturbation.bRateLimiter.out_old = 0;
+    x2cModel.blocks.sspeedPI.sperturbation.bRateLimiter.enable_old = 0;
+
+    /* Block: speedPI/perturbation/SinGen                                                                             */
+    /* fmax = 100.0                                                                                                   */
+    /* Offset = 0.0                                                                                                   */
+    /* Phase = 0.0                                                                                                    */
+    /* ts_fact = 10.0                                                                                                 */
+    x2cModel.blocks.sspeedPI.sperturbation.bSinGen.delta_phi = 6554;
+    x2cModel.blocks.sspeedPI.sperturbation.bSinGen.phase = 0;
+    x2cModel.blocks.sspeedPI.sperturbation.bSinGen.offset = 0;
+    x2cModel.blocks.sspeedPI.sperturbation.bSinGen.phi = 0;
+
     /* Block: startup/Constant1                                                                                       */
     /* Value = 0.0                                                                                                    */
     x2cModel.blocks.sstartup.bConstant1.K = 0;
@@ -328,14 +392,14 @@ void X2C_Init()
     /* Thresh_down = 0.5                                                                                              */
     x2cModel.blocks.sstartup.bFlux_select.Thresh_up = 16384;
     x2cModel.blocks.sstartup.bFlux_select.Thresh_down = 16384;
-    x2cModel.blocks.sstartup.bFlux_select.Status = &RamTable_int16[1];
+    x2cModel.blocks.sstartup.bFlux_select.Status = &RamTable_int16[2];
 
     /* Block: startup/Flux_select1                                                                                    */
     /* Thresh_up = 0.5                                                                                                */
     /* Thresh_down = 0.5                                                                                              */
     x2cModel.blocks.sstartup.bFlux_select1.Thresh_up = 16384;
     x2cModel.blocks.sstartup.bFlux_select1.Thresh_down = 16384;
-    x2cModel.blocks.sstartup.bFlux_select1.Status = &RamTable_int16[2];
+    x2cModel.blocks.sstartup.bFlux_select1.Status = &RamTable_int16[3];
 
     /* Block: startup/IdRateLimiter                                                                                   */
     /* Tr = 0.5                                                                                                       */
@@ -351,7 +415,7 @@ void X2C_Init()
     /* Thresh_down = 0.5                                                                                              */
     x2cModel.blocks.sstartup.bIq_select.Thresh_up = 16384;
     x2cModel.blocks.sstartup.bIq_select.Thresh_down = 16384;
-    x2cModel.blocks.sstartup.bIq_select.Status = &RamTable_int16[3];
+    x2cModel.blocks.sstartup.bIq_select.Status = &RamTable_int16[4];
 
     /* Block: startup/PI                                                                                              */
     /* Kp = 0.05                                                                                                      */
@@ -371,11 +435,11 @@ void X2C_Init()
     /* Thresh_down = 0.5                                                                                              */
     x2cModel.blocks.sstartup.bPosSwitch.Thresh_up = 16384;
     x2cModel.blocks.sstartup.bPosSwitch.Thresh_down = 16384;
-    x2cModel.blocks.sstartup.bPosSwitch.Status = &RamTable_int16[4];
+    x2cModel.blocks.sstartup.bPosSwitch.Status = &RamTable_int16[5];
 
     /* Block: startup/Ramp_Up_Current                                                                                 */
-    /* Value = 0.6                                                                                                    */
-    x2cModel.blocks.sstartup.bRamp_Up_Current.K = 19661;
+    /* Value = 0.3                                                                                                    */
+    x2cModel.blocks.sstartup.bRamp_Up_Current.K = 9830;
 
     /* Block: startup/Ramp_Up_SB/Constant4                                                                            */
     /* Value = 1.0                                                                                                    */
@@ -388,6 +452,8 @@ void X2C_Init()
     /* Block: startup/Ramp_Up_SB/I_Init_Zero1                                                                         */
     /* Value = 0.0                                                                                                    */
     x2cModel.blocks.sstartup.sRamp_Up_SB.bI_Init_Zero1.K = 0;
+
+    /* Block: startup/Ramp_Up_SB/Mult                                                                                 */
 
     /* Block: startup/Ramp_Up_SB/Ramp_Up_PositionGenerator                                                            */
     /* Ki = 100.0                                                                                                     */
@@ -402,6 +468,8 @@ void X2C_Init()
     /* min = -2.0                                                                                                     */
     x2cModel.blocks.sstartup.sRamp_Up_SB.bSaturation.max = 32767;
     x2cModel.blocks.sstartup.sRamp_Up_SB.bSaturation.min = -32767;
+
+    /* Block: startup/Ramp_Up_SB/Sign                                                                                 */
 
     /* Block: startup/Ramp_Up_SB/Speed_Ramp_UP_I                                                                      */
     /* Ki = 1.0                                                                                                       */
@@ -663,6 +731,16 @@ void X2C_Init()
     x2cModel.blocks.bNot.In =
         &x2cModel.blocks.sstartup.bTypeConv.Out;
 
+    /* Block Constant                                                                                                 */
+
+    /* Block Constant1                                                                                                */
+
+    /* Block ManualSwitch                                                                                             */
+    x2cModel.blocks.sspeedPI.bManualSwitch.In1 =
+        &x2cModel.blocks.sspeedPI.bPI_speed.Out;
+    x2cModel.blocks.sspeedPI.bManualSwitch.In2 =
+        &x2cModel.blocks.sspeedPI.bConstant.Out;
+
     /* Block PI_speed                                                                                                 */
     x2cModel.blocks.sspeedPI.bPI_speed.In =
         &x2cModel.blocks.sspeedPI.bSpeed_error.Out;
@@ -673,7 +751,7 @@ void X2C_Init()
 
     /* Block RateLimiter                                                                                              */
     x2cModel.blocks.sspeedPI.bRateLimiter.In =
-        &x2cModel.blocks.sspeedPI.bPI_speed.Out;
+        &x2cModel.blocks.bGain.Out;
     x2cModel.blocks.sspeedPI.bRateLimiter.Init =
         &x2cModel.blocks.sspeedPI.bSpeed_Init1.Out;
     x2cModel.blocks.sspeedPI.bRateLimiter.Enable =
@@ -685,9 +763,49 @@ void X2C_Init()
 
     /* Block Speed_error                                                                                              */
     x2cModel.blocks.sspeedPI.bSpeed_error.Plus =
-        &x2cModel.blocks.bGain.Out;
+        &x2cModel.blocks.sspeedPI.bRateLimiter.Out;
     x2cModel.blocks.sspeedPI.bSpeed_error.Minus =
         &x2cModel.blocks.bManualSwitch1.Out;
+
+    /* Block Add                                                                                                      */
+    x2cModel.blocks.sspeedPI.sperturbation.bAdd.In1 =
+        &x2cModel.blocks.sspeedPI.bManualSwitch.Out;
+    x2cModel.blocks.sspeedPI.sperturbation.bAdd.In2 =
+        &x2cModel.blocks.sspeedPI.sperturbation.bAutoSwitch.Out;
+
+    /* Block AutoSwitch                                                                                               */
+    x2cModel.blocks.sspeedPI.sperturbation.bAutoSwitch.In1 =
+        &x2cModel.blocks.sspeedPI.bConstant1.Out;
+    x2cModel.blocks.sspeedPI.sperturbation.bAutoSwitch.Switch =
+        &x2cModel.blocks.sspeedPI.sperturbation.bSinGen.u;
+    x2cModel.blocks.sspeedPI.sperturbation.bAutoSwitch.In3 =
+        &x2cModel.blocks.sspeedPI.sperturbation.bGain.Out;
+
+    /* Block Constant                                                                                                 */
+
+    /* Block Constant1                                                                                                */
+
+    /* Block Constant2                                                                                                */
+
+    /* Block Constant3                                                                                                */
+
+    /* Block Gain                                                                                                     */
+    x2cModel.blocks.sspeedPI.sperturbation.bGain.In =
+        &x2cModel.blocks.sspeedPI.bConstant1.Out;
+
+    /* Block RateLimiter                                                                                              */
+    x2cModel.blocks.sspeedPI.sperturbation.bRateLimiter.In =
+        &x2cModel.blocks.sspeedPI.sperturbation.bAdd.Out;
+    x2cModel.blocks.sspeedPI.sperturbation.bRateLimiter.Init =
+        &x2cModel.blocks.sspeedPI.sperturbation.bConstant3.Out;
+    x2cModel.blocks.sspeedPI.sperturbation.bRateLimiter.Enable =
+        &x2cModel.blocks.sspeedPI.sperturbation.bConstant2.Out;
+
+    /* Block SinGen                                                                                                   */
+    x2cModel.blocks.sspeedPI.sperturbation.bSinGen.A =
+        &x2cModel.blocks.sspeedPI.sperturbation.bConstant.Out;
+    x2cModel.blocks.sspeedPI.sperturbation.bSinGen.f =
+        &x2cModel.blocks.sspeedPI.sperturbation.bConstant1.Out;
 
     /* Block Constant1                                                                                                */
 
@@ -721,7 +839,7 @@ void X2C_Init()
 
     /* Block Iq_select                                                                                                */
     x2cModel.blocks.sstartup.bIq_select.In1 =
-        &x2cModel.blocks.sspeedPI.bRateLimiter.Out;
+        &x2cModel.blocks.sspeedPI.sperturbation.bRateLimiter.Out;
     x2cModel.blocks.sstartup.bIq_select.Switch =
         &x2cModel.blocks.sstartup.bSequencer.Out4;
     x2cModel.blocks.sstartup.bIq_select.In3 =
@@ -757,6 +875,12 @@ void X2C_Init()
 
     /* Block I_Init_Zero1                                                                                             */
 
+    /* Block Mult                                                                                                     */
+    x2cModel.blocks.sstartup.sRamp_Up_SB.bMult.In1 =
+        &x2cModel.blocks.sstartup.sRamp_Up_SB.bConstant4.Out;
+    x2cModel.blocks.sstartup.sRamp_Up_SB.bMult.In2 =
+        &x2cModel.blocks.sstartup.sRamp_Up_SB.bSign.Out;
+
     /* Block Ramp_Up_PositionGenerator                                                                                */
     x2cModel.blocks.sstartup.sRamp_Up_SB.bRamp_Up_PositionGenerator.In =
         &x2cModel.blocks.sstartup.sRamp_Up_SB.bSaturation.Out;
@@ -769,9 +893,13 @@ void X2C_Init()
     x2cModel.blocks.sstartup.sRamp_Up_SB.bSaturation.In =
         &x2cModel.blocks.sstartup.sRamp_Up_SB.bSpeed_Ramp_UP_I.Out;
 
+    /* Block Sign                                                                                                     */
+    x2cModel.blocks.sstartup.sRamp_Up_SB.bSign.In =
+        &x2cModel.blocks.bGain.Out;
+
     /* Block Speed_Ramp_UP_I                                                                                          */
     x2cModel.blocks.sstartup.sRamp_Up_SB.bSpeed_Ramp_UP_I.In =
-        &x2cModel.blocks.sstartup.sRamp_Up_SB.bConstant4.Out;
+        &x2cModel.blocks.sstartup.sRamp_Up_SB.bMult.Out;
     x2cModel.blocks.sstartup.sRamp_Up_SB.bSpeed_Ramp_UP_I.Init =
         &x2cModel.blocks.sstartup.sRamp_Up_SB.bI_Init_Zero.Out;
     x2cModel.blocks.sstartup.sRamp_Up_SB.bSpeed_Ramp_UP_I.Enable =
@@ -860,11 +988,23 @@ void X2C_Init()
     ManualSwitch_FiP16_Init(&x2cModel.blocks.bManualSwitch);
     ManualSwitch_FiP16_Init(&x2cModel.blocks.bManualSwitch1);
     Not_Bool_Init(&x2cModel.blocks.bNot);
+    Constant_FiP16_Init(&x2cModel.blocks.sspeedPI.bConstant);
+    Constant_FiP16_Init(&x2cModel.blocks.sspeedPI.bConstant1);
+    ManualSwitch_FiP16_Init(&x2cModel.blocks.sspeedPI.bManualSwitch);
     PI_FiP16_Init(&x2cModel.blocks.sspeedPI.bPI_speed);
     RateLimiter_FiP16_Init(&x2cModel.blocks.sspeedPI.bRateLimiter);
     Constant_Bool_Init(&x2cModel.blocks.sspeedPI.bSpeed_Init);
     Constant_FiP16_Init(&x2cModel.blocks.sspeedPI.bSpeed_Init1);
     Sub_FiP16_Init(&x2cModel.blocks.sspeedPI.bSpeed_error);
+    Add_FiP16_Init(&x2cModel.blocks.sspeedPI.sperturbation.bAdd);
+    AutoSwitch_FiP16_Init(&x2cModel.blocks.sspeedPI.sperturbation.bAutoSwitch);
+    Constant_FiP16_Init(&x2cModel.blocks.sspeedPI.sperturbation.bConstant);
+    Constant_FiP16_Init(&x2cModel.blocks.sspeedPI.sperturbation.bConstant1);
+    Constant_Bool_Init(&x2cModel.blocks.sspeedPI.sperturbation.bConstant2);
+    Constant_FiP16_Init(&x2cModel.blocks.sspeedPI.sperturbation.bConstant3);
+    Gain_FiP16_Init(&x2cModel.blocks.sspeedPI.sperturbation.bGain);
+    RateLimiter_FiP16_Init(&x2cModel.blocks.sspeedPI.sperturbation.bRateLimiter);
+    SinGen_FiP16_Init(&x2cModel.blocks.sspeedPI.sperturbation.bSinGen);
     Constant_FiP16_Init(&x2cModel.blocks.sstartup.bConstant1);
     Constant_FiP16_Init(&x2cModel.blocks.sstartup.bConstant2);
     Constant_Bool_Init(&x2cModel.blocks.sstartup.bConstant5);
@@ -879,8 +1019,10 @@ void X2C_Init()
     Constant_FiP16_Init(&x2cModel.blocks.sstartup.sRamp_Up_SB.bConstant4);
     Constant_FiP16_Init(&x2cModel.blocks.sstartup.sRamp_Up_SB.bI_Init_Zero);
     Constant_FiP16_Init(&x2cModel.blocks.sstartup.sRamp_Up_SB.bI_Init_Zero1);
+    Mult_FiP16_Init(&x2cModel.blocks.sstartup.sRamp_Up_SB.bMult);
     uI_FiP16_Init(&x2cModel.blocks.sstartup.sRamp_Up_SB.bRamp_Up_PositionGenerator);
     Saturation_FiP16_Init(&x2cModel.blocks.sstartup.sRamp_Up_SB.bSaturation);
+    Sign_FiP16_Init(&x2cModel.blocks.sstartup.sRamp_Up_SB.bSign);
     I_FiP16_Init(&x2cModel.blocks.sstartup.sRamp_Up_SB.bSpeed_Ramp_UP_I);
     TypeConv_FiP16_Bool_Init(&x2cModel.blocks.sstartup.sRamp_Up_SB.bTypeConv);
     Sequencer_FiP16_Init(&x2cModel.blocks.sstartup.bSequencer);
@@ -888,10 +1030,6 @@ void X2C_Init()
     TypeConv_FiP16_Bool_Init(&x2cModel.blocks.sstartup.bTypeConv1);
     TypeConv_FiP16_Bool_Init(&x2cModel.blocks.sstartup.bTypeConv2);
     Scope_Main_Init(&x2cScope);
-
-    /* Initialize Mask parameter structures                                                                           */
-
-    /* Initialize Implementation parameters of Conversion-on-Target blocks                                            */
 
     /* Initialize TableStruct tables                                                                                  */
     TableStruct->TFncTable = blockFunctionTable;
@@ -923,6 +1061,9 @@ void X2C_Update_1(void)
     Delay_FiP16_Update(&x2cModel.blocks.bDelay1);
     Delay_FiP16_Update(&x2cModel.blocks.bDelay2);
     Delay_FiP16_Update(&x2cModel.blocks.sFOC_main.sPLLEstimator.bDelay1);
+    Gain_FiP16_Update(&x2cModel.blocks.bGain);
+    Sign_FiP16_Update(&x2cModel.blocks.sstartup.sRamp_Up_SB.bSign);
+    Mult_FiP16_Update(&x2cModel.blocks.sstartup.sRamp_Up_SB.bMult);
     ManualSwitch_FiP16_Update(&x2cModel.blocks.bManualSwitch);
     Sequencer_FiP16_Update(&x2cModel.blocks.sstartup.bSequencer);
     AutoSwitch_FiP16_Update(&x2cModel.blocks.sstartup.bFlux_select);
@@ -972,11 +1113,16 @@ void X2C_Update_1(void)
 /* X2C_Update for blocks with 10*Ts                                                                                   */
 void X2C_Update_10(void)
 {
-    Gain_FiP16_Update(&x2cModel.blocks.bGain);
+    SinGen_FiP16_Update(&x2cModel.blocks.sspeedPI.sperturbation.bSinGen);
+    Gain_FiP16_Update(&x2cModel.blocks.sspeedPI.sperturbation.bGain);
+    AutoSwitch_FiP16_Update(&x2cModel.blocks.sspeedPI.sperturbation.bAutoSwitch);
+    RateLimiter_FiP16_Update(&x2cModel.blocks.sspeedPI.bRateLimiter);
     TypeConv_FiP16_Bool_Update(&x2cModel.blocks.sstartup.bTypeConv1);
     ManualSwitch_FiP16_Update(&x2cModel.blocks.bManualSwitch1);
     Sub_FiP16_Update(&x2cModel.blocks.sspeedPI.bSpeed_error);
     PI_FiP16_Update(&x2cModel.blocks.sspeedPI.bPI_speed);
-    RateLimiter_FiP16_Update(&x2cModel.blocks.sspeedPI.bRateLimiter);
+    ManualSwitch_FiP16_Update(&x2cModel.blocks.sspeedPI.bManualSwitch);
+    Add_FiP16_Update(&x2cModel.blocks.sspeedPI.sperturbation.bAdd);
+    RateLimiter_FiP16_Update(&x2cModel.blocks.sspeedPI.sperturbation.bRateLimiter);
 }
 
