@@ -168,7 +168,7 @@
         <targetDevice>dsPIC33CK256MP508</targetDevice>
         <targetHeader></targetHeader>
         <targetPluginBoard></targetPluginBoard>
-        <platformTool>pk4hybrid</platformTool>
+        <platformTool>RealICEPlatformTool</platformTool>
         <languageToolchain>XC16</languageToolchain>
         <languageToolchainVersion>1.50</languageToolchainVersion>
         <platform>3</platform>
@@ -239,7 +239,7 @@
         <property key="oXC16gcc-sfr-warn" value="false"/>
         <property key="oXC16gcc-smar-io-lvl" value="1"/>
         <property key="oXC16gcc-smart-io-fmt" value=""/>
-        <property key="optimization-level" value="3"/>
+        <property key="optimization-level" value="0"/>
         <property key="post-instruction-scheduling" value="default"/>
         <property key="pre-instruction-scheduling" value="default"/>
         <property key="preprocessor-macros"
@@ -506,6 +506,94 @@
                   value="Press to select which tool pack to use"/>
         <property key="voltagevalue" value="3.25"/>
       </ICD4Tool>
+      <RealICEPlatformTool>
+        <property key="ADC" value="true"/>
+        <property key="AutoSelectMemRanges" value="auto"/>
+        <property key="CLC 1" value="true"/>
+        <property key="CLC 2" value="true"/>
+        <property key="CLC 3" value="true"/>
+        <property key="CLC 4" value="true"/>
+        <property key="CRC" value="true"/>
+        <property key="DACFRZ" value="true"/>
+        <property key="DMA" value="true"/>
+        <property key="FRZ" value="true"/>
+        <property key="Freeze All Other Peripherals" value="true"/>
+        <property key="I2C 1" value="true"/>
+        <property key="I2C 2" value="true"/>
+        <property key="I2C 3" value="true"/>
+        <property key="MCCP/SCCP 1" value="true"/>
+        <property key="MCCP/SCCP 2" value="true"/>
+        <property key="MCCP/SCCP 3" value="true"/>
+        <property key="MCCP/SCCP 4" value="true"/>
+        <property key="MCCP/SCCP 5" value="true"/>
+        <property key="MCCP/SCCP 6" value="true"/>
+        <property key="MCCP/SCCP 7" value="true"/>
+        <property key="MCCP/SCCP 8" value="true"/>
+        <property key="MCCP/SCCP 9" value="true"/>
+        <property key="PG1" value="true"/>
+        <property key="PG2" value="true"/>
+        <property key="PG3" value="true"/>
+        <property key="PG4" value="true"/>
+        <property key="PG5" value="true"/>
+        <property key="PG6" value="true"/>
+        <property key="PG7" value="true"/>
+        <property key="PG8" value="true"/>
+        <property key="PMP" value="true"/>
+        <property key="PTGFRZ" value="true"/>
+        <property key="QEI1" value="true"/>
+        <property key="QEI2" value="true"/>
+        <property key="REFO" value="true"/>
+        <property key="RIExTrigs.Five" value="OFF"/>
+        <property key="RIExTrigs.Four" value="OFF"/>
+        <property key="RIExTrigs.One" value="OFF"/>
+        <property key="RIExTrigs.Seven" value="OFF"/>
+        <property key="RIExTrigs.Six" value="OFF"/>
+        <property key="RIExTrigs.Three" value="OFF"/>
+        <property key="RIExTrigs.Two" value="OFF"/>
+        <property key="RIExTrigs.Zero" value="OFF"/>
+        <property key="SENT1" value="true"/>
+        <property key="SENT2" value="true"/>
+        <property key="SPI 1" value="true"/>
+        <property key="SPI 2" value="true"/>
+        <property key="SPI 3" value="true"/>
+        <property key="SecureSegment.SegmentProgramming" value="FullChipProgramming"/>
+        <property key="TIMER1" value="true"/>
+        <property key="ToolFirmwareFilePath"
+                  value="Press to browse for a specific firmware version"/>
+        <property key="ToolFirmwareOption.UseLatestFirmware" value="true"/>
+        <property key="debugoptions.useswbreakpoints" value="false"/>
+        <property key="hwtoolclock.frcindebug" value="false"/>
+        <property key="hwtoolclock.instructionspeed" value="4"/>
+        <property key="hwtoolclock.units" value="mips"/>
+        <property key="memories.aux" value="false"/>
+        <property key="memories.bootflash" value="true"/>
+        <property key="memories.configurationmemory" value="true"/>
+        <property key="memories.configurationmemory2" value="true"/>
+        <property key="memories.dataflash" value="true"/>
+        <property key="memories.eeprom" value="true"/>
+        <property key="memories.flashdata" value="true"/>
+        <property key="memories.id" value="true"/>
+        <property key="memories.instruction.ram" value="true"/>
+        <property key="memories.instruction.ram.ranges"
+                  value="${memories.instruction.ram.ranges}"/>
+        <property key="memories.programmemory" value="true"/>
+        <property key="memories.programmemory.ranges" value="0-2beff"/>
+        <property key="poweroptions.powerenable" value="false"/>
+        <property key="programoptions.donoteraseauxmem" value="false"/>
+        <property key="programoptions.eraseb4program" value="true"/>
+        <property key="programoptions.preservedataflash" value="false"/>
+        <property key="programoptions.preservedataflash.ranges" value=""/>
+        <property key="programoptions.preserveeeprom" value="false"/>
+        <property key="programoptions.preserveeeprom.ranges" value=""/>
+        <property key="programoptions.preserveprogram.ranges" value=""/>
+        <property key="programoptions.preserveprogramrange" value="false"/>
+        <property key="programoptions.preserveuserid" value="false"/>
+        <property key="programoptions.programcalmem" value="false"/>
+        <property key="programoptions.programuserotp" value="false"/>
+        <property key="programoptions.usehighvoltageonmclr" value="false"/>
+        <property key="programoptions.uselvpprogramming" value="false"/>
+        <property key="voltagevalue" value="3.25"/>
+      </RealICEPlatformTool>
       <pk4hybrid>
         <property key="ADC" value="true"/>
         <property key="AutoSelectMemRanges" value="auto"/>
