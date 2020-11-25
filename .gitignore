@@ -1,6 +1,7 @@
 **/nbproject/private/
 **/nbproject/Makefile-*.mk
 **/nbproject/Package-*.bash
+.generated_files/
 build/
 nbbuild/
 dist/
@@ -19,7 +20,7 @@ motorbench-log.0.0.txt.lck
 *.backup
 *.c_backup
 *.log
-*.log
+log/
 X2C/activateScilabX2C.bat
 *.o
 *.lck
