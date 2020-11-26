@@ -5,7 +5,7 @@
 // Simulation settings
 endTime     = 5;
 stepSize    = 1.0E-2; 
-X2C_sampleTime =50E-6;
+X2C_sampleTime =100E-6;//10kHz control loop
 
 // CODE GENERATION PARAMETERS
 

@@ -2,15 +2,15 @@
  * @file
  * @brief Generated model file.
  * 
- * Date:  2020-11-26 12:56
+ * Date:  2020-11-26 13:55
  * 
  * X2C-Version: 6.3.2018
  * X2C-Edition: Free
  */
 /* This file is part of X2C. http://x2c.lcm.at/                                                                       */
 
-/* Model: MC_FOC_SL_FIP_dsPIC33CK_MCLV2                                                                               */
-/* Date:  2020-11-26 12:56                                                                                            */
+/* Model: mc_foc_sl_fip_dspic33ck_mclv2                                                                               */
+/* Date:  2020-11-26 13:55                                                                                            */
 
 /* X2C-Version: 6.3.2018                                                                                              */
 /* X2C-Edition: Free                                                                                                  */
