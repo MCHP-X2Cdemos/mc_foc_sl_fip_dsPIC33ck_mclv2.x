@@ -13,11 +13,11 @@
   @Description
     This source file provides APIs for ADC1.
     Generation Information :
-        Product Revision  :  PIC24 / dsPIC33 / PIC32MM MCUs - 1.167.0
+        Product Revision  :  PIC24 / dsPIC33 / PIC32MM MCUs - 1.169.0
         Device            :  dsPIC33CK256MP508      
     The generated drivers are tested against the following:
         Compiler          :  XC16 v1.50
-        MPLAB 	          :  MPLAB X v5.35
+        MPLAB 	          :  MPLAB X v5.40
 */
 
 /*
@@ -87,10 +87,10 @@ void ADC1_Initialize (void)
     ADMOD1L = 0x40;
     // SIGN24 disabled; DIFF25 disabled; DIFF24 disabled; SIGN25 disabled; 
     ADMOD1H = 0x00;
-    // IE15 disabled; IE1 enabled; IE0 enabled; IE3 disabled; IE2 disabled; IE5 disabled; IE4 disabled; IE10 disabled; IE7 disabled; IE6 disabled; IE9 disabled; IE13 disabled; IE8 disabled; IE14 disabled; IE11 disabled; IE12 disabled; 
-    ADIEL = 0x03;
-    // IE17 disabled; IE18 disabled; IE16 disabled; IE19 enabled; IE20 disabled; IE21 disabled; IE24 disabled; IE25 disabled; IE22 disabled; IE23 disabled; 
-    ADIEH = 0x08;
+    // IE15 disabled; IE1 disabled; IE0 enabled; IE3 disabled; IE2 disabled; IE5 disabled; IE4 disabled; IE10 disabled; IE7 disabled; IE6 disabled; IE9 disabled; IE13 disabled; IE8 disabled; IE14 disabled; IE11 disabled; IE12 disabled; 
+    ADIEL = 0x01;
+    // IE17 disabled; IE18 disabled; IE16 disabled; IE19 disabled; IE20 disabled; IE21 disabled; IE24 disabled; IE25 disabled; IE22 disabled; IE23 disabled; 
+    ADIEH = 0x00;
     // CMPEN10 disabled; CMPEN11 disabled; CMPEN6 disabled; CMPEN5 disabled; CMPEN4 disabled; CMPEN3 disabled; CMPEN2 disabled; CMPEN1 disabled; CMPEN0 disabled; CMPEN14 disabled; CMPEN9 disabled; CMPEN15 disabled; CMPEN8 disabled; CMPEN12 disabled; CMPEN7 disabled; CMPEN13 disabled; 
     ADCMP0ENL = 0x00;
     // CMPEN10 disabled; CMPEN11 disabled; CMPEN6 disabled; CMPEN5 disabled; CMPEN4 disabled; CMPEN3 disabled; CMPEN2 disabled; CMPEN1 disabled; CMPEN0 disabled; CMPEN14 disabled; CMPEN9 disabled; CMPEN15 disabled; CMPEN8 disabled; CMPEN12 disabled; CMPEN7 disabled; CMPEN13 disabled; 
@@ -268,7 +268,7 @@ void __attribute__ ((weak)) ADC1_channel_AN19_Tasks ( void )
 {
     uint16_t valchannel_AN19;
 
-    if(IFS6bits.ADCAN19IF)
+    if(ADSTATHbits.AN19RDY)
     {
         //Read the ADC value from the ADCBUF
         valchannel_AN19 = ADCBUF19;
@@ -277,9 +277,6 @@ void __attribute__ ((weak)) ADC1_channel_AN19_Tasks ( void )
         { 
             ADC1_channel_AN19DefaultInterruptHandler(valchannel_AN19); 
         }
-
-        //clear the channel_AN19 interrupt flag
-        IFS6bits.ADCAN19IF = 0;
     }
 }
 
@@ -323,7 +320,7 @@ void __attribute__ ((weak)) ADC1_channel_ANA1_Tasks ( void )
 {
     uint16_t valchannel_ANA1;
 
-    if(IFS5bits.ADCAN1IF)
+    if(ADSTATLbits.AN1RDY)
     {
         //Read the ADC value from the ADCBUF
         valchannel_ANA1 = ADCBUF1;
@@ -332,9 +329,6 @@ void __attribute__ ((weak)) ADC1_channel_ANA1_Tasks ( void )
         { 
             ADC1_channel_ANA1DefaultInterruptHandler(valchannel_ANA1); 
         }
-
-        //clear the channel_ANA1 interrupt flag
-        IFS5bits.ADCAN1IF = 0;
     }
 }
 

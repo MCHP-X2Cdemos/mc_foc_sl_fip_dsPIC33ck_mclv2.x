@@ -89,6 +89,8 @@
       <logicalFolder name="MCC Generated Files"
                      displayName="MCC Generated Files"
                      projectFiles="true">
+        <logicalFolder name="doc" displayName="doc" projectFiles="true">
+        </logicalFolder>
         <logicalFolder name="X2CCode" displayName="X2CCode" projectFiles="true">
           <logicalFolder name="Controller" displayName="Controller" projectFiles="true">
             <logicalFolder name="Common" displayName="Common" projectFiles="true">
@@ -148,6 +150,7 @@
         <itemPath>mcc_generated_files/qei.c</itemPath>
       </logicalFolder>
       <itemPath>main.c</itemPath>
+      <itemPath>readme.md</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -170,7 +173,7 @@
         <targetPluginBoard></targetPluginBoard>
         <platformTool>pk4hybrid</platformTool>
         <languageToolchain>XC16</languageToolchain>
-        <languageToolchainVersion>1.50</languageToolchainVersion>
+        <languageToolchainVersion>1.60</languageToolchainVersion>
         <platform>3</platform>
       </toolsSet>
       <packs>
@@ -199,6 +202,7 @@
       </compileType>
       <makeCustomizationType>
         <makeCustomizationPreStepEnabled>false</makeCustomizationPreStepEnabled>
+        <makeUseCleanTarget>false</makeUseCleanTarget>
         <makeCustomizationPreStep></makeCustomizationPreStep>
         <makeCustomizationPostStepEnabled>false</makeCustomizationPostStepEnabled>
         <makeCustomizationPostStep></makeCustomizationPostStep>
@@ -207,6 +211,7 @@
         <makeCustomizationNormalizeHexFile>false</makeCustomizationNormalizeHexFile>
       </makeCustomizationType>
       <C30>
+        <property key="appendMe" value=""/>
         <property key="code-model" value="default"/>
         <property key="const-model" value="default"/>
         <property key="data-model" value="default"/>

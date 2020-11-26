@@ -38,7 +38,7 @@ Model sample rate: 1.0E-4
 
 ### Hardware
 
-dsPIC33CK256MP508
+Optional[dsPIC33CK256MP508]
 
 
 ## Hardware settings

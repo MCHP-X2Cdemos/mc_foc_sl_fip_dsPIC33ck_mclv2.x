@@ -13,11 +13,11 @@
   @Description:
     This header file provides implementations for driver APIs for all modules selected in the GUI.
     Generation Information :
-        Product Revision  :  PIC24 / dsPIC33 / PIC32MM MCUs - 1.167.0
+        Product Revision  :  PIC24 / dsPIC33 / PIC32MM MCUs - 1.169.0
         Device            :  dsPIC33CK256MP508
     The generated drivers are tested against the following:
         Compiler          :  XC16 v1.50
-        MPLAB             :  MPLAB X v5.35
+        MPLAB             :  MPLAB X v5.40
 */
 
 /*
@@ -74,7 +74,7 @@ void CLOCK_Initialize(void)
     RPCON = 0x00;
     // PMDLOCK disabled; 
     PMDCON = 0x00;
-    // ADC1MD enabled; T1MD enabled; U2MD enabled; U1MD enabled; SPI2MD enabled; SPI1MD enabled; QEIMD enabled; C1MD enabled; PWMMD enabled; I2C1MD enabled; 
+    // ADC1MD enabled; T1MD enabled; U2MD enabled; U1MD enabled; SPI2MD enabled; SPI1MD enabled; QEI1MD enabled; C1MD enabled; PWMMD enabled; I2C1MD enabled; 
     PMD1 = 0x00;
     // CCP2MD enabled; CCP1MD enabled; CCP4MD enabled; CCP3MD enabled; CCP7MD enabled; CCP8MD enabled; CCP5MD enabled; CCP6MD enabled; CCP9MD enabled; 
     PMD2 = 0x00;
