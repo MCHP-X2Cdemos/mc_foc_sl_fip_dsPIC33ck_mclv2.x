@@ -1,7 +1,7 @@
 /* This file is part of X2C. http://x2c.lcm.at/                                                                       */
 
 /* Model: mc_foc_sl_fip_dspic33ck_mclv2                                                                               */
-/* Date:  2020-11-26 13:55                                                                                            */
+/* Date:  2020-11-26 14:40                                                                                            */
 
 /* X2C-Version: 6.3.2018                                                                                              */
 /* X2C-Edition: Free                                                                                                  */
@@ -293,22 +293,22 @@ void X2C_Init()
     x2cModel.blocks.sspeedPI.bManualSwitch.Toggle = 0;
 
     /* Block: speedPI/PI_speed                                                                                        */
-    /* Kp = 1.0                                                                                                       */
-    /* Ki = 0.5                                                                                                       */
+    /* Kp = 2.0                                                                                                       */
+    /* Ki = 1.0                                                                                                       */
     /* ts_fact = 10.0                                                                                                 */
-    x2cModel.blocks.sspeedPI.bPI_speed.b0 = 16;
+    x2cModel.blocks.sspeedPI.bPI_speed.b0 = 33;
     x2cModel.blocks.sspeedPI.bPI_speed.b1 = 16384;
     x2cModel.blocks.sspeedPI.bPI_speed.sfrb0 = 15;
-    x2cModel.blocks.sspeedPI.bPI_speed.sfrb1 = 14;
+    x2cModel.blocks.sspeedPI.bPI_speed.sfrb1 = 13;
     x2cModel.blocks.sspeedPI.bPI_speed.i_old = 0;
     x2cModel.blocks.sspeedPI.bPI_speed.enable_old = 0;
 
     /* Block: speedPI/RateLimiter                                                                                     */
-    /* Tr = 0.0010                                                                                                    */
-    /* Tf = 0.0010                                                                                                    */
+    /* Tr = 0.2                                                                                                       */
+    /* Tf = 0.2                                                                                                       */
     /* ts_fact = 10.0                                                                                                 */
-    x2cModel.blocks.sspeedPI.bRateLimiter.RateUp = 2147483647;
-    x2cModel.blocks.sspeedPI.bRateLimiter.RateDown = 2147483647;
+    x2cModel.blocks.sspeedPI.bRateLimiter.RateUp = 10737418;
+    x2cModel.blocks.sspeedPI.bRateLimiter.RateDown = 10737418;
     x2cModel.blocks.sspeedPI.bRateLimiter.out_old = 0;
     x2cModel.blocks.sspeedPI.bRateLimiter.enable_old = 0;
 
@@ -427,9 +427,9 @@ void X2C_Init()
 
     /* Block: startup/PI                                                                                              */
     /* Kp = 0.0                                                                                                       */
-    /* Ki = 0.5                                                                                                       */
+    /* Ki = 5.0                                                                                                       */
     /* ts_fact = 1.0                                                                                                  */
-    x2cModel.blocks.sstartup.bPI.b0 = 2;
+    x2cModel.blocks.sstartup.bPI.b0 = 16;
     x2cModel.blocks.sstartup.bPI.b1 = 0;
     x2cModel.blocks.sstartup.bPI.sfrb0 = 15;
     x2cModel.blocks.sstartup.bPI.sfrb1 = 15;

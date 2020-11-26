@@ -50,11 +50,12 @@ void UpdateInports(void) {
       x2cModel.inports.bV_POT = Scaling*A_PeripheralVariable
 
      */
+ 
+    if(ButtonS2_GetValue() == 0) x2cModel.inports.bS2 = false;
+    else  x2cModel.inports.bS2 = true;
+    
     /* Button latch and debounce */
     S3_Value = ButtonS3_GetValue();
-    
-    if(S3_Value == 0) x2cModel.inports.bS2 = 0;
-    else  x2cModel.inports.bS2 = INT16_MAX;
     
     if(edge==0)
     {
@@ -162,7 +163,12 @@ void UpdateOutports(void) {
     	POS1CNTL = 0; //*x2cModel.outports.bHOME_INIT;
     }
     
-    
+    if (*x2cModel.outports.bLED_D17) {
+        LED1_SetHigh();
+    }
+    else {
+        LED1_SetLow();
+    }    
     
     if (*x2cModel.outports.bLED_D2) {
         LED2_SetHigh();
