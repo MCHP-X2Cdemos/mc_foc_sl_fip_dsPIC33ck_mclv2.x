@@ -79,7 +79,17 @@ If SW modification and Runtime Monitoring feature are required then all SW tools
 * [XC16 v1.60](https://www.microchip.com/mplab/compilers) - Microchip C compiler for 16bit micros
 * [X2C v6.3](https://x2c.lcm.at/) - Generate C code from Scilab/XCOS model
 * [MCC v4.0.2](https://www.microchip.com/mplab/mplab-code-configurator) - Configure peripherals and generate low levev drivers
-## Board settings
+## Board configuration and connections
+
+### Connectors used:
+
+* **RS-232:** Used to connect UART to computer
+* **M1/M2/M3:** Motor  phases connected 
+* **HA/HB/HC:** Motor encoder channels connected
+
+![Motor COnnector](readme_images/motor_connect.jpg)
+
+### Configuration
 
 * **JP1/2/3:** "Curr" current position
 * **JP4/5:** "UART" position 
@@ -89,7 +99,9 @@ If SW modification and Runtime Monitoring feature are required then all SW tools
 ![Board settings pic](readme_images/Board_Settings.jpg)
 
 
-## Peripheral settings and connections: 
+RS-232 c
+
+## Peripheral settings and I/O connections: 
 
    Peripherals are configured by [MCC](https://microchipdeveloper.com/mcc:mccgpio) according to the MCLV-2 board [schematics](https://ww1.microchip.com/downloads/en/DeviceDoc/DS-52080a.pdf) and [PIM](#hardware) pinout.
 
