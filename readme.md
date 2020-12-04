@@ -39,10 +39,10 @@ The X2C Communicator tool and its scope feature using the UART to transfer data 
 
 1. Open MPLAB X then MCC:  ![MCC Button](readme_images/MCC_Button.jpg)
 2. Open X2C library window: ![Open X2C MCC](readme_images/X2C_MCC.jpg)
-3. Open the model: ![Open Button](readme_images/Open_Button.jpg)
+3. Open the model: ![Open Button](readme_images/OpenButton.jpg)
 4. Start X2C communicator (double click on the block): ![Start Communicator](readme_images/StartComm.jpg)
 5. Verify UART settings on the setup tab: ![UART Settings](readme_images/setup_tab.jpg)
-6. Connect to HW with X2C Communicator via UART: ![Start Communicator](readme_images/connect.JPG)
+6. Connect to HW with X2C Communicator via UART: ![Start Communicator](readme_images/connect.jpg)
 7. Open Virtual scope: ![Start Scope](readme_images/startScope.jpg)
 
 ## Simulation
@@ -89,7 +89,7 @@ If SW modification and Runtime Monitoring feature are required then all SW tools
 ![Board settings pic](readme_images/Board_Settings.jpg)
 
 
-## Peripheral settomgs and connections: 
+## Peripheral settings and connections: 
 
    Peripherals are configured by [MCC](https://microchipdeveloper.com/mcc:mccgpio) according to the MCLV-2 board [schematics](https://ww1.microchip.com/downloads/en/DeviceDoc/DS-52080a.pdf) and [PIM](#hardware) pinout.
 
