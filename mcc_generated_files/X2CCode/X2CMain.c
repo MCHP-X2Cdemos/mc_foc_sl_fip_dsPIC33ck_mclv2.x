@@ -17,7 +17,8 @@
 #warning "Please generate the code from the model!"
 #endif
 
-#include "mcc.h"
+#include "../pin_manager.h"
+#include "../adc1.h"
 #include "../qei.h"
 #include "../../userparms.h"
 
@@ -89,15 +90,13 @@ void UpdateInports(void) {
     }  
 
     /* ADC */   
-    x2cModel.inports.bI_a = ADCBUF0; //ADC1_Core0ConversionResultGet();
-    x2cModel.inports.bI_b = ADCBUF1; //ADC1_Core1ConversionResultGet();
-    x2cModel.inports.bV_POT = ADCBUF19; //ADC1_SharedChannelAN19ConversionResultGet();  
+    x2cModel.inports.bI_a = ADC1_ConversionResultGet(AN0_IA); //ADC1_Core0ConversionResultGet();
+    x2cModel.inports.bI_b = ADC1_ConversionResultGet(ANA1_IB); //ADC1_Core1ConversionResultGet();
+    x2cModel.inports.bV_POT = ADC1_ConversionResultGet(AN19_POT); //ADC1_SharedChannelAN19ConversionResultGet();  
 
+    //Encoder caculation
     POS1CNTtemp = POS1CNTL;
-    x2cModel.inports.bQEI_POS = (int16_t)(__builtin_mulss(POS1CNTtemp,QEI_FACT));  
-//    x2cModel.inports.bQEI_POS_MECH = (int16_t)(__builtin_mulss(POS1CNTtemp,QEI_FACT_MECH));  
-    
-    
+    x2cModel.inports.bQEI_POS = (int16_t) (__builtin_mulss(POS1CNTtemp, QEI_FACT));
     x2cModel.inports.bQEI_VEL = GetQEIVel();
     
     x2cModel.inports.bCPU_LOAD = CpuLoad;
