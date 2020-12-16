@@ -26,30 +26,30 @@ simulation_time = 5;
 //l3 = 0.01;
 
 // timeing for omega
-tw1 = 0.3;
-tw2 = 0.3;
-tw3 = 2.5;
+tw1 = 0.5;
+tw2 = 0.7;
+tw3 = 2.3;
 tw4 = 0.3;
-tw5 = 1.5;
+tw5 = 1.1;
 tw6 = 0.1;
 
 // omega steps
 w1 = 0.0;
 w2 = 0.1;
-w3 = 0.1;
+w3 = 0.6;
 
 // timinig for load
 tl1 = 0.3;
 tl2 = 0.3;
-tl3 = 2.8;
+tl3 = 2.0;
 tl4 = 0.3;
-tl5 = 1;
+tl5 = 1.8;
 tl6 = 0.3;
 
 // load steps
 l1 = 0.0;
 l2 = 0.01;
-l3 = 0.01;
+l3 = 0.02;
 
 if (tw1+tw2+tw3+tw4+tw5+tw6)> simulation_time then
    mprintf('calculated time for omega is longer than simulation_time '); 

@@ -29,13 +29,6 @@ BEMF_D_UDC = 0.65;
 PLL_INT = 800;
 
 
-
-
-
-
-
-
-
 // POWERSTAGE DATA
 Vbus = 24;
 Rshunt = 0.025;
@@ -69,29 +62,14 @@ theta_r0 = theta_m0*2*%pi*n_p;
 omega_r0 = omega_m0/60*2*%pi*n_p;
 
 
-
-
-
-
-
-
-
-
 // Umrechnen auf Rechnenwerte fuer Modell
 Ld = Ld/2;
 Lq = Lq/2;
 Rs = Rs/2;
 
 
-
-
 // initalize input for simulation
 exec("./gen_inputs.sci");
 exec("./qei_sim.sce");
 exec("./qei_sim2.sce");
-
-
-
-
-
 

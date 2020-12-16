@@ -4,8 +4,7 @@ xdel(winsid());
 tic();
 // Load simulation parameters
 //exec("./parameters.sce");
-exec("./initProject.sce");
-
+//exec("./initProject.sce");
 
 importXcosDiagram("MC_FOC_SL_FIP_dsPIC33CK_MCLV2.zcos");
 
@@ -72,5 +71,5 @@ scf(2);
 plot(dbg2.time, dbg2.values)
 title("dbg2 ch1 = blue, ch2 = green, ch3 = red");
 simulation_time = toc();
-simulation_time
+disp(simulation_time/60, "Simulation Time [min]")
 
