@@ -53,9 +53,9 @@
 */
 
 static void (*ADC1_CommonDefaultInterruptHandler)(void);
-static void (*ADC1_channel_AN19DefaultInterruptHandler)(uint16_t adcVal);
-static void (*ADC1_channel_AN0DefaultInterruptHandler)(uint16_t adcVal);
-static void (*ADC1_channel_ANA1DefaultInterruptHandler)(uint16_t adcVal);
+static void (*ADC1_AN19_POTDefaultInterruptHandler)(uint16_t adcVal);
+static void (*ADC1_AN0_IADefaultInterruptHandler)(uint16_t adcVal);
+static void (*ADC1_ANA1_IBDefaultInterruptHandler)(uint16_t adcVal);
 
 /**
   Section: Driver Interface
@@ -160,13 +160,13 @@ void ADC1_Initialize (void)
 	
     //Assign Default Callbacks
     ADC1_SetCommonInterruptHandler(&ADC1_CallBack);
-    ADC1_Setchannel_AN19InterruptHandler(&ADC1_channel_AN19_CallBack);
-    ADC1_Setchannel_AN0InterruptHandler(&ADC1_channel_AN0_CallBack);
-    ADC1_Setchannel_ANA1InterruptHandler(&ADC1_channel_ANA1_CallBack);
+    ADC1_SetAN19_POTInterruptHandler(&ADC1_AN19_POT_CallBack);
+    ADC1_SetAN0_IAInterruptHandler(&ADC1_AN0_IA_CallBack);
+    ADC1_SetANA1_IBInterruptHandler(&ADC1_ANA1_IB_CallBack);
     
-    // Clearing channel_AN0 interrupt flag.
+    // Clearing AN0_IA interrupt flag.
     IFS5bits.ADCAN0IF = 0;
-    // Enabling channel_AN0 interrupt.
+    // Enabling AN0_IA interrupt.
     IEC5bits.ADCAN0IE = 1;
 
     // Setting WARMTIME bit
@@ -254,80 +254,80 @@ void __attribute__ ((weak)) ADC1_Tasks ( void )
     }
 }
 
-void __attribute__ ((weak)) ADC1_channel_AN19_CallBack( uint16_t adcVal )
+void __attribute__ ((weak)) ADC1_AN19_POT_CallBack( uint16_t adcVal )
 { 
 
 }
 
-void ADC1_Setchannel_AN19InterruptHandler(void* handler)
+void ADC1_SetAN19_POTInterruptHandler(void* handler)
 {
-    ADC1_channel_AN19DefaultInterruptHandler = handler;
+    ADC1_AN19_POTDefaultInterruptHandler = handler;
 }
 
-void __attribute__ ((weak)) ADC1_channel_AN19_Tasks ( void )
+void __attribute__ ((weak)) ADC1_AN19_POT_Tasks ( void )
 {
-    uint16_t valchannel_AN19;
+    uint16_t valAN19_POT;
 
     if(ADSTATHbits.AN19RDY)
     {
         //Read the ADC value from the ADCBUF
-        valchannel_AN19 = ADCBUF19;
+        valAN19_POT = ADCBUF19;
 
-        if(ADC1_channel_AN19DefaultInterruptHandler) 
+        if(ADC1_AN19_POTDefaultInterruptHandler) 
         { 
-            ADC1_channel_AN19DefaultInterruptHandler(valchannel_AN19); 
+            ADC1_AN19_POTDefaultInterruptHandler(valAN19_POT); 
         }
     }
 }
 
 
-void __attribute__ ((weak)) ADC1_channel_AN0_CallBack( uint16_t adcVal )
+void __attribute__ ((weak)) ADC1_AN0_IA_CallBack( uint16_t adcVal )
 { 
 
 }
 
-void ADC1_Setchannel_AN0InterruptHandler(void* handler)
+void ADC1_SetAN0_IAInterruptHandler(void* handler)
 {
-    ADC1_channel_AN0DefaultInterruptHandler = handler;
+    ADC1_AN0_IADefaultInterruptHandler = handler;
 }
 
 void __attribute__ ( ( __interrupt__ , auto_psv, weak ) ) _ADCAN0Interrupt ( void )
 {
-    uint16_t valchannel_AN0;
+    uint16_t valAN0_IA;
     //Read the ADC value from the ADCBUF
-    valchannel_AN0 = ADCBUF0;
+    valAN0_IA = ADCBUF0;
 
-    if(ADC1_channel_AN0DefaultInterruptHandler) 
+    if(ADC1_AN0_IADefaultInterruptHandler) 
     { 
-        ADC1_channel_AN0DefaultInterruptHandler(valchannel_AN0); 
+        ADC1_AN0_IADefaultInterruptHandler(valAN0_IA); 
     }
 
-    //clear the channel_AN0 interrupt flag
+    //clear the AN0_IA interrupt flag
     IFS5bits.ADCAN0IF = 0;
 }
 
-void __attribute__ ((weak)) ADC1_channel_ANA1_CallBack( uint16_t adcVal )
+void __attribute__ ((weak)) ADC1_ANA1_IB_CallBack( uint16_t adcVal )
 { 
 
 }
 
-void ADC1_Setchannel_ANA1InterruptHandler(void* handler)
+void ADC1_SetANA1_IBInterruptHandler(void* handler)
 {
-    ADC1_channel_ANA1DefaultInterruptHandler = handler;
+    ADC1_ANA1_IBDefaultInterruptHandler = handler;
 }
 
-void __attribute__ ((weak)) ADC1_channel_ANA1_Tasks ( void )
+void __attribute__ ((weak)) ADC1_ANA1_IB_Tasks ( void )
 {
-    uint16_t valchannel_ANA1;
+    uint16_t valANA1_IB;
 
     if(ADSTATLbits.AN1RDY)
     {
         //Read the ADC value from the ADCBUF
-        valchannel_ANA1 = ADCBUF1;
+        valANA1_IB = ADCBUF1;
 
-        if(ADC1_channel_ANA1DefaultInterruptHandler) 
+        if(ADC1_ANA1_IBDefaultInterruptHandler) 
         { 
-            ADC1_channel_ANA1DefaultInterruptHandler(valchannel_ANA1); 
+            ADC1_ANA1_IBDefaultInterruptHandler(valANA1_IB); 
         }
     }
 }

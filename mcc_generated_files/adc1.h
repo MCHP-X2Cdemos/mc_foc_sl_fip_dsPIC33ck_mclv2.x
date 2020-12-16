@@ -90,9 +90,9 @@
  */
 typedef enum 
 {
-    channel_AN19,//Channel Name:AN19   Assigned to:Shared Channel
-    channel_AN0,//Channel Name:AN0   Assigned to:Dedicated Core0
-    channel_ANA1,//Channel Name:ANA1   Assigned to:Dedicated Core1
+    AN19_POT,//Channel Name:AN19   Assigned to:Shared Channel
+    AN0_IA,//Channel Name:AN0   Assigned to:Dedicated Core0
+    ANA1_IB,//Channel Name:ANA1   Assigned to:Dedicated Core1
 } ADC1_CHANNEL;
 
 /**
@@ -383,13 +383,13 @@ inline static uint16_t ADC1_ConversionResultGet( ADC1_CHANNEL channel )
 
     switch(channel)
     {
-        case channel_AN19:
+        case AN19_POT:
                 result = ADCBUF19;
                 break;
-        case channel_AN0:
+        case AN0_IA:
                 result = ADCBUF0;
                 break;
-        case channel_ANA1:
+        case ANA1_IB:
                 result = ADCBUF1;
                 break;
         default:
@@ -441,13 +441,13 @@ inline static bool ADC1_IsConversionComplete(ADC1_CHANNEL channel)
 
     switch(channel)
     {
-        case channel_AN19:
+        case AN19_POT:
                 status = ADSTATHbits.AN19RDY;
                 break;
-        case channel_AN0:
+        case AN0_IA:
                 status = ADSTATLbits.AN0RDY;
                 break;
-        case channel_ANA1:
+        case ANA1_IB:
                 status = ADSTATLbits.AN1RDY;
                 break;
         default:
@@ -660,13 +660,13 @@ inline static void ADC1_IndividualChannelInterruptEnable(ADC1_CHANNEL channel)
 {
     switch(channel)
     {
-        case channel_AN19:
+        case AN19_POT:
                 IEC6bits.ADCAN19IE = 1;
                 break;
-        case channel_AN0:
+        case AN0_IA:
                 IEC5bits.ADCAN0IE = 1;
                 break;
-        case channel_ANA1:
+        case ANA1_IB:
                 IEC5bits.ADCAN1IE = 1;
                 break;
         default:
@@ -700,13 +700,13 @@ inline static void ADC1_IndividualChannelInterruptDisable(ADC1_CHANNEL channel)
 {
     switch(channel)
     {
-        case channel_AN19:
+        case AN19_POT:
                 IEC6bits.ADCAN19IE = 0;
                 break;
-        case channel_AN0:
+        case AN0_IA:
                 IEC5bits.ADCAN0IE = 0;
                 break;
-        case channel_ANA1:
+        case ANA1_IB:
                 IEC5bits.ADCAN1IE = 0;
                 break;
         default:
@@ -739,13 +739,13 @@ inline static void ADC1_IndividualChannelInterruptFlagClear(ADC1_CHANNEL channel
 {
     switch(channel)
     {
-        case channel_AN19:
+        case AN19_POT:
                 IFS6bits.ADCAN19IF = 0;
                 break;
-        case channel_AN0:
+        case AN0_IA:
                 IFS5bits.ADCAN0IF = 0;
                 break;
-        case channel_ANA1:
+        case ANA1_IB:
                 IFS5bits.ADCAN1IF = 0;
                 break;
         default:
@@ -755,10 +755,10 @@ inline static void ADC1_IndividualChannelInterruptFlagClear(ADC1_CHANNEL channel
 
 /**
   @Summary
-    ADC1 channel_AN19 callback routine.
+    ADC1 AN19_POT callback routine.
 
   @Description
-    This routine is a ADC1 channel_AN19 callback function.
+    This routine is a ADC1 AN19_POT callback function.
   
   @Preconditions
     None.
@@ -771,17 +771,17 @@ inline static void ADC1_IndividualChannelInterruptFlagClear(ADC1_CHANNEL channel
  
   @Example 
     <code>
-        ADC1_Setchannel_AN19InterruptHandler(&ADC1_channel_AN19_CallBack);
+        ADC1_SetAN19_POTInterruptHandler(&ADC1_AN19_POT_CallBack);
     </code>
 */
-void ADC1_channel_AN19_CallBack(uint16_t adcVal);
+void ADC1_AN19_POT_CallBack(uint16_t adcVal);
 
 /**
   @Summary
-    Assigns a function pointer with a ADC1 channel_AN19 callback address.
+    Assigns a function pointer with a ADC1 AN19_POT callback address.
 
   @Description
-    This routine assigns a function pointer with a ADC1 channel_AN19 callback address.
+    This routine assigns a function pointer with a ADC1 AN19_POT callback address.
   
   @Preconditions
     None.
@@ -794,17 +794,17 @@ void ADC1_channel_AN19_CallBack(uint16_t adcVal);
  
   @Example 
     <code>
-        ADC1_Setchannel_AN19InterruptHandler(&ADC1_channel_AN19_CallBack);
+        ADC1_SetAN19_POTInterruptHandler(&ADC1_AN19_POT_CallBack);
     </code>
 */
-void ADC1_Setchannel_AN19InterruptHandler(void* handler);
+void ADC1_SetAN19_POTInterruptHandler(void* handler);
 
 /**
   @Summary
     Polled implementation
 
   @Description
-    This routine is used to implement the tasks for ADC1 channel_AN19 polled implementations.
+    This routine is used to implement the tasks for ADC1 AN19_POT polled implementations.
   
   @Preconditions
     ADC1_Initialize() function should have been 
@@ -818,18 +818,18 @@ void ADC1_Setchannel_AN19InterruptHandler(void* handler);
  
   @Example
     <code>    
-        ADC1_channel_AN19_Tasks();
+        ADC1_AN19_POT_Tasks();
     </code>
 */
-void ADC1_channel_AN19_Tasks(void);
+void ADC1_AN19_POT_Tasks(void);
 
 
 /**
   @Summary
-    ADC1 channel_AN0 callback routine.
+    ADC1 AN0_IA callback routine.
 
   @Description
-    This routine is a ADC1 channel_AN0 callback function.
+    This routine is a ADC1 AN0_IA callback function.
   
   @Preconditions
     None.
@@ -842,63 +842,17 @@ void ADC1_channel_AN19_Tasks(void);
  
   @Example 
     <code>
-        ADC1_Setchannel_AN0InterruptHandler(&ADC1_channel_AN0_CallBack);
+        ADC1_SetAN0_IAInterruptHandler(&ADC1_AN0_IA_CallBack);
     </code>
 */
-void ADC1_channel_AN0_CallBack(uint16_t adcVal);
+void ADC1_AN0_IA_CallBack(uint16_t adcVal);
 
 /**
   @Summary
-    Assigns a function pointer with a ADC1 channel_AN0 callback address.
+    Assigns a function pointer with a ADC1 AN0_IA callback address.
 
   @Description
-    This routine assigns a function pointer with a ADC1 channel_AN0 callback address.
-  
-  @Preconditions
-    None.
-
-  @Param
-    Address of the callback routine.
-
-  @Returns
-    None
- 
-  @Example 
-    <code>
-        ADC1_Setchannel_AN0InterruptHandler(&ADC1_channel_AN0_CallBack);
-    </code>
-*/
-void ADC1_Setchannel_AN0InterruptHandler(void* handler);
-
-/**
-  @Summary
-    ADC1 channel_ANA1 callback routine.
-
-  @Description
-    This routine is a ADC1 channel_ANA1 callback function.
-  
-  @Preconditions
-    None.
-
-  @Param
-    None.
-
-  @Returns
-    None
- 
-  @Example 
-    <code>
-        ADC1_Setchannel_ANA1InterruptHandler(&ADC1_channel_ANA1_CallBack);
-    </code>
-*/
-void ADC1_channel_ANA1_CallBack(uint16_t adcVal);
-
-/**
-  @Summary
-    Assigns a function pointer with a ADC1 channel_ANA1 callback address.
-
-  @Description
-    This routine assigns a function pointer with a ADC1 channel_ANA1 callback address.
+    This routine assigns a function pointer with a ADC1 AN0_IA callback address.
   
   @Preconditions
     None.
@@ -911,17 +865,63 @@ void ADC1_channel_ANA1_CallBack(uint16_t adcVal);
  
   @Example 
     <code>
-        ADC1_Setchannel_ANA1InterruptHandler(&ADC1_channel_ANA1_CallBack);
+        ADC1_SetAN0_IAInterruptHandler(&ADC1_AN0_IA_CallBack);
     </code>
 */
-void ADC1_Setchannel_ANA1InterruptHandler(void* handler);
+void ADC1_SetAN0_IAInterruptHandler(void* handler);
+
+/**
+  @Summary
+    ADC1 ANA1_IB callback routine.
+
+  @Description
+    This routine is a ADC1 ANA1_IB callback function.
+  
+  @Preconditions
+    None.
+
+  @Param
+    None.
+
+  @Returns
+    None
+ 
+  @Example 
+    <code>
+        ADC1_SetANA1_IBInterruptHandler(&ADC1_ANA1_IB_CallBack);
+    </code>
+*/
+void ADC1_ANA1_IB_CallBack(uint16_t adcVal);
+
+/**
+  @Summary
+    Assigns a function pointer with a ADC1 ANA1_IB callback address.
+
+  @Description
+    This routine assigns a function pointer with a ADC1 ANA1_IB callback address.
+  
+  @Preconditions
+    None.
+
+  @Param
+    Address of the callback routine.
+
+  @Returns
+    None
+ 
+  @Example 
+    <code>
+        ADC1_SetANA1_IBInterruptHandler(&ADC1_ANA1_IB_CallBack);
+    </code>
+*/
+void ADC1_SetANA1_IBInterruptHandler(void* handler);
 
 /**
   @Summary
     Polled implementation
 
   @Description
-    This routine is used to implement the tasks for ADC1 channel_ANA1 polled implementations.
+    This routine is used to implement the tasks for ADC1 ANA1_IB polled implementations.
   
   @Preconditions
     ADC1_Initialize() function should have been 
@@ -935,10 +935,10 @@ void ADC1_Setchannel_ANA1InterruptHandler(void* handler);
  
   @Example
     <code>    
-        ADC1_channel_ANA1_Tasks();
+        ADC1_ANA1_IB_Tasks();
     </code>
 */
-void ADC1_channel_ANA1_Tasks(void);
+void ADC1_ANA1_IB_Tasks(void);
 
 
 

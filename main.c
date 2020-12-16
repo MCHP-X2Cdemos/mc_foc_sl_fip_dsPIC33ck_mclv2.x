@@ -66,7 +66,7 @@ int main(void)
     //ADCON1Hbits.FORM = 0b11;
     
     TMR1_Start();
-    
+    QEI_Initialize();
     while (1)
     {
         // Add your application code
