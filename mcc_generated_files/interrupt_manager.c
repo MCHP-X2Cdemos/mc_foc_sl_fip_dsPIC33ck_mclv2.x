@@ -14,11 +14,11 @@
   @Description:
     This source file provides implementations for PIC24 / dsPIC33 / PIC32MM MCUs interrupts.
     Generation Information : 
-        Product Revision  :  PIC24 / dsPIC33 / PIC32MM MCUs - 1.169.0
+        Product Revision  :  PIC24 / dsPIC33 / PIC32MM MCUs - 1.170.0
         Device            :  dsPIC33CK256MP508
     The generated drivers are tested against the following:
-        Compiler          :  XC16 v1.50
-        MPLAB             :  MPLAB X v5.40
+        Compiler          :  XC16 v1.61
+        MPLAB             :  MPLAB X v5.45
 */
 /*
     (c) 2020 Microchip Technology Inc. and its subsidiaries. You may use this
@@ -52,7 +52,13 @@
 */
 void INTERRUPT_Initialize (void)
 {
+    //    ADCAN24: ADC AN24 Convert Done
+    //    Priority: 1
+        IPC48bits.ADCAN24IP = 1;
     //    ADCAN0: ADC AN0 Convert Done
     //    Priority: 1
         IPC22bits.ADCAN0IP = 1;
+    //    ADCAN25: ADC AN25 Convert Done
+    //    Priority: 1
+        IPC48bits.ADCAN25IP = 1;
 }

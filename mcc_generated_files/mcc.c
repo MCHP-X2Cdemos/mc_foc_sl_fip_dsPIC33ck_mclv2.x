@@ -13,11 +13,11 @@
   @Description:
     The configuration contents of this file are moved to system.c and this file will be removed in future MCC releases. 
     Generation Information :
-        Product Revision  :  PIC24 / dsPIC33 / PIC32MM MCUs - 1.169.0
+        Product Revision  :  PIC24 / dsPIC33 / PIC32MM MCUs - 1.170.0
         Device            :  dsPIC33CK256MP508
     The generated drivers are tested against the following:
-        Compiler          :  XC16 v1.50
-        MPLAB             :  MPLAB X v5.40
+        Compiler          :  XC16 v1.61
+        MPLAB             :  MPLAB X v5.45
 */
 
 /*

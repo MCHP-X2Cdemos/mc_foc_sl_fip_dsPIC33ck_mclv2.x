@@ -2,17 +2,17 @@
  * @file
  * @brief Generated RAM table file.
  * 
- * Date:  2020-11-25 14:01
+ * Date:  2020-12-21 16:47
  * 
  * X2C-Version: 6.3.2018
- * X2C-Edition: Educational
+ * X2C-Edition: Free
  */
 /* This file is part of X2C. http://x2c.lcm.at/                                                                       */
 
-/* Date:  2020-11-25 14:01                                                                                            */
+/* Date:  2020-12-21 16:47                                                                                            */
 
 /* X2C-Version: 6.3.2018                                                                                              */
-/* X2C-Edition: Educational                                                                                           */
+/* X2C-Edition: Free                                                                                                  */
 
 #ifndef RAMTABLE_H
 #define RAMTABLE_H

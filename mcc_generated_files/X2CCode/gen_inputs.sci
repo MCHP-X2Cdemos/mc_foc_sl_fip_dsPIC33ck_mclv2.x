@@ -36,7 +36,7 @@ tw6 = 0.1;
 // omega steps
 w1 = 0.0;
 w2 = 0.1;
-w3 = 0.6;
+w3 = 0.25;
 
 // timinig for load
 tl1 = 0.3;

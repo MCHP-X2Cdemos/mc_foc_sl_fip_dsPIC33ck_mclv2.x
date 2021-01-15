@@ -3,8 +3,7 @@
 // initScript.sce and this script is executed automatically, if model is opened from MPLAB X MCC X2C library.
 
 // Simulation settings
-endTime     = 5;
-stepSize    = 1.0E-2; 
+stepSize    = 1E-3; 
 X2C_sampleTime =100E-6;//10kHz control loop
 
 // CODE GENERATION PARAMETERS
@@ -21,7 +20,7 @@ PITorqueKp = 0.8;
 PITorqueKi = 0.5;
 
 // PLL parameters
-MotorLs = 0.41;
+MotorLs = 0.43;
 MotorRs = 0.35;
 U_DCLINK = 24;
 I_MAX = 3.95;
@@ -33,6 +32,7 @@ PLL_INT = 800;
 Vbus = 24;
 Rshunt = 0.025;
 Igain = -15;
+Vdd = 3.3;
 
 // MOTORDATEN
 Nm_ozin = 7.061552e-3;

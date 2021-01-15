@@ -13,11 +13,11 @@
   @Description
     This source file provides APIs for ADC1.
     Generation Information :
-        Product Revision  :  PIC24 / dsPIC33 / PIC32MM MCUs - 1.169.0
+        Product Revision  :  PIC24 / dsPIC33 / PIC32MM MCUs - 1.170.0
         Device            :  dsPIC33CK256MP508      
     The generated drivers are tested against the following:
-        Compiler          :  XC16 v1.50
-        MPLAB 	          :  MPLAB X v5.40
+        Compiler          :  XC16 v1.61
+        MPLAB 	          :  MPLAB X v5.45
 */
 
 /*
@@ -54,6 +54,8 @@
 
 static void (*ADC1_CommonDefaultInterruptHandler)(void);
 static void (*ADC1_AN19_POTDefaultInterruptHandler)(uint16_t adcVal);
+static void (*ADC1_channel_AN24DefaultInterruptHandler)(uint16_t adcVal);
+static void (*ADC1_channel_AN25DefaultInterruptHandler)(uint16_t adcVal);
 static void (*ADC1_AN0_IADefaultInterruptHandler)(uint16_t adcVal);
 static void (*ADC1_ANA1_IBDefaultInterruptHandler)(uint16_t adcVal);
 
@@ -89,8 +91,8 @@ void ADC1_Initialize (void)
     ADMOD1H = 0x00;
     // IE15 disabled; IE1 disabled; IE0 enabled; IE3 disabled; IE2 disabled; IE5 disabled; IE4 disabled; IE10 disabled; IE7 disabled; IE6 disabled; IE9 disabled; IE13 disabled; IE8 disabled; IE14 disabled; IE11 disabled; IE12 disabled; 
     ADIEL = 0x01;
-    // IE17 disabled; IE18 disabled; IE16 disabled; IE19 disabled; IE20 disabled; IE21 disabled; IE24 disabled; IE25 disabled; IE22 disabled; IE23 disabled; 
-    ADIEH = 0x00;
+    // IE17 disabled; IE18 disabled; IE16 disabled; IE19 disabled; IE20 disabled; IE21 disabled; IE24 enabled; IE25 enabled; IE22 disabled; IE23 disabled; 
+    ADIEH = 0x300;
     // CMPEN10 disabled; CMPEN11 disabled; CMPEN6 disabled; CMPEN5 disabled; CMPEN4 disabled; CMPEN3 disabled; CMPEN2 disabled; CMPEN1 disabled; CMPEN0 disabled; CMPEN14 disabled; CMPEN9 disabled; CMPEN15 disabled; CMPEN8 disabled; CMPEN12 disabled; CMPEN7 disabled; CMPEN13 disabled; 
     ADCMP0ENL = 0x00;
     // CMPEN10 disabled; CMPEN11 disabled; CMPEN6 disabled; CMPEN5 disabled; CMPEN4 disabled; CMPEN3 disabled; CMPEN2 disabled; CMPEN1 disabled; CMPEN0 disabled; CMPEN14 disabled; CMPEN9 disabled; CMPEN15 disabled; CMPEN8 disabled; CMPEN12 disabled; CMPEN7 disabled; CMPEN13 disabled; 
@@ -161,9 +163,19 @@ void ADC1_Initialize (void)
     //Assign Default Callbacks
     ADC1_SetCommonInterruptHandler(&ADC1_CallBack);
     ADC1_SetAN19_POTInterruptHandler(&ADC1_AN19_POT_CallBack);
+    ADC1_Setchannel_AN24InterruptHandler(&ADC1_channel_AN24_CallBack);
+    ADC1_Setchannel_AN25InterruptHandler(&ADC1_channel_AN25_CallBack);
     ADC1_SetAN0_IAInterruptHandler(&ADC1_AN0_IA_CallBack);
     ADC1_SetANA1_IBInterruptHandler(&ADC1_ANA1_IB_CallBack);
     
+    // Clearing channel_AN24 interrupt flag.
+    IFS12bits.ADCAN24IF = 0;
+    // Enabling channel_AN24 interrupt.
+    IEC12bits.ADCAN24IE = 1;
+    // Clearing channel_AN25 interrupt flag.
+    IFS12bits.ADCAN25IF = 0;
+    // Enabling channel_AN25 interrupt.
+    IEC12bits.ADCAN25IE = 1;
     // Clearing AN0_IA interrupt flag.
     IFS5bits.ADCAN0IF = 0;
     // Enabling AN0_IA interrupt.
@@ -204,8 +216,8 @@ void ADC1_Initialize (void)
     ADTRIG5L = 0x00;
     //TRGSRC22 None; TRGSRC23 None; 
     ADTRIG5H = 0x00;
-    //TRGSRC24 None; TRGSRC25 None; 
-    ADTRIG6L = 0x00;
+    //TRGSRC24 Common Software Trigger; TRGSRC25 Common Software Trigger; 
+    ADTRIG6L = 0x101;
 }
 
 void ADC1_Core0PowerEnable ( ) 
@@ -278,6 +290,56 @@ void __attribute__ ((weak)) ADC1_AN19_POT_Tasks ( void )
             ADC1_AN19_POTDefaultInterruptHandler(valAN19_POT); 
         }
     }
+}
+
+void __attribute__ ((weak)) ADC1_channel_AN24_CallBack( uint16_t adcVal )
+{ 
+
+}
+
+void ADC1_Setchannel_AN24InterruptHandler(void* handler)
+{
+    ADC1_channel_AN24DefaultInterruptHandler = handler;
+}
+
+void __attribute__ ( ( __interrupt__ , auto_psv, weak ) ) _ADCAN24Interrupt ( void )
+{
+    uint16_t valchannel_AN24;
+    //Read the ADC value from the ADCBUF
+    valchannel_AN24 = ADCBUF24;
+
+    if(ADC1_channel_AN24DefaultInterruptHandler) 
+    { 
+        ADC1_channel_AN24DefaultInterruptHandler(valchannel_AN24); 
+    }
+
+    //clear the channel_AN24 interrupt flag
+    IFS12bits.ADCAN24IF = 0;
+}
+
+void __attribute__ ((weak)) ADC1_channel_AN25_CallBack( uint16_t adcVal )
+{ 
+
+}
+
+void ADC1_Setchannel_AN25InterruptHandler(void* handler)
+{
+    ADC1_channel_AN25DefaultInterruptHandler = handler;
+}
+
+void __attribute__ ( ( __interrupt__ , auto_psv, weak ) ) _ADCAN25Interrupt ( void )
+{
+    uint16_t valchannel_AN25;
+    //Read the ADC value from the ADCBUF
+    valchannel_AN25 = ADCBUF25;
+
+    if(ADC1_channel_AN25DefaultInterruptHandler) 
+    { 
+        ADC1_channel_AN25DefaultInterruptHandler(valchannel_AN25); 
+    }
+
+    //clear the channel_AN25 interrupt flag
+    IFS12bits.ADCAN25IF = 0;
 }
 
 

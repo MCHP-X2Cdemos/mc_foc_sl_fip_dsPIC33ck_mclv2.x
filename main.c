@@ -13,11 +13,11 @@
   @Description
     This source file provides main entry point for system initialization and application code development.
     Generation Information :
-        Product Revision  :  PIC24 / dsPIC33 / PIC32MM MCUs - 1.169.0
+        Product Revision  :  PIC24 / dsPIC33 / PIC32MM MCUs - 1.170.0
         Device            :  dsPIC33CK256MP508
     The generated drivers are tested against the following:
-        Compiler          :  XC16 v1.50
-        MPLAB 	          :  MPLAB X v5.40
+        Compiler          :  XC16 v1.61
+        MPLAB 	          :  MPLAB X v5.45
 */
 
 /*
@@ -73,9 +73,7 @@ int main(void)
         X2C_Communicate(); // X2C scope communication interface task. NON BLOCKING function.
     }
     return 1; 
-    
 }
-
 /**
  End of File
 */
