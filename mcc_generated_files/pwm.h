@@ -13,11 +13,11 @@
   @Description
     This header file provides APIs for driver for PWM.
     Generation Information :
-        Product Revision  :  PIC24 / dsPIC33 / PIC32MM MCUs - 1.170.0
+        Product Revision  :  PIC24 / dsPIC33 / PIC32MM MCUs - 1.169.0
         Device            :  dsPIC33CK256MP508
     The generated drivers are tested against the following:
-        Compiler          :  XC16 v1.61
-        MPLAB 	          :  MPLAB X v5.45
+        Compiler          :  XC16 v1.50
+        MPLAB 	          :  MPLAB X v5.40
 */
 
 /*
@@ -521,13 +521,19 @@ inline static void PWM_OverrideDataHighSet(PWM_GENERATOR genNum,bool overrideDat
 {
     switch(genNum) { 
         case PWM_GENERATOR_1:
-                PG1IOCONLbits.OVRDAT |= (overrideDataHigh << 1);
+                overrideDataHigh = ((overrideDataHigh & 0x0001)<<11);
+                PG1IOCONLbits.OVRDAT = (PG1IOCONLbits.OVRDAT & 0xF7FF);
+                PG1IOCONLbits.OVRDAT = (PG1IOCONLbits.OVRDAT | overrideDataHigh);
                 break;
         case PWM_GENERATOR_2:
-                PG2IOCONLbits.OVRDAT |= (overrideDataHigh << 1);
+                overrideDataHigh = ((overrideDataHigh & 0x0001)<<11);
+                PG2IOCONLbits.OVRDAT = (PG2IOCONLbits.OVRDAT & 0xF7FF);
+                PG2IOCONLbits.OVRDAT = (PG2IOCONLbits.OVRDAT | overrideDataHigh);
                 break;
         case PWM_GENERATOR_3:
-                PG3IOCONLbits.OVRDAT |= (overrideDataHigh << 1);
+                overrideDataHigh = ((overrideDataHigh & 0x0001)<<11);
+                PG3IOCONLbits.OVRDAT = (PG3IOCONLbits.OVRDAT & 0xF7FF);
+                PG3IOCONLbits.OVRDAT = (PG3IOCONLbits.OVRDAT | overrideDataHigh);
                 break;
         default:break;    
     }
@@ -561,13 +567,19 @@ inline static void PWM_OverrideDataLowSet(PWM_GENERATOR genNum,bool overrideData
 {
     switch(genNum) { 
         case PWM_GENERATOR_1:
-                PG1IOCONLbits.OVRDAT |= overrideDataLow;             
+                overrideDataLow = ((overrideDataLow & 0x0001)<<10);
+                PG1IOCONLbits.OVRDAT = (PG1IOCONLbits.OVRDAT & 0xFBFF);
+                PG1IOCONLbits.OVRDAT = (PG1IOCONLbits.OVRDAT | overrideDataLow);             
                 break;  
         case PWM_GENERATOR_2:
-                PG2IOCONLbits.OVRDAT |= overrideDataLow;             
+                overrideDataLow = ((overrideDataLow & 0x0001)<<10);
+                PG2IOCONLbits.OVRDAT = (PG2IOCONLbits.OVRDAT & 0xFBFF);
+                PG2IOCONLbits.OVRDAT = (PG2IOCONLbits.OVRDAT | overrideDataLow);             
                 break;  
         case PWM_GENERATOR_3:
-                PG3IOCONLbits.OVRDAT |= overrideDataLow;             
+                overrideDataLow = ((overrideDataLow & 0x0001)<<10);
+                PG3IOCONLbits.OVRDAT = (PG3IOCONLbits.OVRDAT & 0xFBFF);
+                PG3IOCONLbits.OVRDAT = (PG3IOCONLbits.OVRDAT | overrideDataLow);             
                 break;  
         default:break;    
     }

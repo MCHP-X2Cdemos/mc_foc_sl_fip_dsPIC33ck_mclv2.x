@@ -1,6 +1,6 @@
 @echo off
 
-set PROJECT_ROOT= C:\_bitbucket\x2c_demos\mc_foc_sl_fip_dspic33ck_mclv2
+set PROJECT_ROOT= C:\_projects\mc_foc_sl_fip_dspic33ck_mclv2
 set MPLABX_ROOT=C:\Program Files\Microchip\MPLABX\v5.45
 set DEVICE=33CK256MP508
 set TOOL=Supported device not found. Please programm it manually!
