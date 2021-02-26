@@ -71,8 +71,8 @@
 #define PWM_MIN     0.02 * LOOPINTCY
 #define PWM_MAX     0.98 * LOOPINTCY
     
-#define CURRENT_OFFSET_SAMPLE_COUNT 32768
-#define CURRENT_OFFSET_SAMPLE_SCALER  15
+#define CURRENT_OFFSET_SAMPLE_COUNT 1024 //Number of samples for avaraging
+#define CURRENT_OFFSET_SAMPLE_SCALER  10 //Backshifting of the result of the avaraging
 #define CURRENT_MAX_OFFSET 0x00FF // Maximum offset that still accaptable, above that error
 #endif	/* XC_HEADER_TEMPLATE_H */
 

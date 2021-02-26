@@ -29,7 +29,7 @@
     static int16_t CpuLoad;
     static uint16_t POS1CNTtemp;
 
-    volatile int16_t offset_AN0_IA, offset_ANA1_IB;
+    volatile int16_t offset_AN0_IA=0, offset_ANA1_IB=0;
     
 void UpdateInports(void) {
 
@@ -92,9 +92,9 @@ void UpdateInports(void) {
     }  
 
     /* ADC */   
-    x2cModel.inports.bI_a = ADC1_ConversionResultGet(AN0_IA) - offset_AN0_IA; //ADC1_Core0ConversionResultGet();
-    x2cModel.inports.bI_b = ADC1_ConversionResultGet(ANA1_IB) - offset_ANA1_IB; //ADC1_Core1ConversionResultGet();
-    x2cModel.inports.bV_POT = ADC1_ConversionResultGet(AN19_POT); //ADC1_SharedChannelAN19ConversionResultGet();  
+    x2cModel.inports.bI_a = ADC1_ConversionResultGet(AN0_IA) - offset_AN0_IA; 
+    x2cModel.inports.bI_b = ADC1_ConversionResultGet(ANA1_IB) - offset_ANA1_IB;
+    x2cModel.inports.bV_POT = ADC1_ConversionResultGet(AN19_POT);   
 
     //Encoder caculation
     POS1CNTtemp = POS1CNTL;
