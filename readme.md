@@ -85,10 +85,17 @@ If SW modification and Runtime Monitoring feature are required then all SW tools
 
 
 * **M1/M2/M3:** Motor  phases connected 
+  * M1 - PHASEA (Motor P1 PIN3)
+  * M2 - PHASEB (Motor P1 PIN2)
+  * M3 - PHASEC (Motor P1 PIN1)
 * **J2:** 24V Power supply
-* * **RS-232:** Used to connect UART to computer (Optional for run-time monitoring and parameter tuning)
+* **RS-232:** Used to connect UART to computer (Optional for run-time monitoring and parameter tuning)
 * **HA/HB:** Motor encoder A and B channels connected (Optional for sensor operation mode)
+  * HA - A (Motor P3 PIN2)
+  * HB - B (Motor P3 PIN3)
 * **+5V/GND:** Encoder supply connected (Optional for sensor operation mode)
+  * +5V - +5V (Motor P3 PIN1)
+  * DGND - -5V(return) (Motor P3 PIN5)
 
 ![Board Connector](readme_images/motor_connect.jpg)  
 ![Motor Connector](readme_images\LongHurstConnector.jpg)
