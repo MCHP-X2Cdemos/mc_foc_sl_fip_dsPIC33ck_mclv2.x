@@ -8,14 +8,14 @@ debug/
 run/
 .generated_files/
 # folder to ignore where *.X is not root of repository
-**/*.X/build
+**/*.X/build/
 **/*.X/nbbuild/
-**/*.X/dist
+**/*.X/dist/
 **/*.X/nbdist/
 **/*.X/nb-gradle/
-**/*.X/debug
+**/*.X/debug/
 **/*.X/run/
-**/*.X/.generated_files
+**/*.X/.generated_files/
 #other folders and files to ignore
 **/nbproject/private
 **/nbproject/Makefile-*
